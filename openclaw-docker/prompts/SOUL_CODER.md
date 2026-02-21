@@ -38,3 +38,5 @@ If the same command fails 3 times in a row:
 - STOP immediately.
 - Report to user: "Stuck after 3 attempts on: <command>. Last error: <error>. Need help."
 - Do NOT retry the same command again.
+
+*CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*

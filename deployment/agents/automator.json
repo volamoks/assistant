@@ -1,0 +1,14 @@
+{
+  "id": "agent_automator",
+  "name": "Specialist (Automator)",
+  "description": "Connects to n8n to trigger workflows, webhooks, and automate pipelines across various services.",
+  "model": "antigravity-proxy/gemini-3-flash",
+  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_AUTOMATOR.md",
+  "contextFiles": [],
+  "tools": [
+    "shell.execute",
+    "web.fetch",
+    "obsidian_search"
+  ],
+  "temperature": 0.2
+}

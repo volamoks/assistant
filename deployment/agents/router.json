@@ -3,10 +3,10 @@
   "name": "Orchestrator (Router)",
   "description": "The entry point for all requests. Never executes tasks itself. Analyzes intent and routes to the correct specialist.",
   "model": "antigravity-proxy/gemini-3-flash",
-  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_ROUTER.md",
+  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
-    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
-    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+    "/home/node/.openclaw/prompts/AGENTS.md",
+    "/home/node/.openclaw/prompts/MEMORY.md"
   ],
   "tools": [
     "agent_general",
@@ -21,7 +21,14 @@
     "agent_chef",
     "agent_travel",
     "agent_transport",
-    "agent_shopper"
+    "agent_shopper",
+    "agent_browser",
+    "agent_automator"
   ],
-  "temperature": 0.1
+  "temperature": 0.1,
+  "subagents": {
+    "allowAgents": [
+      "*"
+    ]
+  }
 }

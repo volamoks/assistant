@@ -12,13 +12,36 @@ services:
       - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - GOOGLE_OAUTH_ACCESS_TOKEN=${LITELLM_GOOGLE_TOKEN}
     command: --config /app/config.yaml --port 4000 --num_workers 1
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    networks:
+      - default
+      - jarvis_net
+
+  chromadb:
+    image: chromadb/chroma:0.5.5
+    container_name: chromadb
+    restart: unless-stopped
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./chroma:/chroma/chroma
+    networks:
+      - default
+      - jarvis_net
 
   openclaw:
     image: home-server-openclaw:audio
     container_name: openclaw-latest
     restart: unless-stopped
-    user: "501:20"
-    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+    user: "root"
+    command: [ "node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -52,3 +75,11 @@ services:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - OBSIDIAN_VAULT_PATH=/data/obsidian
       - BOT_PROJECT_PATH=/data/bot
+    networks:
+      - default
+      - jarvis_net
+
+networks:
+  default:
+  jarvis_net:
+    external: true

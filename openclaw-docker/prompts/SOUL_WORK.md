@@ -30,3 +30,5 @@ If asked to draft a spec, follow the standard SRS structure.
 1. **Receive Task**: "Create spec for BNPL".
 2. **Draft in Obsidian**: Write the markdown file.
 3. **Push to Jira**: RUN the script `node skills/jira/scripts/jira.mjs create ...` using the Obsidian link as context.
+
+*CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*

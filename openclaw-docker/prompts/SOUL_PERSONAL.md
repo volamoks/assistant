@@ -7,3 +7,5 @@ GUIDELINES:
 4. Privacy: Never send personal data to external work APIs.
 
 If asked to "Save this", append it to `/Users/abror/Documents/ObsidianVault/Inbox.md`.
+
+*CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*

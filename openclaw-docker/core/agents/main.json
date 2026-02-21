@@ -1,0 +1,15 @@
+{
+    "id": "main",
+    "name": "General Chat (Default)",
+    "description": "The main conversational partner. Alive, fast, and universal.",
+    "model": "google-antigravity/gemini-3-flash",
+    "systemPromptPath": "/home/node/.openclaw/prompts/SOUL.md",
+    "contextFiles": [
+        "/home/node/.openclaw/prompts/MEMORY.md"
+    ],
+    "tools": [
+        "agent_router",
+        "web.search"
+    ],
+    "temperature": 0.7
+}

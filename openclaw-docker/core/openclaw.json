@@ -1,41 +1,57 @@
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.17",
-    "lastTouchedAt": "2026-02-21T15:18:04.185Z"
-  },
-  "wizard": {
-    "lastRunAt": "2026-02-21T14:29:03.570Z",
-    "lastRunVersion": "2026.2.17",
-    "lastRunCommand": "doctor",
-    "lastRunMode": "local"
-  },
-  "agents": {
-    "defaults": {
-      "model": {
-        "primary": "google-antigravity/gemini-3-flash"
-      },
-      "models": {
-        "google-antigravity/gemini-3-flash": {
-          "streaming": false
+    "meta": {
+        "lastTouchedVersion": "2026-02-21",
+        "lastTouchedAt": "2026-02-21T17:40:00Z"
+    },
+    "tools": {
+        "agentToAgent": {
+            "enabled": true,
+            "allow": ["main", "coder", "researcher"]
         }
-      }
+    },
+    "agents": {
+        "defaults": {
+            "model": {
+                "primary": "google-antigravity/gemini-3-flash"
+            }
+        },
+        "list": [
+            {
+                "id": "main"
+            },
+            {
+                "id": "coder",
+                "name": "coder",
+                "workspace": "/data/bot/openclaw-docker/workspace",
+                "agentDir": "/home/node/.openclaw/agents/coder/agent",
+                "model": "openrouter/deepseek/deepseek-chat"
+            },
+            {
+                "id": "researcher",
+                "name": "researcher",
+                "workspace": "/home/node/.openclaw/workspace-researcher",
+                "agentDir": "/home/node/.openclaw/agents/researcher/agent",
+                "model": "google-antigravity/gemini-3-flash"
+            }
+        ]
+    },
+    "commands": {
+        "native": "auto",
+        "nativeSkills": "auto",
+        "restart": true,
+        "ownerDisplay": "raw"
+    },
+    "gateway": {
+        "mode": "local"
+    },
+    "plugins": {
+        "entries": {
+            "telegram": {
+                "enabled": true
+            },
+            "google-antigravity-auth": {
+                "enabled": true
+            }
+        }
     }
-  },
-  "commands": {
-    "native": "auto",
-    "nativeSkills": "auto"
-  },
-  "gateway": {
-    "mode": "local"
-  },
-  "plugins": {
-    "entries": {
-      "telegram": {
-        "enabled": true
-      },
-      "google-antigravity-auth": {
-        "enabled": true
-      }
-    }
-  }
 }

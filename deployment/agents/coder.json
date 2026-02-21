@@ -3,11 +3,14 @@
   "name": "Specialist (Coder)",
   "description": "DevOps & Backend Engineer powered by Qwen 3.5 (397B). Native MCP support for full-repo understanding.",
   "model": "openrouter/qwen/qwen-3.5-397b",
-  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_CODER.md",
+  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CODER.md",
   "contextFiles": [
-    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
-    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+    "/home/node/.openclaw/prompts/MEMORY.md"
   ],
-  "tools": ["shell.execute", "file.read", "file.write"],
+  "tools": [
+    "shell.execute",
+    "file.read",
+    "file.write"
+  ],
   "temperature": 0.1
 }
