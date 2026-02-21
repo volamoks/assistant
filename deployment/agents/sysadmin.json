@@ -1,0 +1,16 @@
+{
+  "id": "agent_sysadmin",
+  "name": "Specialist (Sysadmin)",
+  "description": "Watchdog that monitors system logs and fixes server issues.",
+  "model": "openrouter/deepseek/deepseek-v3.2",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_SYSADMIN.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "shell.execute",
+    "file.watcher"
+  ],
+  "temperature": 0.1
+}

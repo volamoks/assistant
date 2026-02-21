@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "alive-check",
+      "name": "Alive Health Check",
+      "schedule": "*/30 * * * *",
+      "enabled": false,
+      "agent": "agent_sysadmin",
+      "prompt": "Run a quick health check: check disk space with `df -h /data/bot 2>/dev/null || df -h /` and check if /data/obsidian is mounted with `ls /data/obsidian | head -3`. Report only if something is broken. Stay silent if all is fine.",
+      "state": {}
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "agent_interviewer",
+  "name": "Specialist (Interviewer)",
+  "description": "Conducts strict mock interviews for Agoda/FAANG (System Design, Leadership).",
+  "model": "antigravity-proxy/gemini-3-deep-think",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_INTERVIEWER.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [],
+  "temperature": 0.5
+}

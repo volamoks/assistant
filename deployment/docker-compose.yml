@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # 🤵 Main Jarvis (Yours)
+  jarvis-main:
+    image: openclaw:latest
+    container_name: jarvis-main
+    restart: unless-stopped
+    ports:
+      - "18789:18789"
+    volumes:
+      # Mount Core Config
+      - ./core/openclaw.json:/home/node/.openclaw/openclaw.json
+      # Mount Agents & Prompts
+      - ./agents:/home/node/.openclaw/agents
+      - ./prompts:/home/node/.openclaw/prompts
+      # Mount Skills
+      - ./skills:/home/node/.openclaw/skills
+      # Persist Memory & Workspace
+      - jarvis-main-data:/home/node/.openclaw/memory
+      - jarvis-main-workspace:/home/node/.openclaw/workspace
+      
+      # 🌉 BRIDGES TO HOST (Mac Mini)
+      # Uncomment and adjust paths to let Jarvis see your files:
+      # - /Users/abror/Documents/Obsidian Vault:/data/obsidian
+      # - /Users/abror/Google Drive:/data/gdrive
+      # - /Users/abror/Downloads:/data/downloads
+    environment:
+      - NODE_ENV=production
+      # Tell agents where to look
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+
+  # 👩‍💼 Wife's Jarvis (Example)
+  # Uncomment to enable after creating config with ./create_profile.sh
+  # jarvis-wife:
+  #   image: openclaw:latest
+  #   container_name: jarvis-wife
+  #   restart: unless-stopped
+  #   ports:
+  #     - "18790:18790"
+  #   volumes:
+  #     - ./profiles/wife/config.json:/home/node/.openclaw/openclaw.json
+  #     - ./profiles/wife/agents:/home/node/.openclaw/agents
+  #     - ./prompts:/home/node/.openclaw/prompts
+  #     - ./skills:/home/node/.openclaw/skills
+  #     - jarvis-wife-data:/home/node/.openclaw/memory
+  #     - jarvis-wife-workspace:/home/node/.openclaw/workspace
+
+volumes:
+  jarvis-main-data:
+  jarvis-main-workspace:
+  jarvis-wife-data:
+  jarvis-wife-workspace:

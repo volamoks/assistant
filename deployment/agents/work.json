@@ -1,0 +1,13 @@
+{
+  "id": "agent_work",
+  "name": "Specialist (Work)",
+  "description": "PM Strategy Agent powered by Qwen 3.5 (Native Visual/MCP). Handles complex PRDs and strategy.",
+  "model": "openrouter/qwen/qwen-3.5-plus",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_WORK.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": ["jira", "confluence", "web.search", "text.summarize", "shell.execute", "agent-browser", "brainstorming", "writing-plans", "find-skills"],
+  "temperature": 0.3
+}

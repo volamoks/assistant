@@ -1,0 +1,15 @@
+{
+  "id": "agent_general",
+  "name": "General Chat (Default)",
+  "description": "The main conversational partner. Alive, fast, and universal. Use this for general queries, chit-chat, or when no other specialist matches.",
+  "model": "openrouter/minimax/minimax-m2.5",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "web.search"
+  ],
+  "temperature": 0.7
+}

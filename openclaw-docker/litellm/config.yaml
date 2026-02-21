@@ -1,0 +1,33 @@
+model_list:
+  # openclaw requests these as "google-antigravity/gemini-3-flash" or "gemini-3-flash"
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: vertex_ai/gemini-2.0-flash
+      vertex_project: os.environ/VERTEXAI_PROJECT
+      vertex_location: us-central1
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: vertex_ai/gemini-2.0-flash
+      vertex_project: os.environ/VERTEXAI_PROJECT
+      vertex_location: us-central1
+
+  - model_name: gemini-3-pro-high
+    litellm_params:
+      model: vertex_ai/gemini-2.0-pro-exp
+      vertex_project: os.environ/VERTEXAI_PROJECT
+      vertex_location: us-central1
+
+  - model_name: google-antigravity/gemini-3-pro-high
+    litellm_params:
+      model: vertex_ai/gemini-2.0-pro-exp
+      vertex_project: os.environ/VERTEXAI_PROJECT
+      vertex_location: us-central1
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  num_retries: 2
+
+# No master_key — LiteLLM accepts any Bearer token from openclaw
+general_settings: {}

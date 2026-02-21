@@ -1,0 +1,13 @@
+{
+  "id": "agent_research",
+  "name": "Specialist (Research)",
+  "description": "Deep researcher that reads books, documentation, and PDFs.",
+  "model": "openrouter/moonshot/moonshot-v1-128k",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_RESEARCH.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": ["web.search", "text.summarize", "shell.execute", "pdf"],
+  "temperature": 0.3
+}

@@ -1,0 +1,8 @@
+{
+  "name": "jarvis-skills",
+  "version": "1.0.0",
+  "description": "Dependencies for Jarvis Skills",
+  "dependencies": {
+    "plaud-unofficial": "latest"
+  }
+}

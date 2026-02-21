@@ -1,0 +1,205 @@
+version: '3.8'
+
+networks:
+  jarvis_net:
+    name: jarvis_net
+    driver: bridge
+
+volumes:
+  postgres_data:
+  postgres_backup:
+  planka_avatars:
+  planka_project_backgrounds:
+  planka_attachments:
+  ryot_data:
+  searxng_data:
+  chromadb_data:
+  n8n_data:
+
+
+services:
+  # --- 🗄️ DATABASE & BACKUP ---
+  apps-postgres:
+    image: postgres:16-alpine
+    container_name: apps-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_DB: defaultdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d defaultdb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-backup:
+    image: prodrigestivill/postgres-backup-local
+    container_name: postgres-backup
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: apps-postgres
+      POSTGRES_DB: planka,ryot,shlink
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: supersecretpassword
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+    volumes:
+      - postgres_backup:/backups
+    networks:
+      - jarvis_net
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+
+  # --- 📝 PRODUCTIVITY & ORGANIZATION ---
+  planka:
+    image: ghcr.io/plankanban/planka:latest
+    container_name: planka
+    restart: unless-stopped
+    volumes:
+      - planka_avatars:/app/public/user-avatars
+      - planka_project_backgrounds:/app/public/project-backgrounds
+      - planka_attachments:/app/private/attachments
+    ports:
+      - "3000:3000"
+    environment:
+      - BASE_URL=http://localhost:3000
+      - TRUST_PROXY=0
+      - DATABASE_URL=postgresql://admin:supersecretpassword@apps-postgres/planka
+      - SECRET_KEY=k298132k1j3n12k3n1k2n3k12n3k12n3
+    networks:
+      - jarvis_net
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+
+  ryot:
+    image: ghcr.io/ignisda/ryot:latest
+    container_name: ryot
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://admin:supersecretpassword@apps-postgres:5432/ryot
+    volumes:
+      - ryot_data:/data
+    networks:
+      - jarvis_net
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+
+  stirling-pdf:
+    image: frooodle/s-pdf:latest
+    container_name: stirling-pdf
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+    networks:
+      - jarvis_net
+
+  shlink-backend:
+    image: shlinkio/shlink:stable
+    container_name: shlink-backend
+    restart: unless-stopped
+    environment:
+      - DB_DRIVER=postgres
+      - DB_USER=admin
+      - DB_PASSWORD=supersecretpassword
+      - DB_NAME=shlink
+      - DB_HOST=apps-postgres
+      - DEFAULT_DOMAIN=localhost:8081
+      - IS_HTTPS_ENABLED=false
+    ports:
+      - "8081:8080"
+    networks:
+      - jarvis_net
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+
+  shlink-web-client:
+    image: shlinkio/shlink-web-client
+    container_name: shlink-web-client
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    environment:
+      - SHLINK_SERVER_URL=http://localhost:8081
+      - SHLINK_SERVER_API_KEY=YOUR_API_KEY_HERE
+    networks:
+      - jarvis_net
+
+  # --- 🧠 AI FOUNDATION (JARVIS EXTENSIONS) ---
+  browserless:
+    image: ghcr.io/browserless/chromium
+    container_name: browserless
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - TOKEN=secret-browser-token
+      - CONNECTION_TIMEOUT=60000
+      - CONCURRENT=5
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+    networks:
+      - jarvis_net
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8083/
+    networks:
+      - jarvis_net
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+    networks:
+      - jarvis_net
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Tashkent
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - jarvis_net

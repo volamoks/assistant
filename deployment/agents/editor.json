@@ -1,0 +1,16 @@
+{
+  "id": "agent_editor",
+  "name": "Specialist (Editor)",
+  "description": "Validates logic, structure, and quality of Tickets, Docs, and Emails.",
+  "model": "openrouter/deepseek/deepseek-v3.2",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_EDITOR.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "obsidian",
+    "text.summarize"
+  ],
+  "temperature": 0.3
+}

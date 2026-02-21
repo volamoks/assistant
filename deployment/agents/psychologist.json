@@ -1,0 +1,15 @@
+{
+  "id": "agent_psychologist",
+  "name": "Specialist (Psychologist)",
+  "description": "Provides psychological support, active listening, and high EQ reflection.",
+  "model": "openrouter/minimax/minimax-m2.5",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_PSYCH.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "obsidian"
+  ],
+  "temperature": 0.7
+}

@@ -1,0 +1,54 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm-proxy
+    restart: unless-stopped
+    ports:
+      - "18788:4000"
+    volumes:
+      - ./litellm/config.yaml:/app/config.yaml
+    environment:
+      # No master key — LiteLLM accepts any Bearer token from openclaw
+      - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
+      - GOOGLE_OAUTH_ACCESS_TOKEN=${LITELLM_GOOGLE_TOKEN}
+    command: --config /app/config.yaml --port 4000 --num_workers 1
+
+  openclaw:
+    image: home-server-openclaw:audio
+    container_name: openclaw-latest
+    restart: unless-stopped
+    user: "501:20"
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "18790:18789"
+    depends_on:
+      - litellm
+    volumes:
+      - ./core:/home/node/.openclaw
+      - ./prompts:/home/node/.openclaw/prompts
+      - ./skills:/home/node/.openclaw/skills
+      - ./shared:/home/node/.openclaw/shared
+      - ./memory:/home/node/.openclaw/memory
+      - ./workspace:/home/node/.openclaw/workspace
+      - ./canvas:/home/node/.openclaw/canvas
+      - ./cron:/home/node/.openclaw/cron
+      - ./telegram:/home/node/.openclaw/telegram
+      # Obsidian vault (iCloud)
+      - "/Users/abror_mac_mini/Library/Mobile Documents/com~apple~CloudDocs/abror:/data/obsidian"
+      # Bot project for coder agent (git + configs)
+      - /Users/abror_mac_mini/Projects/bot:/data/bot
+      # Docker socket so coder can restart containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NODE_ENV=production
+      - HOME=/home/node
+      - DEBUG=openclaw:*
+      - OPENCLAW_GATEWAY_TOKEN=my-secure-token-123
+      - OPENCLAW_REFRESH_TOKEN=${OPENCLAW_REFRESH_TOKEN}
+      - OPENCLAW_PROJECT_ID=${OPENCLAW_PROJECT_ID}
+      - OPENCLAW_EMAIL=${OPENCLAW_EMAIL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - BOT_PROJECT_PATH=/data/bot

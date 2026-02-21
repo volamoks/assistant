@@ -1,0 +1,15 @@
+{
+  "id": "agent_cynologist",
+  "name": "Specialist (Cynologist)",
+  "description": "Provides dog training advice, schedules, and behavioral tips.",
+  "model": "antigravity-proxy/gemini-3-flash",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_CYNO.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "web.search"
+  ],
+  "temperature": 0.4
+}

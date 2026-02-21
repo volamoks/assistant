@@ -1,0 +1,15 @@
+{
+  "id": "agent_fitness",
+  "name": "Specialist (Fitness)",
+  "description": "Provides workout plans, nutrition advice, and tracks fitness goals.",
+  "model": "antigravity-proxy/gemini-3-flash",
+  "systemPromptPath": "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/SOUL_FITNESS.md",
+  "contextFiles": [
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/AGENTS.md",
+    "/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148/MEMORY.md"
+  ],
+  "tools": [
+    "web.search"
+  ],
+  "temperature": 0.5
+}
