@@ -66,15 +66,17 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Check if there are any .md files in /data/obsidian/Bot/crash-configs/. If the folder is empty or doesn't exist — do nothing, stay completely silent. If files exist: for each file read the git diff inside it, analyze what the bot changed and why it was wrong, then append a dated entry to /data/obsidian/Bot/lessons-learned.md in this format:\n\n## YYYY-MM-DD — <short title>\n**What happened:** ...\n**Root cause:** ...\n**Rule:** Never do X. Always do Y instead.\n\nAfter writing the lesson, delete the crash file. Report to Telegram only if you processed at least one crash file.",
+        "message": "Check if there are any .md files in /data/obsidian/Bot/crash-configs/. If the folder is empty or doesn't exist — stop immediately, output nothing at all. If files exist: for each file read the git diff inside it, analyze what the bot changed and why it was wrong, then append a dated entry to /data/obsidian/Bot/lessons-learned.md in this format:\n\n## YYYY-MM-DD — <short title>\n**What happened:** ...\n**Root cause:** ...\n**Rule:** Never do X. Always do Y instead.\n\nAfter writing the lesson, delete the crash file. Then use agent_sysadmin to send a Telegram notification via curl with a summary of what was learned.",
         "thinking": "low"
       },
-      "delivery": {
-        "mode": "announce",
-        "channel": "last",
-        "to": "telegram:6053956251"
+      "state": {
+        "nextRunAtMs": 1771781400000,
+        "lastRunAtMs": 1771780800057,
+        "lastStatus": "ok",
+        "lastDurationMs": 11034,
+        "consecutiveErrors": 0
       },
-      "state": {}
+      "updatedAtMs": 1771780811091
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",

@@ -90,7 +90,7 @@
         "ollama/deepseek-r1:14b": { "streaming": false }
       },
       "compaction": {},
-      "timeoutSeconds": 60,
+      "timeoutSeconds": 120,
       "heartbeat": {
         "every": "30m",
         "model": "ollama/llama3.2:1b"
