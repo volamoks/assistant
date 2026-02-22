@@ -18,7 +18,7 @@ openclaw-docker/core/cron/
 # Runtime state (auto-generated)
 openclaw-docker/core/devices/
 openclaw-docker/core/canvas/
-openclaw-docker/core/agents/main/sessions/
+openclaw-docker/core/agents/*/sessions/
 openclaw-docker/core/update-check.json
 openclaw-docker/core/memory/
 openclaw-docker/telegram/
@@ -43,3 +43,9 @@ openclaw-docker/workspace/
 
 # Nested git repos (skills cloned separately)
 deployment/skills/agent-browser/
+
+# Homepage dashboard data
+openclaw-docker/homepage/
+
+# Home Assistant (personal home automation data)
+openclaw-docker/homeassistant/

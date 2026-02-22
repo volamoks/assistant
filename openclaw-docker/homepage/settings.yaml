@@ -1,0 +1,137 @@
+---
+# Homepage Settings
+title: Jarvis Home Dashboard
+headerStyle: floating
+background: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80
+
+theme: primary
+color:
+  primary: '#6366f1'
+  secondary: '#8b5cf6'
+  text: '#f8fafc'
+  background: '#0f172a'
+
+bookmarks:
+  - name: AI Services
+    icon: robot
+    items:
+      - name: OpenClaw
+        href: http://jarvis.volamoks.store
+        icon: robot
+      - name: Ollama
+        href: http://host.docker.internal:11434
+        icon: cpu
+      - name: LiteLLM
+        href: http://host.docker.internal:18788
+        icon: server
+      - name: n8n
+        href: http://n8n.volamoks.store
+        icon: workflow
+      - name: ChromaDB
+        href: http://host.docker.internal:3018
+        icon: database
+      - name: SearXNG
+        href: http://search.volamoks.store
+        icon: search
+
+  - name: Home
+    icon: home
+    items:
+      - name: Home Assistant
+        href: http://home.volamoks.store
+        icon: home
+      - name: AdGuard
+        href: http://adguard.volamoks.store
+        icon: shield
+
+  - name: Productivity
+    icon: folder
+    items:
+      - name: Planka
+        href: http://planka.volamoks.store
+        icon: trello
+      - name: Ryot
+        href: http://ryot.volamoks.store
+        icon: book
+      - name: Stirling PDF
+        href: http://pdf.volamoks.store
+        icon: file-text
+
+  - name: Media
+    icon: tv
+    items:
+      - name: TorrServer
+        href: http://torrserver.volamoks.store
+        icon: download
+
+  - name: System
+    icon: server
+    items:
+      - name: Uptime Kuma
+        href: http://monitor.volamoks.store
+        icon: activity
+      - name: Beszel
+        href: http://beszel.volamoks.store
+        icon: monitor
+
+services:
+  - name: Docker
+    icon: docker
+    href: http://host.docker.internal:3000
+    widget:
+      type: docker
+      url: http://host.docker.internal
+      container: homepage
+
+  - name: Home Assistant
+    icon: home
+    href: http://home.volamoks.store
+    widget:
+      type: homeassistant
+      url: http://host.docker.internal:8123
+      fields:
+        - temperature
+        - humidity
+        - battery
+
+  - name: AdGuard
+    icon: shield
+    href: http://adguard.volamoks.store
+    widget:
+      type: adguard
+      url: http://host.docker.internal
+
+  - name: n8n
+    icon: workflow
+    href: http://n8n.volamoks.store
+    widget:
+      type: n8n
+      url: http://host.docker.internal:3016
+
+  - name: Uptime Kuma
+    icon: activity
+    href: http://monitor.volamoks.store
+    widget:
+      type: uptimekuma
+      url: http://host.docker.internal:3003
+
+widgets:
+  - type: clock
+    location: header
+    settings:
+      format: 24h
+      showDate: true
+
+  - type: weather
+    location: header
+    settings:
+      provider: openmeteo
+      latitude: 41.2995
+      longitude: 69.2401
+      timezone: Asia/Tashkent
+
+  - type: search
+    location: header
+    settings:
+      provider: searxng
+      url: http://host.docker.internal:3017
