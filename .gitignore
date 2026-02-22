@@ -21,20 +21,39 @@ openclaw-docker/core/canvas/
 openclaw-docker/core/agents/*/sessions/
 openclaw-docker/core/update-check.json
 openclaw-docker/core/memory/
+openclaw-docker/core/media/
+openclaw-docker/core/subagents/
+openclaw-docker/core/HEARTBEAT.md
+openclaw-docker/core/identity/device-auth.json
 openclaw-docker/telegram/
 openclaw-docker/chroma/
 openclaw-docker/ollama/
 openclaw-docker/memory/
 openclaw-docker/cron/runs/
+openclaw-docker/.build/
+openclaw-docker/beszel_agent_data/
 openclaw-docker/core/workspace-researcher/
+openclaw-docker/core/workspace-analyst/
 openclaw-docker/homebridge/
+
+# Subagent runtime dirs (auto-created by openclaw, contain OAuth tokens + sessions)
+openclaw-docker/core/agents/main/
+openclaw-docker/core/agents/coder/
+openclaw-docker/core/agents/researcher/
+openclaw-docker/core/agents/analyst/
 
 
 # Obsidian workspace (personal data, synced via iCloud)
 openclaw-docker/workspace/memory/
 
-# Scratch
+# Scratch / temp files
 new.txt
+test_spawn.js
+benchmark_ollama.py
+benchmark_router.py
+benchmark_results.json
+router_benchmark.json
+router_benchmark_extended.json
 
 # macOS
 .DS_Store

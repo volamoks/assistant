@@ -46,7 +46,7 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771782000000,
+        "nextRunAtMs": 1771868400000,
         "lastRunAtMs": 1771695600030,
         "lastStatus": "ok",
         "lastDurationMs": 33294,
@@ -70,13 +70,16 @@
         "thinking": "low"
       },
       "state": {
-        "nextRunAtMs": 1771781400000,
-        "lastRunAtMs": 1771780800057,
+        "nextRunAtMs": 1771783200000,
+        "lastRunAtMs": 1771782600032,
         "lastStatus": "ok",
-        "lastDurationMs": 11034,
+        "lastDurationMs": 21047,
         "consecutiveErrors": 0
       },
-      "updatedAtMs": 1771780811091
+      "updatedAtMs": 1771782621079,
+      "delivery": {
+        "mode": "announce"
+      }
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
