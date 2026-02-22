@@ -2,7 +2,7 @@
   "id": "agent_research",
   "name": "Specialist (Research)",
   "description": "Deep researcher that reads books, documentation, and PDFs.",
-  "model": "openrouter/moonshot/moonshot-v1-128k",
+  "model": "deepseek/deepseek-chat",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_RESEARCH.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"
