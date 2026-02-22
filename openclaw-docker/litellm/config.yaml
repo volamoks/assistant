@@ -1,35 +1,139 @@
 model_list:
-  # openclaw requests these as "google-antigravity/gemini-3-flash" or "gemini-3-flash"
+  # Gemini 2.5 Flash & Pro (latest)
+  - model_name: gemini-2-5-flash
+    litellm_params:
+      model: vertex_ai/gemini-2.5-flash-preview-0506
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
+
+  - model_name: gemini-2-5-pro
+    litellm_params:
+      model: vertex_ai/gemini-2.5-pro-preview-0506
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
+
+  # Gemini 2.0 Flash
+  - model_name: gemini-2-0-flash
+    litellm_params:
+      model: vertex_ai/gemini-2.0-flash-001
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
+
+  - model_name: gemini-2-0-flash-2-0
+    litellm_params:
+      model: vertex_ai/gemini-2.0-flash-001
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
+
+  # Legacy Gemini 3 models (maps to 2.0)
   - model_name: gemini-3-flash
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash
-      vertex_project: os.environ/VERTEXAI_PROJECT
-      vertex_location: us-central1
+      model: vertex_ai/gemini-2.0-flash-001
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
 
   - model_name: google-antigravity/gemini-3-flash
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash
-      vertex_project: os.environ/VERTEXAI_PROJECT
-      vertex_location: us-central1
-      rpm: 10
-      tpm: 32000
+      model: vertex_ai/gemini-2.0-flash-001
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
 
   - model_name: gemini-3-pro-high
     litellm_params:
       model: vertex_ai/gemini-2.0-pro-exp
-      vertex_project: os.environ/VERTEXAI_PROJECT
-      vertex_location: us-central1
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
 
   - model_name: google-antigravity/gemini-3-pro-high
     litellm_params:
       model: vertex_ai/gemini-2.0-pro-exp
-      vertex_project: os.environ/VERTEXAI_PROJECT
-      vertex_location: us-central1
+      vertex_project: crucial-river-3zftk
+      vertex_location: asia-south1
+
+  # DeepSeek via API
+  - model_name: deepseek/deepseek-chat
+    litellm_params:
+      model: deepseek/deepseek-chat
+      api_key: os.environ/DEEPSEEK_API_KEY
+      api_base: https://api.deepseek.com/v1
+
+  - model_name: deepseek/deepseek-reasoner
+    litellm_params:
+      model: deepseek/deepseek-reasoner
+      api_key: os.environ/DEEPSEEK_API_KEY
+      api_base: https://api.deepseek.com/v1
+
+  # DeepSeek via OpenRouter
+  - model_name: openrouter/deepseek/deepseek-chat
+    litellm_params:
+      model: openrouter/deepseek/deepseek-chat
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  - model_name: openrouter/deepseek/deepseek-r1
+    litellm_params:
+      model: openrouter/deepseek/deepseek-r1
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  # Minimax via OpenRouter
+  - model_name: openrouter/minimax/minimax-01
+    litellm_params:
+      model: openrouter/minimax/minimax-01
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  # Minimax via LiteLLM
+  - model_name: minimax/MiniMax-M2.5
+    litellm_params:
+      model: minimax/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+
+  # Local Ollama
+  - model_name: ollama/llama3.2:1b
+    litellm_params:
+      model: ollama_chat/llama3.2:1b
+      api_base: http://ollama:11434
 
 litellm_settings:
   drop_params: true
   request_timeout: 600
   num_retries: 2
+  stream: true
+  log_level: DEBUG
+  log_requests: true
+  log_cache_stats: true
+
+router_settings:
+  fallbacks:
+    - gemini-3-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - google-antigravity/gemini-3-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - gemini-2-5-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - gemini-2-5-pro: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - gemini-2-0-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - gemini-2-0-flash-2-0: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - minimax/MiniMax-M2.5: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - openrouter/deepseek/deepseek-chat: ["deepseek/deepseek-reasoner"]
+  retry_policy:
+    RateLimitError: 2
+    ServiceUnavailableError: 2
+    GatewayTimeoutError: 2
+    ConnectionError: 2
+    AuthenticationError: 2
+    UnauthorizedError: 2
+  error_handling:
+  retry_on_rate_limit: true
+  retry_on_service_unavailable: true
+  retry_on_authentication_error: true
+  fallback_on_deepseek: true
+  max_fallback_attempts: 3
+  fallback_delay: 2
+  log_fallback_events: true
+  notify_on_fallback: false
 
 # No master_key — LiteLLM accepts any Bearer token from openclaw
 general_settings: {}
+cache_responses: true
+cache_config:
+  type: redis
+  host: redis
+  port: 6379
+  # local cache (in-memory) alternative:
+  # type: local

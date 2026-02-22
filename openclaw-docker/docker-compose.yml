@@ -1,4 +1,17 @@
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - default
+      - jarvis_net
+
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm-proxy
@@ -7,10 +20,16 @@ services:
       - "18788:4000"
     volumes:
       - ./litellm/config.yaml:/app/config.yaml
+      - ./litellm/.env:/app/.env
     environment:
       # No master key — LiteLLM accepts any Bearer token from openclaw
       - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - GOOGLE_OAUTH_ACCESS_TOKEN=${LITELLM_GOOGLE_TOKEN}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    depends_on:
+      - redis
     command: --config /app/config.yaml --port 4000 --num_workers 1
   ollama:
     image: ollama/ollama:latest
@@ -45,7 +64,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "18790:18789"
+      - "18789:18789"
     depends_on:
       - litellm
     volumes:
@@ -73,8 +92,24 @@ services:
       - OPENCLAW_PROJECT_ID=${OPENCLAW_PROJECT_ID}
       - OPENCLAW_EMAIL=${OPENCLAW_EMAIL}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OLLAMA_API_KEY=${OLLAMA_API_KEY}
+      - OLLAMA_HOST=${OLLAMA_HOST}
       - OBSIDIAN_VAULT_PATH=/data/obsidian
       - BOT_PROJECT_PATH=/data/bot
+    networks:
+      - default
+      - jarvis_net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARED_TUNNEL_TOKEN}
     networks:
       - default
       - jarvis_net
