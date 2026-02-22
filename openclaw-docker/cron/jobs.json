@@ -54,6 +54,29 @@
       }
     },
     {
+      "id": "crash-analysis",
+      "name": "Crash Config Analyzer",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/10 * * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Check if there are any .md files in /data/obsidian/Bot/crash-configs/. If the folder is empty or doesn't exist — do nothing, stay completely silent. If files exist: for each file read the git diff inside it, analyze what the bot changed and why it was wrong, then append a dated entry to /data/obsidian/Bot/lessons-learned.md in this format:\n\n## YYYY-MM-DD — <short title>\n**What happened:** ...\n**Root cause:** ...\n**Rule:** Never do X. Always do Y instead.\n\nAfter writing the lesson, delete the crash file. Report to Telegram only if you processed at least one crash file.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {}
+    },
+    {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
       "name": "Daily Report",
       "enabled": true,
