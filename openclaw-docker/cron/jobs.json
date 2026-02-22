@@ -58,7 +58,7 @@
       "name": "Daily Report",
       "enabled": true,
       "createdAtMs": 1771695517846,
-      "updatedAtMs": 1771695517846,
+      "updatedAtMs": 1771696807532,
       "schedule": {
         "kind": "cron",
         "expr": "0 23 * * *",
@@ -77,7 +77,12 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771696800000
+        "nextRunAtMs": 1771783200000,
+        "lastRunAtMs": 1771696800026,
+        "lastStatus": "error",
+        "lastDurationMs": 7506,
+        "lastError": "cron announce delivery failed",
+        "consecutiveErrors": 1
       }
     }
   ]

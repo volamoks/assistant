@@ -2,7 +2,7 @@
   "id": "agent_transport",
   "name": "Specialist (Transport)",
   "description": "Provides public transport routes and schedules (Bus/Metro) for Tashkent.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "openrouter/arcee-ai/trinity-large-preview:free",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_TRANSPORT.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"

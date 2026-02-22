@@ -2,7 +2,7 @@
   "id": "agent_router",
   "name": "Orchestrator (Router)",
   "description": "The entry point for all requests. Never executes tasks itself. Analyzes intent and routes to the correct specialist.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "ollama/qwen3:8b",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",

@@ -27,6 +27,8 @@ openclaw-docker/ollama/
 openclaw-docker/memory/
 openclaw-docker/cron/runs/
 openclaw-docker/core/workspace-researcher/
+openclaw-docker/homebridge/
+
 
 # Obsidian workspace (personal data, synced via iCloud)
 openclaw-docker/workspace/memory/
@@ -40,6 +42,8 @@ new.txt
 
 # openclaw manages workspace/ as its own git repo — don't double-track it
 openclaw-docker/workspace/
+openclaw-docker/homebridge/
+openclaw-docker/homeassistant/
 
 # Nested git repos (skills cloned separately)
 deployment/skills/agent-browser/

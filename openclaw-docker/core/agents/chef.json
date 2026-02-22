@@ -2,7 +2,7 @@
   "id": "agent_chef",
   "name": "Specialist (Chef)",
   "description": "Provides recipes, cooking advice, and meal planning based on inventory.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "openrouter/arcee-ai/trinity-large-preview:free",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CHEF.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"

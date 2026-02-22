@@ -2,7 +2,7 @@
   "id": "agent_cynologist",
   "name": "Specialist (Cynologist)",
   "description": "Provides dog training advice, schedules, and behavioral tips.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "openrouter/arcee-ai/trinity-large-preview:free",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CYNO.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"
