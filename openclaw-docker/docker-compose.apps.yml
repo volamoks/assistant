@@ -317,7 +317,7 @@ services:
     container_name: homepage
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3012:3000"
     volumes:
       - ./homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
