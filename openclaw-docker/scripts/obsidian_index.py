@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
 Obsidian FTS5 Indexer — chunks markdown by headers into SQLite full-text search index.
-Runs on host (macOS). Index stored in Obsidian vault, accessible from container.
+Works on host (macOS) or inside container via --vault and --db flags.
 
-Usage:
-  python3 obsidian_index.py           # index/update
-  python3 obsidian_index.py --search "POST /users"  # search
-  python3 obsidian_index.py --search "API key" --limit 5
+Usage (host):
+  python3 obsidian_index.py                     # incremental update
+  python3 obsidian_index.py --force             # full reindex
+  python3 obsidian_index.py --search "POST /users"
+
+Usage (container):
+  python3 obsidian_index.py --vault /data/obsidian --db "/data/obsidian/To claw/Bot/obsidian.db" --force
 """
 
 import sys
@@ -16,8 +19,11 @@ import argparse
 from pathlib import Path
 
 VAULT_HOST = Path("/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs")
-DB_PATH = VAULT_HOST / "To claw" / "Bot" / "obsidian.db"
+DB_DEFAULT = VAULT_HOST / "To claw" / "Bot" / "obsidian.db"
 MAX_CHUNK_LINES = 200
+
+# Resolved at runtime from args
+DB_PATH = DB_DEFAULT
 
 def get_db():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -166,9 +172,13 @@ if __name__ == "__main__":
     parser.add_argument("--search", "-s", help="Search query")
     parser.add_argument("--limit", "-l", type=int, default=3)
     parser.add_argument("--vault", help="Vault path override")
+    parser.add_argument("--db", help="SQLite DB path override (for container use)")
     parser.add_argument("--force", "-f", action="store_true",
                         help="Force full reindex (ignore mtime cache)")
     args = parser.parse_args()
+
+    if args.db:
+        DB_PATH = Path(args.db)
 
     if args.search:
         search(args.search, args.limit)
