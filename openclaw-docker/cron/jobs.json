@@ -41,7 +41,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — DO NOT send any message unless instructed below.\n\nCheck: ls /data/obsidian/Bot/crash-configs/ 2>/dev/null\n\nIf the folder is empty or does not exist — STOP IMMEDIATELY. Output nothing. No explanation. No confirmation. Absolute silence.\n\nOnly if .md files exist: read each file, analyze the git diff, append a lesson to /data/obsidian/Bot/lessons-learned.md (format: ## DATE — title / What happened / Root cause / Rule), delete the crash file, then send ONE Telegram notification via sysadmin agent.",
+        "message": "SILENT TASK — DO NOT send any message unless instructed below.\n\nCheck: ls \"/data/obsidian/To claw/Bot/crash-configs/\" 2>/dev/null\n\nIf the folder is empty or does not exist — STOP IMMEDIATELY. Output nothing. No explanation. No confirmation. Absolute silence.\n\nOnly if .md files exist: read each file, analyze the git diff, append a lesson to \"/data/obsidian/To claw/Bot/lessons-learned.md\" (format: ## DATE — title / What happened / Root cause / Rule), delete the crash file, then send ONE Telegram notification via sysadmin agent.",
         "thinking": "low"
       },
       "delivery": {
@@ -50,13 +50,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771783800000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1771783200036,
-        "lastStatus": "ok",
-        "lastDurationMs": 18669
+        "nextRunAtMs": 1771785000000,
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1771784400008,
+        "lastStatus": "error",
+        "lastDurationMs": 20349,
+        "lastError": "cron announce delivery failed"
       },
-      "updatedAtMs": 1771783218705
+      "updatedAtMs": 1771784420357
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
