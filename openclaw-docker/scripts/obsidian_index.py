@@ -66,10 +66,16 @@ def chunk_markdown(text, file_path):
 
     return chunks
 
-def index(vault_path=None):
+def index(vault_path=None, force=False):
     vault = Path(vault_path) if vault_path else VAULT_HOST
     conn = get_db()
     cur = conn.cursor()
+
+    if force:
+        cur.execute("DELETE FROM chunks")
+        cur.execute("DELETE FROM files")
+        conn.commit()
+        print("Force mode: cleared existing index")
 
     added = updated = skipped = 0
 
@@ -78,7 +84,7 @@ def index(vault_path=None):
         mtime = md_file.stat().st_mtime
 
         row = cur.execute("SELECT mtime FROM files WHERE path=?", (rel,)).fetchone()
-        if row and abs(row[0] - mtime) < 1:
+        if not force and row and abs(row[0] - mtime) < 1:
             skipped += 1
             continue
 
@@ -160,9 +166,11 @@ if __name__ == "__main__":
     parser.add_argument("--search", "-s", help="Search query")
     parser.add_argument("--limit", "-l", type=int, default=3)
     parser.add_argument("--vault", help="Vault path override")
+    parser.add_argument("--force", "-f", action="store_true",
+                        help="Force full reindex (ignore mtime cache)")
     args = parser.parse_args()
 
     if args.search:
         search(args.search, args.limit)
     else:
-        index(args.vault)
+        index(args.vault, force=args.force)

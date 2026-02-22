@@ -77,8 +77,8 @@ services:
       - ./canvas:/home/node/.openclaw/canvas
       - ./cron:/home/node/.openclaw/cron
       - ./telegram:/home/node/.openclaw/telegram
-      # Obsidian vault — To claw subfolder in main vault (visible on iPhone)
-      - "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/To claw:/data/obsidian"
+      # Obsidian vault — full My Docs vault (bot files in To claw/ subfolder)
+      - "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs:/data/obsidian"
       # Bot project for coder agent (git + configs)
       - /Users/abror_mac_mini/Projects/bot:/data/bot
       # Docker socket so coder can restart containers
@@ -97,7 +97,7 @@ services:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OLLAMA_API_KEY=${OLLAMA_API_KEY}
       - OLLAMA_HOST=${OLLAMA_HOST}
-      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - OBSIDIAN_VAULT_PATH=/data/obsidian/To claw
       - BOT_PROJECT_PATH=/data/bot
     networks:
       - default
