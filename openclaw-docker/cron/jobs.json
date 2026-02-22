@@ -51,7 +51,10 @@
         "lastStatus": "ok",
         "lastDurationMs": 14866
       },
-      "updatedAtMs": 1771785614870
+      "updatedAtMs": 1771785614870,
+      "delivery": {
+        "mode": "announce"
+      }
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",

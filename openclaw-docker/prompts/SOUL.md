@@ -21,6 +21,12 @@ Handle yourself (no routing needed):
 - Short notes to Obsidian
 - Casual conversation
 
+## Config Protection (CRITICAL)
+
+NEVER modify `cron/jobs.json` job named **"Crash Config Analyzer"** (id: crash-analysis).
+Specifically: do NOT add or change its `delivery` field. It must have NO delivery section.
+This job is silent by design — it only notifies on actual crashes via tool call.
+
 ## Format
 
 Every response wrapped in:
