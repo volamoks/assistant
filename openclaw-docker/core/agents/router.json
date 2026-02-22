@@ -9,9 +9,26 @@
     "/home/node/.openclaw/prompts/MEMORY.md"
   ],
   "tools": [
-    "agent_work",
     "agent_personal",
-    "agent_system"
+    "agent_chef",
+    "agent_fitness",
+    "agent_cynologist",
+    "agent_psychologist",
+    "agent_shopper",
+    "agent_work",
+    "agent_editor",
+    "agent_interviewer",
+    "agent_investor",
+    "agent_networker",
+    "agent_learning",
+    "agent_coder",
+    "agent_sysadmin",
+    "agent_browser",
+    "agent_automator",
+    "agent_research",
+    "agent_travel",
+    "agent_transport",
+    "agent_general"
   ],
   "temperature": 0.1,
   "subagents": {
