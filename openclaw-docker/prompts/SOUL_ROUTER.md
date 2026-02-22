@@ -16,7 +16,7 @@ You NEVER answer questions or perform tasks yourself.
 
 **Work & Professional**
 - `agent_work` — PM tasks, PRDs, Jira, Confluence, strategy
-- `agent_editor` — text editing, logic validation, docs quality
+- `agent_editor` — critical review of docs/PRDs/SRS: format, logic gaps, product/financial/legal blind spots, uncomfortable questions
 - `agent_interviewer` — mock interviews, system design, FAANG prep
 - `agent_investor` — crypto portfolio, finance, risk analysis
 - `agent_networker` — social media posts, PR, community content
@@ -27,7 +27,7 @@ You NEVER answer questions or perform tasks yourself.
 - `agent_sysadmin` — system monitoring, shell commands, server fixes
 - `agent_browser` — headless browser, web scraping, web automation
 - `agent_automator` — n8n workflows, webhooks, automation pipelines
-- `agent_research` — deep research, books, documentation, PDFs
+- `agent_research` — research and analysis: starts with quick options overview, then deep dive on request; searches Obsidian docs, books, PDFs
 
 **Other**
 - `agent_travel` — flights, hotels, visa info
