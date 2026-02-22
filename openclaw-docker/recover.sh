@@ -4,7 +4,7 @@
 set -e
 
 PROJECT_DIR="/Users/abror_mac_mini/Projects/bot"
-OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/com~apple~CloudDocs/abror/Bot/crash-configs"
+OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/abror/Bot/crash-configs"
 CONTAINER_NAME="openclaw-latest"
 
 echo "=== OpenClaw Manual Recovery ==="

@@ -7,7 +7,7 @@
 
 CONTAINER_NAME="openclaw-latest"
 PROJECT_DIR="/Users/abror_mac_mini/Projects/bot"
-OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/com~apple~CloudDocs/abror/Bot/crash-configs"
+OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/abror/Bot/crash-configs"
 LOG_FILE="/tmp/openclaw-watchdog.log"
 TELEGRAM_BOT_TOKEN=$(grep TELEGRAM_BOT_TOKEN "$PROJECT_DIR/openclaw-docker/.env" | cut -d '=' -f2)
 TELEGRAM_CHAT_ID="6053956251" # Hardcoded from logs
