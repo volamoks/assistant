@@ -45,16 +45,83 @@
         "thinking": "low"
       },
       "state": {
-        "nextRunAtMs": 1771835400000,
+        "nextRunAtMs": 1771836000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771834800009,
+        "lastRunAtMs": 1771835400039,
         "lastStatus": "ok",
-        "lastDurationMs": 8627
+        "lastDurationMs": 9352
       },
-      "updatedAtMs": 1771834808636,
+      "updatedAtMs": 1771835409391,
       "delivery": {
         "mode": "none"
       }
+    },
+    {
+      "id": "task-orchestration",
+      "name": "Morning Task Briefing",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Scan the Obsidian vault at /data/obsidian for all unchecked tasks (lines matching `- [ ]`). Use bash: grep -r '- \\[ \\]' /data/obsidian --include='*.md' -l to find files, then read the relevant ones. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Skip tasks in Archive or Templates folders. Keep the message compact.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {}
+    },
+    {
+      "id": "telegram-dashboard",
+      "name": "Morning System Status",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 8 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run a system health check and send a status dashboard to Telegram. Check: (1) Docker containers — run `docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.RunningFor}}'` via bash tool; (2) Disk usage — `df -h /`; (3) Any recent entries in `/data/obsidian/To claw/Bot/lessons-learned.md` (last 3). Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {}
+    },
+    {
+      "id": "vault-gardening",
+      "name": "Vault Gardening",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 23 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — only send to Telegram if issues are found.\n\nScan /data/obsidian/To claw/ for quality issues:\n1. Empty files: bash: find '/data/obsidian/To claw' -name '*.md' -empty\n2. Broken wikilinks: grep for [[links]] patterns and verify the target file exists in the vault\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {}
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
