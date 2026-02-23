@@ -45,15 +45,16 @@
         "thinking": "low"
       },
       "state": {
-        "nextRunAtMs": 1771786200000,
+        "nextRunAtMs": 1771833000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771785600004,
+        "lastRunAtMs": 1771832400011,
         "lastStatus": "ok",
-        "lastDurationMs": 14866
+        "lastDurationMs": 7966,
+        "runningAtMs": 1771833000005
       },
-      "updatedAtMs": 1771785614870,
+      "updatedAtMs": 1771832407977,
       "delivery": {
-        "mode": "announce"
+        "mode": "none"
       }
     },
     {

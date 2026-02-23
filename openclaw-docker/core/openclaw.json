@@ -124,7 +124,7 @@
         "name": "researcher",
         "workspace": "/home/node/.openclaw/workspace-researcher",
         "agentDir": "/home/node/.openclaw/agents/researcher/agent",
-        "model": "deepseek/deepseek-reasoner"
+        "model": "deepseek/deepseek-chat"
       },
       {
         "id": "analyst",
