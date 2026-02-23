@@ -49,11 +49,13 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=0
     deploy:
       resources:
         limits:
-          # No memory limit — models can be large (deepseek-r1:14b needs ~14GB)
-          cpus: '6.0'
+          memory: 6g
+          cpus: '4.0'
     networks:
       - default
       - jarvis_net
@@ -106,7 +108,6 @@ services:
     environment:
       - NODE_ENV=production
       - HOME=/home/node
-      - DEBUG=openclaw:*
       - OPENCLAW_GATEWAY_TOKEN=my-secure-token-123
       - OPENCLAW_REFRESH_TOKEN=${OPENCLAW_REFRESH_TOKEN}
       - OPENCLAW_PROJECT_ID=${OPENCLAW_PROJECT_ID}
@@ -119,6 +120,23 @@ services:
       - OLLAMA_HOST=${OLLAMA_HOST}
       - OBSIDIAN_VAULT_PATH=/data/obsidian/To claw
       - BOT_PROJECT_PATH=/data/bot
+    networks:
+      - default
+      - jarvis_net
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "3017:8080"
+    volumes:
+      - ./searxng:/etc/searxng
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+          cpus: '0.5'
     networks:
       - default
       - jarvis_net

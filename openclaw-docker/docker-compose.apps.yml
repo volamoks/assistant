@@ -322,6 +322,7 @@ services:
       - TZ=Asia/Tashkent
       - HOMEBRIDGE_CONFIG_UI_PORT=8080
 
+
   # --- 🏠 HOMEPAGE DASHBOARD ---
   homepage:
     image: gethomepage/homepage:latest

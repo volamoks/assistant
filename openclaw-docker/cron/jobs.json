@@ -23,10 +23,13 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771868400000,
+        "nextRunAtMs": 1771954800000,
         "lastStatus": "ok",
-        "consecutiveErrors": 0
-      }
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1771868400019,
+        "lastDurationMs": 146065
+      },
+      "updatedAtMs": 1771868546084
     },
     {
       "id": "crash-analysis",
@@ -45,13 +48,13 @@
         "thinking": "low"
       },
       "state": {
-        "nextRunAtMs": 1771836000000,
+        "nextRunAtMs": 1771876200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771835400039,
+        "lastRunAtMs": 1771875600028,
         "lastStatus": "ok",
-        "lastDurationMs": 9352
+        "lastDurationMs": 2665
       },
-      "updatedAtMs": 1771835409391,
+      "updatedAtMs": 1771875602693,
       "delivery": {
         "mode": "none"
       }
@@ -77,7 +80,9 @@
         "channel": "last",
         "to": "telegram:6053956251"
       },
-      "state": {}
+      "state": {
+        "nextRunAtMs": 1771902000000
+      }
     },
     {
       "id": "telegram-dashboard",
@@ -100,7 +105,9 @@
         "channel": "last",
         "to": "telegram:6053956251"
       },
-      "state": {}
+      "state": {
+        "nextRunAtMs": 1771903800000
+      }
     },
     {
       "id": "vault-gardening",
@@ -121,7 +128,42 @@
       "delivery": {
         "mode": "none"
       },
-      "state": {}
+      "state": {
+        "nextRunAtMs": 1771957800000,
+        "lastRunAtMs": 1771871403277,
+        "lastStatus": "ok",
+        "lastDurationMs": 134467,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771871537744
+    },
+    {
+      "id": "finance-enrichment",
+      "name": "Finance Enrichment",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 2 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: cd /data/bot/openclaw-docker/workspace/telegram && python3 enrichment.py --model qwen3:8b 2>&1\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram.\nIf successful — complete silently.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1771880400000,
+        "lastRunAtMs": 1771864086532,
+        "lastStatus": "ok",
+        "lastDurationMs": 148434,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771864234966
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -145,13 +187,13 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771869600000,
+        "nextRunAtMs": 1771956000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771783218705,
+        "lastRunAtMs": 1771869602747,
         "lastStatus": "ok",
-        "lastDurationMs": 49647
+        "lastDurationMs": 19168
       },
-      "updatedAtMs": 1771783268352
+      "updatedAtMs": 1771869621915
     }
   ]
 }

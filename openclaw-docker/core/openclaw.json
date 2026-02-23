@@ -32,6 +32,7 @@
       },
       "ollama": {
         "baseUrl": "http://ollama:11434/v1",
+        "api": "openai-completions",
         "apiKey": "ollama-local",
         "models": [
           { "id": "llama3.2:1b", "name": "Llama 3.2 1B (local)" },
@@ -69,7 +70,7 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "deepseek/deepseek-chat"
+        "primary": "openrouter/arcee-ai/trinity-mini:free"
       },
       "models": {
         "google-antigravity/gemini-3-flash": {},
@@ -79,22 +80,18 @@
         "deepseek/deepseek-reasoner": { "streaming": false },
         "minimax/MiniMax-M2.5": { "streaming": false },
         "minimax/MiniMax-M2.5-Lightning": { "streaming": false },
-        "openrouter/deepseek/deepseek-chat": { "streaming": false },
-        "openrouter/deepseek/deepseek-r1": { "streaming": false },
-        "openrouter/arcee-ai/trinity-mini:free": { "streaming": false },
-        "openrouter/arcee-ai/trinity-large-preview:free": { "streaming": false },
-        "openrouter/minimax/minimax-01": { "streaming": false },
+        "openrouter/deepseek/deepseek-chat": {},
+        "openrouter/deepseek/deepseek-r1": {},
+        "openrouter/arcee-ai/trinity-mini:free": {},
+        "openrouter/arcee-ai/trinity-large-preview:free": {},
+        "openrouter/minimax/minimax-01": {},
         "ollama/llama3.2:1b": { "streaming": false },
         "ollama/qwen3:8b": { "streaming": false },
         "ollama/qwen2.5:7b": { "streaming": false },
         "ollama/deepseek-r1:14b": { "streaming": false }
       },
       "compaction": {},
-      "timeoutSeconds": 120,
-      "heartbeat": {
-        "every": "30m",
-        "model": "ollama/llama3.2:1b"
-      },
+      "timeoutSeconds": 360,
       "subagents": {
         "maxConcurrent": 8,
         "maxSpawnDepth": 2
@@ -105,7 +102,7 @@
         "id": "main",
         "heartbeat": {
           "every": "15m",
-          "model": "ollama/llama3.2:1b",
+          "model": "openrouter/arcee-ai/trinity-mini:free",
           "target": "telegram"
         },
         "subagents": {
