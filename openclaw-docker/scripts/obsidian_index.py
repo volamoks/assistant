@@ -1,53 +1,45 @@
 #!/usr/bin/env python3
 """
-Obsidian FTS5 Indexer — chunks markdown by headers into SQLite full-text search index.
-Works on host (macOS) or inside container via --vault and --db flags.
-
-Usage (host):
-  python3 obsidian_index.py                     # incremental update
-  python3 obsidian_index.py --force             # full reindex
-  python3 obsidian_index.py --search "POST /users"
-
-Usage (container):
-  python3 obsidian_index.py --vault /data/obsidian --db "/data/obsidian/To claw/Bot/obsidian.db" --force
+Obsidian FTS5 Indexer v2.0 (Stable)
+Supports MD, PDF, DOCX, XLSX via Unstructured.io API.
 """
 
 import sys
 import sqlite3
 import re
 import argparse
+import time
+import requests
 from pathlib import Path
 
+# --- Configuration ---
 VAULT_HOST = Path("/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs")
 DB_DEFAULT = VAULT_HOST / "To claw" / "Bot" / "obsidian.db"
 MAX_CHUNK_LINES = 200
+UNSTRUCTURED_URL = "http://unstructured-api:8000/general/v0/general"
 
 # Resolved at runtime from args
 DB_PATH = DB_DEFAULT
 
 def get_db():
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS files (
-            path TEXT PRIMARY KEY,
-            mtime REAL
-        )
-    """)
-    conn.execute("""
-        CREATE VIRTUAL TABLE IF NOT EXISTS chunks USING fts5(
-            file_path,
-            section_title,
-            content,
-            tokenize='unicode61 remove_diacritics 1'
-        )
-    """)
-    conn.commit()
-    return conn
+    try:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("CREATE TABLE IF NOT EXISTS files (path TEXT PRIMARY KEY, mtime REAL)")
+        conn.execute("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS chunks USING fts5(
+                file_path, section_title, content,
+                tokenize='unicode61 remove_diacritics 1'
+            )
+        """)
+        conn.commit()
+        return conn
+    except Exception as e:
+        print(f"CRITICAL: Database error: {e}")
+        sys.exit(1)
 
 def chunk_markdown(text, file_path):
-    """Split markdown into sections by headers."""
     lines = text.splitlines()
     chunks = []
     current_title = "(intro)"
@@ -62,18 +54,52 @@ def chunk_markdown(text, file_path):
             current_lines = [line]
         else:
             current_lines.append(line)
-            # Split oversized chunks mid-section
             if len(current_lines) >= MAX_CHUNK_LINES:
                 chunks.append((file_path, current_title + " [cont]", "\n".join(current_lines)))
                 current_lines = []
 
     if current_lines:
         chunks.append((file_path, current_title, "\n".join(current_lines)))
-
     return chunks
+
+def wait_for_unstructured():
+    print(">>> Waiting for Unstructured API...")
+    for i in range(15):
+        try:
+            # Try to get root or health
+            res = requests.get("http://unstructured-api:8000/", timeout=3)
+            if res.status_code in [200, 404]:
+                print(f">>> API is UP (Status: {res.status_code})")
+                return True
+        except Exception:
+            pass
+        print(f"    [{i+1}/15] Still waiting...")
+        time.sleep(3)
+    return False
+
+def get_text_from_unstructured(file_path):
+    try:
+        print(f"    ...extracting text via API: {file_path.name}")
+        with open(file_path, "rb") as f:
+            files = {"files": (file_path.name, f)}
+            # No complex data params to avoid 422 errors
+            response = requests.post(UNSTRUCTURED_URL, files=files, timeout=300)
+            if response.status_code == 200:
+                elements = response.json()
+                text = "\n\n".join([el.get("text", "") for el in elements if "text" in el])
+                print(f"    ✅ Success: {len(text)} chars extracted.")
+                return text
+            else:
+                print(f"    ❌ API Error {response.status_code}: {response.text[:100]}")
+                return ""
+    except Exception as e:
+        print(f"    ❌ Extraction Exception: {e}")
+        return ""
 
 def index(vault_path=None, force=False):
     vault = Path(vault_path) if vault_path else VAULT_HOST
+    print(f"Starting indexer. Vault: {vault}")
+    
     conn = get_db()
     cur = conn.cursor()
 
@@ -81,33 +107,54 @@ def index(vault_path=None, force=False):
         cur.execute("DELETE FROM chunks")
         cur.execute("DELETE FROM files")
         conn.commit()
-        print("Force mode: cleared existing index")
+        print("Force mode: Index cleared.")
+
+    # Find all supported files
+    extensions = ["*.md", "*.pdf", "*.docx", "*.xlsx"]
+    files_to_index = []
+    for ext in extensions:
+        files_to_index.extend(list(vault.rglob(ext)))
+
+    print(f"Found {len(files_to_index)} files total.")
+
+    # Check for Unstructured API if needed
+    if any(f.suffix != ".md" for f in files_to_index):
+        if not wait_for_unstructured():
+            print("ERROR: Unstructured API is not responding. Skipping PDF/Office files.")
+            # Filter out complex files to avoid errors
+            files_to_index = [f for f in files_to_index if f.suffix == ".md"]
 
     added = updated = skipped = 0
-
-    for md_file in vault.rglob("*.md"):
-        rel = str(md_file.relative_to(vault))
-        mtime = md_file.stat().st_mtime
-
+    for doc_file in files_to_index:
+        try:
+            rel = str(doc_file.relative_to(vault))
+        except ValueError:
+            rel = str(doc_file)
+            
+        mtime = doc_file.stat().st_mtime
         row = cur.execute("SELECT mtime FROM files WHERE path=?", (rel,)).fetchone()
+        
         if not force and row and abs(row[0] - mtime) < 1:
             skipped += 1
             continue
 
+        print(f"[{added+updated+skipped+1}/{len(files_to_index)}] Indexing: {rel}")
+        
         try:
-            text = md_file.read_text(encoding="utf-8", errors="ignore")
-        except Exception:
+            if doc_file.suffix == ".md":
+                text = doc_file.read_text(encoding="utf-8", errors="ignore")
+            else:
+                text = get_text_from_unstructured(doc_file)
+        except Exception as e:
+            print(f"    ⚠️ Skipping {rel}: {e}")
             continue
 
-        # Remove old chunks for this file
-        cur.execute("DELETE FROM chunks WHERE file_path=?", (rel,))
+        if not text:
+            continue
 
-        # Insert new chunks
+        cur.execute("DELETE FROM chunks WHERE file_path=?", (rel,))
         chunks = chunk_markdown(text, rel)
-        cur.executemany(
-            "INSERT INTO chunks(file_path, section_title, content) VALUES(?,?,?)",
-            chunks
-        )
+        cur.executemany("INSERT INTO chunks(file_path, section_title, content) VALUES(?,?,?)", chunks)
 
         if row:
             cur.execute("UPDATE files SET mtime=? WHERE path=?", (mtime, rel))
@@ -115,38 +162,29 @@ def index(vault_path=None, force=False):
         else:
             cur.execute("INSERT INTO files(path, mtime) VALUES(?,?)", (rel, mtime))
             added += 1
+        
+        conn.commit()
 
-    conn.commit()
     conn.close()
-    print(f"Index updated: +{added} new, ~{updated} updated, {skipped} unchanged")
+    print(f"\nFINISH: +{added} new, ~{updated} updated, {skipped} skipped.")
 
 def search(query, limit=3):
     if not DB_PATH.exists():
-        print("Index not found. Run without --search first to build index.")
+        print("Index not found. Build it first.")
         sys.exit(1)
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
-
-    # Try FTS5 match first
     try:
         rows = conn.execute("""
-            SELECT file_path, section_title, content,
-                   rank
-            FROM chunks
-            WHERE chunks MATCH ?
-            ORDER BY rank
-            LIMIT ?
+            SELECT file_path, section_title, content, rank 
+            FROM chunks WHERE chunks MATCH ? ORDER BY rank LIMIT ?
         """, (query, limit)).fetchall()
     except sqlite3.OperationalError:
-        # Fallback: LIKE search if query has special chars
         rows = conn.execute("""
-            SELECT file_path, section_title, content, 0 as rank
-            FROM chunks
-            WHERE content LIKE ?
-            LIMIT ?
+            SELECT file_path, section_title, content, 0 as rank 
+            FROM chunks WHERE content LIKE ? LIMIT ?
         """, (f"%{query}%", limit)).fetchall()
-
     conn.close()
 
     if not rows:
@@ -154,32 +192,22 @@ def search(query, limit=3):
         return
 
     print(f'🔍 Results for: "{query}"\n')
-    for i, row in enumerate(rows, 1):
-        print(f"📄 {row['file_path']}")
-        print(f"   § {row['section_title']}")
+    for row in rows:
+        print(f"📄 {row['file_path']} [§ {row['section_title']}]")
         print("────────────────────────────────")
-        # Show snippet: first 60 lines of chunk
-        lines = row['content'].splitlines()[:60]
-        print("\n".join(lines))
-        if len(row['content'].splitlines()) > 60:
-            print(f"   ... ({len(row['content'].splitlines())} lines total, showing 60)")
+        print("\n".join(row['content'].splitlines()[:40]))
         print()
-
-    print(f"[{len(rows)} result(s), limit={limit}]")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--search", "-s", help="Search query")
+    parser.add_argument("--search", "-s")
     parser.add_argument("--limit", "-l", type=int, default=3)
-    parser.add_argument("--vault", help="Vault path override")
-    parser.add_argument("--db", help="SQLite DB path override (for container use)")
-    parser.add_argument("--force", "-f", action="store_true",
-                        help="Force full reindex (ignore mtime cache)")
+    parser.add_argument("--vault")
+    parser.add_argument("--db")
+    parser.add_argument("--force", "-f", action="store_true")
     args = parser.parse_args()
 
-    if args.db:
-        DB_PATH = Path(args.db)
-
+    if args.db: DB_PATH = Path(args.db)
     if args.search:
         search(args.search, args.limit)
     else:

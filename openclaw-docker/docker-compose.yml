@@ -103,6 +103,22 @@ services:
       - default
       - jarvis_net
 
+  unstructured-api:
+    image: downloads.unstructured.io/unstructured-io/unstructured-api:latest
+    container_name: unstructured-api
+    restart: unless-stopped
+    profiles: ["tools"]
+    ports:
+      - "8001:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '2.0'
+    networks:
+      - default
+      - jarvis_net
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
