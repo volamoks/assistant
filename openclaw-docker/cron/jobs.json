@@ -52,7 +52,8 @@
         "consecutiveErrors": 0,
         "lastRunAtMs": 1771875600028,
         "lastStatus": "ok",
-        "lastDurationMs": 2665
+        "lastDurationMs": 2665,
+        "runningAtMs": 1771876200020
       },
       "updatedAtMs": 1771875602693,
       "delivery": {
