@@ -2,7 +2,7 @@
   "id": "agent_travel",
   "name": "Specialist (Travel)",
   "description": "Handles flight and hotel searches using Amadeus API and provides visa information.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "google-antigravity/gemini-3-flash",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_TRAVEL.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"

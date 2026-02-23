@@ -2,32 +2,9 @@
   "version": 1,
   "jobs": [
     {
-      "id": "alive-check",
-      "name": "Alive Health Check",
-      "schedule": "*/30 * * * *",
-      "enabled": false,
-      "agent": "agent_sysadmin",
-      "prompt": "Run a quick health check: check disk space with `df -h /data/bot 2>/dev/null || df -h /` and check if /data/obsidian is mounted with `ls /data/obsidian | head -3`. Report only if something is broken. Stay silent if all is fine.",
-      "state": {}
-    },
-    {
-      "id": "nightly-evolution",
-      "name": "Nightly System Evolution",
-      "schedule": "0 3 * * *",
-      "enabled": false,
-      "agent": "agent_coder",
-      "prompt": "1. Use search to find new alpha plugins or core improvements for OpenClaw/Agentic systems.\n2. Review current codebase in /data/bot/openclaw-docker/ and /home/node/.openclaw/skills/.\n3. Implement 1-2 safe improvements or add new skills if applicable.\n4. Log all changes to /data/obsidian/Changelog.md.\n5. Prepare a brief summary for Abror to see in the morning.",
-      "state": {
-        "scheduleErrorCount": 3,
-        "lastError": "schedule error: TypeError: Cannot read properties of undefined (reading 'trim')"
-      }
-    },
-    {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
       "name": "Nightly Evolution",
       "enabled": true,
-      "createdAtMs": 1771695517200,
-      "updatedAtMs": 1771695633324,
       "schedule": {
         "kind": "cron",
         "expr": "40 22 * * *",
@@ -46,19 +23,152 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771782000000,
-        "lastRunAtMs": 1771695600030,
+        "nextRunAtMs": 1771954800000,
         "lastStatus": "ok",
-        "lastDurationMs": 33294,
-        "consecutiveErrors": 0
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1771868400019,
+        "lastDurationMs": 146065
+      },
+      "updatedAtMs": 1771868546084
+    },
+    {
+      "id": "crash-analysis",
+      "name": "Crash Config Analyzer",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/10 * * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — DO NOT send any message unless instructed below.\n\nCheck: ls \"/data/obsidian/To claw/Bot/crash-configs/\" 2>/dev/null\n\nIf the folder is empty or does not exist — STOP IMMEDIATELY. Output nothing. No explanation. No confirmation. Absolute silence.\n\nOnly if .md files exist: read each file, analyze the git diff, append a lesson to \"/data/obsidian/To claw/Bot/lessons-learned.md\" (format: ## DATE — title / What happened / Root cause / Rule), delete the crash file, then send ONE Telegram notification via sysadmin agent.",
+        "thinking": "low"
+      },
+      "state": {
+        "nextRunAtMs": 1771876200000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1771875600028,
+        "lastStatus": "ok",
+        "lastDurationMs": 2665
+      },
+      "updatedAtMs": 1771875602693,
+      "delivery": {
+        "mode": "none"
       }
+    },
+    {
+      "id": "task-orchestration",
+      "name": "Morning Task Briefing",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Scan the Obsidian vault at /data/obsidian for all unchecked tasks (lines matching `- [ ]`). Use bash: grep -r '- \\[ \\]' /data/obsidian --include='*.md' -l to find files, then read the relevant ones. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Skip tasks in Archive or Templates folders. Keep the message compact.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1771902000000
+      }
+    },
+    {
+      "id": "telegram-dashboard",
+      "name": "Morning System Status",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 8 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run a system health check and send a status dashboard to Telegram. Check: (1) Docker containers — run `docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.RunningFor}}'` via bash tool; (2) Disk usage — `df -h /`; (3) Any recent entries in `/data/obsidian/To claw/Bot/lessons-learned.md` (last 3). Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1771903800000
+      }
+    },
+    {
+      "id": "vault-gardening",
+      "name": "Vault Gardening",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 23 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — only send to Telegram if issues are found.\n\nScan /data/obsidian/To claw/ for quality issues:\n1. Empty files: bash: find '/data/obsidian/To claw' -name '*.md' -empty\n2. Broken wikilinks: grep for [[links]] patterns and verify the target file exists in the vault\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1771957800000,
+        "lastRunAtMs": 1771871403277,
+        "lastStatus": "ok",
+        "lastDurationMs": 134467,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771871537744
+    },
+    {
+      "id": "finance-enrichment",
+      "name": "Finance Enrichment",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 2 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: cd /data/bot/openclaw-docker/workspace/telegram && python3 enrichment.py --model qwen3:8b 2>&1\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram.\nIf successful — complete silently.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1771880400000,
+        "lastRunAtMs": 1771864086532,
+        "lastStatus": "ok",
+        "lastDurationMs": 148434,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771864234966
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
       "name": "Daily Report",
       "enabled": true,
-      "createdAtMs": 1771695517846,
-      "updatedAtMs": 1771695517846,
       "schedule": {
         "kind": "cron",
         "expr": "0 23 * * *",
@@ -77,8 +187,13 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771696800000
-      }
+        "nextRunAtMs": 1771956000000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1771869602747,
+        "lastStatus": "ok",
+        "lastDurationMs": 19168
+      },
+      "updatedAtMs": 1771869621915
     }
   ]
 }

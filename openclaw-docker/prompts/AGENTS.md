@@ -52,6 +52,13 @@ When user sends `/alive`:
 - **Role**: Bar Raiser.
 - **Why**: Mock Agoda interviews. System Design.
 
+### F2. Career Agent (`agent_career`)
+- **Model**: **gemini-2-5-flash** (Strategic)
+- **Role**: Resume + ATS + Job Search Advisor.
+- **SOUL**: `prompts/SOUL_CAREER.md`
+- **Why**: ATS optimization, cover letters, salary negotiation, application tracking in Obsidian.
+- **Handoff**: Deep mock interviews → Interviewer Agent.
+
 ### G. Investor Agent (`agent_investor`)
 - **Model**: **Qwen 3 Max** (CFO)
 - **Role**: Finance / Crypto.

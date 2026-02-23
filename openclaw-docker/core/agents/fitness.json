@@ -2,7 +2,7 @@
   "id": "agent_fitness",
   "name": "Specialist (Fitness)",
   "description": "Provides workout plans, nutrition advice, and tracks fitness goals.",
-  "model": "antigravity-proxy/gemini-3-flash",
+  "model": "openrouter/arcee-ai/trinity-large-preview:free",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_FITNESS.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"

@@ -2,7 +2,7 @@
   "id": "agent_personal",
   "name": "Specialist (Personal)",
   "description": "Manages personal life, health, home, and quick notes.",
-  "model": "antigravity-proxy/gemini-3-pro",
+  "model": "google-antigravity/gemini-3-pro",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_PERSONAL.md",
   "contextFiles": [],
   "tools": [

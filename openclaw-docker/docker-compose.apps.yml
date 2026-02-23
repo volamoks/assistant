@@ -19,7 +19,6 @@ volumes:
   beszel_data:
   torrserver_data:
   adguard_data:
-  homepage_data:
 
 
 services:
@@ -311,6 +310,19 @@ services:
     networks:
       - jarvis_net
 
+  # --- 🍎 HOMEBRIDGE FOR APPLE HOME ---
+  homebridge:
+    image: oznu/homebridge:ubuntu
+    container_name: homebridge
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./homebridge:/homebridge
+    environment:
+      - TZ=Asia/Tashkent
+      - HOMEBRIDGE_CONFIG_UI_PORT=8080
+
+
   # --- 🏠 HOMEPAGE DASHBOARD ---
   homepage:
     image: gethomepage/homepage:latest
@@ -325,5 +337,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Tashkent
+      - HOMEPAGE_ALLOWED_HOSTS=localhost:3012,host.docker.internal:3012
     networks:
       - jarvis_net
