@@ -124,47 +124,47 @@ model_list:
   # === AI Studio keys (load balanced — fallback when Vertex AI throttles) ===
   - model_name: gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_2
 
   - model_name: gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_3
 
   - model_name: fast
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: fast
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_2
 
   - model_name: fast
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_3
 
   - model_name: google-antigravity/gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: google-antigravity/gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_2
 
   - model_name: google-antigravity/gemini-3-flash
     litellm_params:
-      model: gemini/gemini-2.5-flash
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_3
 
   # Local Ollama
