@@ -1,4 +1,18 @@
 model_list:
+  # === GENERIC ALIASES (use these instead of specific models) ===
+  - model_name: litellm/smart
+    litellm_params:
+      model: gemini-2-5-pro
+
+  - model_name: litellm/fast
+    litellm_params:
+      model: gemini-2-0-flash
+
+  - model_name: litellm/thinking
+    litellm_params:
+      model: deepseek/deepseek-reasoner
+
+  # === SPECIFIC MODELS ===
   # Gemini 2.5 Flash & Pro (latest)
   - model_name: gemini-2-5-flash
     litellm_params:
@@ -92,6 +106,21 @@ model_list:
       model: ollama_chat/llama3.2:1b
       api_base: http://ollama:11434
 
+  - model_name: ollama/qwen3:8b
+    litellm_params:
+      model: ollama_chat/qwen3:8b
+      api_base: http://ollama:11434
+
+  - model_name: ollama/qwen2.5:7b
+    litellm_params:
+      model: ollama_chat/qwen2.5:7b
+      api_base: http://ollama:11434
+
+  - model_name: ollama/deepseek-r1:14b
+    litellm_params:
+      model: ollama_chat/deepseek-r1:14b
+      api_base: http://ollama:11434
+
 litellm_settings:
   drop_params: true
   request_timeout: 600
@@ -102,7 +131,11 @@ litellm_settings:
   log_cache_stats: true
 
 router_settings:
+  # Add generic aliases to fallbacks
   fallbacks:
+    - litellm/smart: ["gemini-2-0-flash", "deepseek/deepseek-reasoner"]
+    - litellm/fast: ["gemini-2-5-flash", "deepseek/deepseek-chat"]
+    - litellm/thinking: ["deepseek/deepseek-chat", "ollama/deepseek-r1:14b"]
     - gemini-3-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
     - google-antigravity/gemini-3-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
     - gemini-2-5-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
@@ -118,18 +151,10 @@ router_settings:
     ConnectionError: 2
     AuthenticationError: 2
     UnauthorizedError: 2
-  error_handling:
-  retry_on_rate_limit: true
-  retry_on_service_unavailable: true
-  retry_on_authentication_error: true
-  fallback_on_deepseek: true
-  max_fallback_attempts: 3
-  fallback_delay: 2
-  log_fallback_events: true
-  notify_on_fallback: false
 
-# No master_key — LiteLLM accepts any Bearer token from openclaw
-general_settings: {}
+# LiteLLM master key for authentication
+general_settings:
+  master_key: ${LITELLM_MASTER_KEY}
 cache_responses: true
 cache_config:
   type: redis
