@@ -10,7 +10,7 @@ PROJECT_DIR="/Users/abror_mac_mini/Projects/bot"
 OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/To claw/Bot/crash-configs"
 LOG_FILE="/tmp/openclaw-watchdog.log"
 TELEGRAM_BOT_TOKEN=$(grep TELEGRAM_BOT_TOKEN "$PROJECT_DIR/openclaw-docker/.env" | cut -d '=' -f2)
-TELEGRAM_CHAT_ID="6053956251" # Hardcoded from logs
+TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-6053956251}" # Default from .env if set
 
 # Check container status
 STATUS=$(docker container inspect -f '{{.State.Status}}' "$CONTAINER_NAME" 2>/dev/null)

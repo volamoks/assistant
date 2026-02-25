@@ -24,7 +24,7 @@ openclaw-docker/core/memory/
 openclaw-docker/core/media/
 openclaw-docker/core/subagents/
 openclaw-docker/core/HEARTBEAT.md
-openclaw-docker/core/identity/device-auth.json
+openclaw-docker/core/identity/
 openclaw-docker/telegram/
 openclaw-docker/chroma/
 openclaw-docker/ollama/
@@ -55,6 +55,10 @@ benchmark_results.json
 router_benchmark.json
 router_benchmark_extended.json
 
+# Dev tooling
+.kilocode/
+openclaw-docker/scripts/backup.log
+
 # macOS
 .DS_Store
 **/.DS_Store
@@ -77,3 +81,6 @@ openclaw-docker/homeassistant/
 openclaw-docker/redis-data/
 openclaw-docker/searxng/
 openclaw-docker/open-webui/
+deployment/
+openclaw-docker/actual-data/
+*.md.resolved

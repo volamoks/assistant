@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: defaultdb
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -50,7 +50,7 @@ services:
       POSTGRES_HOST: apps-postgres
       POSTGRES_DB: planka,ryot,shlink
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       SCHEDULE: "@daily"
       BACKUP_KEEP_DAYS: 7
     volumes:
@@ -75,8 +75,8 @@ services:
     environment:
       - BASE_URL=http://localhost:3010
       - TRUST_PROXY=0
-      - DATABASE_URL=postgresql://admin:supersecretpassword@apps-postgres/planka
-      - SECRET_KEY=k298132k1j3n12k3n1k2n3k12n3k12n3
+      - DATABASE_URL=postgresql://admin:${POSTGRES_PASSWORD}@apps-postgres/planka
+      - SECRET_KEY=${SECRET_KEY}
     networks:
       - jarvis_net
     depends_on:
@@ -90,8 +90,8 @@ services:
     ports:
       - "3014:8000"
     environment:
-      - DATABASE_URL=postgres://admin:supersecretpassword@apps-postgres:5432/ryot
-      - SERVER_ADMIN_ACCESS_TOKEN=supersecretpassword
+      - DATABASE_URL=postgres://admin:${POSTGRES_PASSWORD}@apps-postgres:5432/ryot
+      - SERVER_ADMIN_ACCESS_TOKEN=${RYOT_ADMIN_TOKEN}
     volumes:
       - ryot_data:/data
     networks:
@@ -118,7 +118,7 @@ services:
     environment:
       - DB_DRIVER=postgres
       - DB_USER=admin
-      - DB_PASSWORD=supersecretpassword
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=shlink
       - DB_HOST=apps-postgres
       - DEFAULT_DOMAIN=localhost:8081
@@ -151,7 +151,7 @@ services:
     ports:
       - "3001:3000"
     environment:
-      - TOKEN=secret-browser-token
+      - TOKEN=${BROWSERLESS_TOKEN}
       - CONNECTION_TIMEOUT=60000
       - CONCURRENT=5
     deploy:
@@ -321,7 +321,6 @@ services:
     environment:
       - TZ=Asia/Tashkent
       - HOMEBRIDGE_CONFIG_UI_PORT=8080
-
 
   # --- 🏠 HOMEPAGE DASHBOARD ---
   homepage:

@@ -1,13 +1,19 @@
 {
   "meta": {
-    "lastTouchedVersion": "2026.2.21",
-    "lastTouchedAt": "2026-02-22T05:10:29.053Z"
+    "lastTouchedVersion": "2026.2.25",
+    "lastTouchedAt": "2026-02-25T06:40:44.321Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-25T06:26:05.779Z",
+    "lastRunVersion": "2026.2.17",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
   },
   "models": {
     "providers": {
       "litellm": {
         "baseUrl": "http://litellm:4000",
-        "apiKey": "placeholder",
+        "apiKey": "sk-litellm-openclaw-proxy",
         "api": "openai-completions",
         "models": [
           {
@@ -31,7 +37,7 @@
             "name": "DeepSeek R1 (litellm)"
           },
           {
-            "id": "openrouter/deepseek/deepseek-chat",
+            "id": "litellm/or-deepseek-chat",
             "name": "DeepSeek Chat (OpenRouter)"
           },
           {
@@ -59,56 +65,20 @@
         "models": [
           {
             "id": "llama3.2:1b",
-            "name": "Llama 3.2 1B (local)",
-            "input": [
-              "text"
-            ],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            }
+            "name": "Llama 3.2 1B (local)"
           },
           {
             "id": "qwen3:8b",
-            "name": "Qwen3 8B (local)",
-            "input": [
-              "text"
-            ],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            }
+            "name": "Qwen3 8B (local)"
           },
           {
             "id": "qwen2.5:7b",
-            "name": "Qwen2.5 7B (local)",
-            "input": [
-              "text"
-            ],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            }
+            "name": "Qwen2.5 7B (local)"
           },
           {
             "id": "deepseek-r1:14b",
             "name": "DeepSeek R1 14B (local)",
-            "reasoning": true,
-            "input": [
-              "text"
-            ],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            }
+            "reasoning": true
           }
         ]
       }
@@ -117,7 +87,7 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "litellm/smart"
+        "primary": "litellm/or-deepseek-chat"
       },
       "models": {
         "litellm/smart": {
@@ -138,7 +108,7 @@
         "deepseek/deepseek-reasoner": {
           "streaming": true
         },
-        "openrouter/deepseek/deepseek-chat": {
+        "litellm/or-deepseek-chat": {
           "streaming": true
         },
         "openrouter/deepseek/deepseek-r1": {
@@ -166,6 +136,12 @@
           "streaming": true
         }
       },
+      "memorySearch": {
+        "enabled": false
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
       "timeoutSeconds": 600,
       "heartbeat": {
         "every": "30s",
@@ -181,7 +157,7 @@
         "id": "main",
         "heartbeat": {
           "every": "15m",
-          "model": "openrouter/deepseek/deepseek-chat",
+          "model": "litellm/or-deepseek-chat",
           "target": "telegram"
         },
         "subagents": {
@@ -204,32 +180,43 @@
         "name": "researcher",
         "workspace": "/home/node/.openclaw/workspace-researcher",
         "agentDir": "/home/node/.openclaw/agents/researcher/agent",
-        "model": "openrouter/deepseek/deepseek-chat"
+        "model": "litellm/or-deepseek-chat"
       },
       {
         "id": "analyst",
         "name": "analyst",
         "workspace": "/home/node/.openclaw/workspace-analyst",
         "agentDir": "/home/node/.openclaw/agents/analyst/agent",
-        "model": "openrouter/deepseek/deepseek-chat"
+        "model": "litellm/or-deepseek-chat"
       }
     ]
   },
   "commands": {
     "native": "auto",
     "nativeSkills": "auto",
-    "restart": true,
-    "ownerDisplay": "raw"
+    "restart": true
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "groupPolicy": "allowlist",
+      "streaming": "off"
+    }
   },
   "gateway": {
-    "mode": "local"
+    "mode": "local",
+    "controlUi": {
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    },
+    "auth": {
+      "mode": "token",
+      "token": "7d1b19d965d62e7106f69e4317d43584d2150a91a6260c77"
+    }
   },
   "plugins": {
     "entries": {
       "telegram": {
-        "enabled": true
-      },
-      "google-antigravity-auth": {
         "enabled": true
       }
     }

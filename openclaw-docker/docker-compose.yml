@@ -28,6 +28,7 @@ services:
       - ./litellm/.env:/app/.env
     environment:
       # No master key — LiteLLM accepts any Bearer token from openclaw
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - GOOGLE_OAUTH_ACCESS_TOKEN=${LITELLM_GOOGLE_TOKEN}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
@@ -78,10 +79,10 @@ services:
       - jarvis_net
 
   openclaw:
-    image: home-server-openclaw:audio
+    image: ghcr.io/openclaw/openclaw:main
     container_name: openclaw-latest
     restart: unless-stopped
-    user: "root"
+    # user: "root"  # Change to non-root if needed
     command: [ "node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -108,7 +109,7 @@ services:
     environment:
       - NODE_ENV=production
       - HOME=/home/node
-      - OPENCLAW_GATEWAY_TOKEN=my-secure-token-123
+      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
       - OPENCLAW_REFRESH_TOKEN=${OPENCLAW_REFRESH_TOKEN}
       - OPENCLAW_PROJECT_ID=${OPENCLAW_PROJECT_ID}
       - OPENCLAW_EMAIL=${OPENCLAW_EMAIL}
@@ -118,8 +119,12 @@ services:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OLLAMA_API_KEY=${OLLAMA_API_KEY}
       - OLLAMA_HOST=${OLLAMA_HOST}
+      - LITELLM_HOST=http://litellm:4000
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - OBSIDIAN_VAULT_PATH=/data/obsidian/To claw
       - BOT_PROJECT_PATH=/data/bot
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
     networks:
       - default
       - jarvis_net
@@ -169,6 +174,23 @@ services:
         limits:
           memory: 128m
           cpus: '0.25'
+    networks:
+      - default
+      - jarvis_net
+
+  actual-budget:
+    image: actualbudget/actual-server:latest
+    container_name: actual-budget
+    restart: unless-stopped
+    ports:
+      - "5006:5006"
+    volumes:
+      - ./actual-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+          cpus: '0.5'
     networks:
       - default
       - jarvis_net

@@ -2,6 +2,34 @@
   "version": 1,
   "jobs": [
     {
+      "id": "intraday-snapshot",
+      "name": "Intraday Context Snapshot",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK. Run this bash command and output nothing:\nbash: bash -c 'FILE=\"/data/obsidian/To claw/Bot/today-session.md\"; if [ ! -f \"$FILE\" ] || [ \"$(date +%Y-%m-%d)\" != \"$(head -1 \"$FILE\" | grep -oP \"\\d{4}-\\d{2}-\\d{2}\")\" ]; then echo \"# Session Log — $(date +\\'%Y-%m-%d\\')\" > \"$FILE\"; echo \"\" >> \"$FILE\"; echo \"_Agent will append actions here throughout the day._\" >> \"$FILE\"; fi'",
+        "model": "ollama/llama3.2:1b"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772074800000,
+        "lastRunAtMs": 1771993592460,
+        "lastStatus": "ok",
+        "lastDurationMs": 48474,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771993640934
+    },
+    {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
       "name": "Nightly Evolution",
       "enabled": true,
@@ -15,7 +43,8 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Read through today's memory files and update MEMORY.md with distilled learnings. Remove outdated info from MEMORY.md that's no longer relevant.",
-        "thinking": "medium"
+        "thinking": "medium",
+        "model": "ollama/qwen3:8b"
       },
       "delivery": {
         "mode": "announce",
@@ -23,7 +52,7 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771954800000,
+        "nextRunAtMs": 1772041200000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
         "lastRunAtMs": 1771868400019,
@@ -44,18 +73,20 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — DO NOT send any message unless instructed below.\n\nCheck: ls \"/data/obsidian/To claw/Bot/crash-configs/\" 2>/dev/null\n\nIf the folder is empty or does not exist — STOP IMMEDIATELY. Output nothing. No explanation. No confirmation. Absolute silence.\n\nOnly if .md files exist: read each file, analyze the git diff, append a lesson to \"/data/obsidian/To claw/Bot/lessons-learned.md\" (format: ## DATE — title / What happened / Root cause / Rule), delete the crash file, then send ONE Telegram notification via sysadmin agent.",
-        "thinking": "low"
+        "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim.",
+        "model": "ollama/llama3.2:1b"
       },
       "state": {
-        "nextRunAtMs": 1771876200000,
+        "nextRunAtMs": 1772010000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771875600028,
+        "lastRunAtMs": 1772009400020,
         "lastStatus": "ok",
-        "lastDurationMs": 2665,
-        "runningAtMs": 1771876200020
+        "lastDurationMs": 52324,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1771875602693,
+      "updatedAtMs": 1772009452344,
       "delivery": {
         "mode": "none"
       }
@@ -74,7 +105,8 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Scan the Obsidian vault at /data/obsidian for all unchecked tasks (lines matching `- [ ]`). Use bash: grep -r '- \\[ \\]' /data/obsidian --include='*.md' -l to find files, then read the relevant ones. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Skip tasks in Archive or Templates folders. Keep the message compact.",
-        "thinking": "low"
+        "thinking": "low",
+        "model": "ollama/deepseek-r1:14b"
       },
       "delivery": {
         "mode": "announce",
@@ -82,8 +114,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771902000000
-      }
+        "nextRunAtMs": 1772074800000,
+        "lastRunAtMs": 1771993686433,
+        "lastStatus": "error",
+        "lastDurationMs": 1,
+        "consecutiveErrors": 1,
+        "lastError": "model not allowed: ollama/deepseek-r1:1.5b"
+      },
+      "updatedAtMs": 1771993686434
     },
     {
       "id": "telegram-dashboard",
@@ -99,7 +137,8 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Run a system health check and send a status dashboard to Telegram. Check: (1) Docker containers — run `docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.RunningFor}}'` via bash tool; (2) Disk usage — `df -h /`; (3) Any recent entries in `/data/obsidian/To claw/Bot/lessons-learned.md` (last 3). Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
-        "thinking": "low"
+        "thinking": "low",
+        "model": "ollama/llama3.2:1b"
       },
       "delivery": {
         "mode": "announce",
@@ -107,8 +146,13 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771903800000
-      }
+        "nextRunAtMs": 1772076600000,
+        "lastRunAtMs": 1771993686434,
+        "lastStatus": "ok",
+        "lastDurationMs": 42468,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1771993728902
     },
     {
       "id": "vault-gardening",
@@ -124,19 +168,51 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — only send to Telegram if issues are found.\n\nScan /data/obsidian/To claw/ for quality issues:\n1. Empty files: bash: find '/data/obsidian/To claw' -name '*.md' -empty\n2. Broken wikilinks: grep for [[links]] patterns and verify the target file exists in the vault\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
-        "thinking": "low"
+        "thinking": "low",
+        "model": "ollama/llama3.2:1b"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1771957800000,
+        "nextRunAtMs": 1772044200000,
         "lastRunAtMs": 1771871403277,
         "lastStatus": "ok",
         "lastDurationMs": 134467,
         "consecutiveErrors": 0
       },
       "updatedAtMs": 1771871537744
+    },
+    {
+      "id": "actual-sync",
+      "name": "Actual Budget Sync",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/30 * * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: ACTUAL_URL=http://host.docker.internal:5006 ACTUAL_PASSWORD=${ACTUAL_PASSWORD} ACTUAL_FILE=13ff18b4-1062-4238-ab67-416f1bbf0ce9 python3 /data/bot/pfm/sync_to_actual.py 2>&1\n\nIf sync fails — send a brief error to Telegram.\nIf successful — complete silently.",
+        "model": "ollama/llama3.2:1b"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772010000000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772009052452,
+        "lastStatus": "ok",
+        "lastDurationMs": 54713,
+        "lastRunStatus": "ok",
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
+      },
+      "updatedAtMs": 1772009107165
     },
     {
       "id": "finance-enrichment",
@@ -152,19 +228,20 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: cd /data/bot/openclaw-docker/workspace/telegram && python3 enrichment.py --model qwen3:8b 2>&1\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram.\nIf successful — complete silently.",
-        "thinking": "low"
+        "thinking": "low",
+        "model": "ollama/llama3.2:1b"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1771880400000,
-        "lastRunAtMs": 1771864086532,
+        "nextRunAtMs": 1772053200000,
+        "lastRunAtMs": 1771993770928,
         "lastStatus": "ok",
-        "lastDurationMs": 148434,
+        "lastDurationMs": 42812,
         "consecutiveErrors": 0
       },
-      "updatedAtMs": 1771864234966
+      "updatedAtMs": 1771993813740
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -180,7 +257,8 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Summarize what was done today based on memory files and current status of projects. Report any issues.",
-        "thinking": "low"
+        "thinking": "low",
+        "model": "ollama/qwen3:8b"
       },
       "delivery": {
         "mode": "announce",
@@ -188,7 +266,7 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1771956000000,
+        "nextRunAtMs": 1772042400000,
         "consecutiveErrors": 0,
         "lastRunAtMs": 1771869602747,
         "lastStatus": "ok",

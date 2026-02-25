@@ -21,8 +21,8 @@ cp -r skills/* "$OPENCLAW_DIR/skills/"
 # 2. Fix Paths
 echo "🔧 Fixing paths..."
 PROMPTS_DIR="$OPENCLAW_DIR/prompts"
-# The default path used in your configs
-ARTIFACT_PATH="/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148"
+# The default path used in your configs (customize if different)
+ARTIFACT_PATH="${ARTIFACT_PATH:-/Users/abror/.gemini/antigravity/brain/b4934c14-3c8c-4e86-af31-5c0e83614148}"
 ESCAPED_ARTIFACT_PATH=$(echo "$ARTIFACT_PATH" | sed 's/\//\\\//g')
 ESCAPED_PROMPTS_DIR=$(echo "$PROMPTS_DIR" | sed 's/\//\\\//g')
 
