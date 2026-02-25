@@ -83,7 +83,7 @@ services:
     container_name: openclaw-latest
     restart: unless-stopped
     # user: "root"  # Change to non-root if needed
-    command: [ "node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan" ]
+    command: [ "sh", "-c", "npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -106,6 +106,8 @@ services:
       - /Users/abror_mac_mini/Projects/bot:/data/bot
       # Docker socket so coder can restart containers
       - /var/run/docker.sock:/var/run/docker.sock
+      # Gemini CLI credentials (for gemini-3.1-pro access)
+      - /Users/abror_mac_mini/.gemini:/home/node/.gemini
     environment:
       - NODE_ENV=production
       - HOME=/home/node
@@ -119,6 +121,7 @@ services:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OLLAMA_API_KEY=${OLLAMA_API_KEY}
       - OLLAMA_HOST=${OLLAMA_HOST}
+      - GEMINI_API_KEY=${AI_STUDIO_KEY_1}
       - LITELLM_HOST=http://litellm:4000
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - OBSIDIAN_VAULT_PATH=/data/obsidian/To claw
