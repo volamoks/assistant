@@ -98,6 +98,12 @@ model_list:
   - model_name: or-deepseek-chat
     litellm_params:
       model: openrouter/deepseek/deepseek-chat
+
+  - model_name: openrouter/deepseek/deepseek-v3.2
+    litellm_params:
+      model: openrouter/deepseek/deepseek-v3.2
+      api_key: os.environ/OPENROUTER_API_KEY
+
   - model_name: openrouter/deepseek/deepseek-r1
     litellm_params:
       model: openrouter/deepseek/deepseek-r1
@@ -114,6 +120,52 @@ model_list:
     litellm_params:
       model: minimax/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
+
+  # === AI Studio keys (load balanced — fallback when Vertex AI throttles) ===
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
+
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_2
+
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_3
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_2
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_3
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_2
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/AI_STUDIO_KEY_3
 
   # Local Ollama
   - model_name: ollama/llama3.2:1b
