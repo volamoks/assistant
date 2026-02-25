@@ -24,7 +24,27 @@ fi
 
 echo "🌐 Clipping: $URL"
 
-# --- Try Crawl4AI first (best quality fit_markdown) ---
+# --- Auto-start Crawl4AI if not running ---
+COMPOSE_FILE="/data/bot/openclaw-docker/docker-compose.yml"
+CRAWL4AI_RUNNING=$(curl -s --max-time 3 "${CRAWL4AI_HOST}/health" 2>/dev/null | grep -c '"status":"ok"' || echo "0")
+
+if [ "$CRAWL4AI_RUNNING" = "0" ]; then
+    echo "⏳ Starting Crawl4AI..."
+    docker compose -f "$COMPOSE_FILE" --profile crawl up -d crawl4ai 2>/dev/null
+
+    # Wait for health check (max 30s)
+    for i in $(seq 1 10); do
+        sleep 3
+        READY=$(curl -s --max-time 3 "${CRAWL4AI_HOST}/health" 2>/dev/null | grep -c '"status":"ok"' || echo "0")
+        if [ "$READY" != "0" ]; then
+            echo "✅ Crawl4AI ready"
+            break
+        fi
+        [ $i -eq 10 ] && echo "⚠️  Crawl4AI slow to start, proceeding anyway..."
+    done
+fi
+
+# --- Try Crawl4AI (best quality markdown, JS-rendered) ---
 CRAWL_RESPONSE=$(curl -s --max-time 30 \
     -X POST "${CRAWL4AI_HOST}/crawl" \
     -H "Authorization: Bearer ${CRAWL4AI_TOKEN}" \
@@ -35,6 +55,7 @@ CRAWL_RESPONSE=$(curl -s --max-time 30 \
         \"excluded_tags\": [\"nav\", \"header\", \"footer\", \"aside\", \"script\", \"style\"],
         \"remove_overlay_elements\": true
     }" 2>/dev/null)
+
 
 CRAWL4AI_OK=$(echo "$CRAWL_RESPONSE" | python3 -c "
 import json, sys
