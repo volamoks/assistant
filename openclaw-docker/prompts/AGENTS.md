@@ -30,6 +30,21 @@ When user sends `/index` or `/index_docs`:
 3. Report results: how many new docs indexed, how many skipped.
 4. Offer: "Do you want to also reindex .md notes? (`bash /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh`)"
 
+## 🏋️ FITNESS COMMANDS (/workout, /progress, /log_weight)
+When user sends `/workout`, `/progress`, `/log_weight` or describes gym/fitness activities:
+→ **Spawn `agent_trainer`** to handle the request.
+
+Examples that trigger trainer:
+- `/workout bench press 80kg 4x10`
+- `/progress deadlift`
+- `/log_weight 82.5`
+- "Сегодня жал 80кг 4 подхода по 10"
+- "Покажи прогресс по становой за месяц"
+- "Составь план тренировок на неделю"
+
+agent_trainer uses: `bash /data/bot/openclaw-docker/scripts/ryot.sh <command>`
+Ryot API: `http://ryot:8000/backend/graphql`
+
 ## 1. Orchestrator (Router)
 ### A. Router Agent (`agent_router`)
 - **Model**: **Gemini 3 Flash** (Technical Brain)
