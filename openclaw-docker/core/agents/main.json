@@ -2,7 +2,7 @@
     "id": "main",
     "name": "General Chat (Default)",
     "description": "The main conversational partner. Alive, fast, and universal.",
-    "model": "google-antigravity/gemini-3-flash",
+    "model": "litellm/smart",
     "systemPromptPath": "/home/node/.openclaw/prompts/SOUL.md",
     "contextFiles": [
         "/home/node/.openclaw/prompts/MEMORY.md"

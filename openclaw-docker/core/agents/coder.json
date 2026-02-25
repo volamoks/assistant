@@ -2,12 +2,16 @@
   "id": "agent_coder",
   "name": "Specialist (Coder)",
   "description": "DevOps & Backend Engineer powered by DeepSeek V3 (OpenRouter). Native MCP support for full-repo understanding.",
-  "model": "openrouter/deepseek/deepseek-chat",
+  "model": "litellm/thinking",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CODER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",
     "/home/node/.openclaw/prompts/MEMORY.md"
   ],
-  "tools": ["shell.execute", "file.read", "file.write"],
+  "tools": [
+    "shell.execute",
+    "file.read",
+    "file.write"
+  ],
   "temperature": 0.1
 }

@@ -2,7 +2,7 @@
   "id": "agent_router",
   "name": "Orchestrator (Router)",
   "description": "The entry point for all requests. Never executes tasks itself. Analyzes intent and routes to the correct specialist.",
-  "model": "ollama/qwen3:8b",
+  "model": "litellm/fast",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",
