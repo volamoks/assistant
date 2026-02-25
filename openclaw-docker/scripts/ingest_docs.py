@@ -57,22 +57,15 @@ def file_hash(path: Path) -> str:
 # ─── markitdown conversion ───────────────────────────────────────────────────
 
 def ensure_markitdown():
-    """Install markitdown if not present."""
+    """Check markitdown is available."""
     try:
         import markitdown  # noqa
         return True
     except ImportError:
-        log("Installing markitdown...")
-        import subprocess
-        result = subprocess.run(
-            [sys.executable, "-m", "pip", "install", "markitdown[all]", "-q"],
-            capture_output=True
-        )
-        if result.returncode != 0:
-            log(f"Failed to install markitdown: {result.stderr.decode()}")
-            return False
-        log("markitdown installed.")
-        return True
+        log("❌ markitdown not found.")
+        log("   Install once with:")
+        log("   docker exec -u root openclaw-latest pip3 install 'markitdown[all]' --break-system-packages")
+        return False
 
 def convert_to_text(file_path: Path) -> str | None:
     """Convert doc to markdown text using markitdown."""
