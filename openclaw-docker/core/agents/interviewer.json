@@ -1,12 +1,17 @@
 {
-  "id": "agent_interviewer",
-  "name": "Specialist (Interviewer)",
-  "description": "Conducts strict mock interviews for Agoda/FAANG (System Design, Leadership).",
-  "model": "google-antigravity/gemini-3-deep-think",
-  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_INTERVIEWER.md",
-  "contextFiles": [
-    "/home/node/.openclaw/prompts/MEMORY.md"
-  ],
-  "tools": [],
-  "temperature": 0.5
+    "id": "agent_interviewer",
+    "name": "Interviewer",
+    "description": "Bar Raiser mock interviewer for tech companies (Agoda, FAANG). Handles System Design, Behavioral (STAR), Product Sense. Also coaches pitch and communication clarity for speech training.",
+    "model": "google-antigravity/gemini-3-flash",
+    "systemPromptPath": "prompts/SOUL_INTERVIEWER.md",
+    "tools": [
+        "exec",
+        "read"
+    ],
+    "tags": [
+        "career",
+        "interview",
+        "coaching"
+    ],
+    "allowSpawn": false
 }
