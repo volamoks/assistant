@@ -128,9 +128,12 @@ def get_collection_id() -> str | None:
 def get_existing_ids(col_id: str) -> set[str]:
     """Get all document IDs already in the collection."""
     try:
-        data = http_get(f"{CHROMA_HOST}/api/v1/collections/{col_id}/get?include=[]")
-        return set(data.get("ids", []))
-    except Exception:
+        data = http_post(f"{CHROMA_HOST}/api/v1/collections/{col_id}/get",
+                         {"include": []})
+        ids = data.get("ids", [])
+        return set(ids)
+    except Exception as e:
+        log(f"  ⚠️  Could not get existing IDs: {e} — treating as empty")
         return set()
 
 def delete_chunks_for_file(col_id: str, source: str, existing_ids: set[str]):
@@ -146,9 +149,10 @@ def delete_chunks_for_file(col_id: str, source: str, existing_ids: set[str]):
         log(f"  ⚠️  Could not delete old chunks: {e}")
 
 def upsert_chunks(col_id: str, chunks: list[dict]):
-    """Embed and upsert chunks into ChromaDB in batches of 10."""
-    batch_size = 10
-    for i in range(0, len(chunks), batch_size):
+    """Embed and upsert chunks into ChromaDB in batches."""
+    batch_size = 5  # small batches to avoid OOM
+    total = len(chunks)
+    for i in range(0, total, batch_size):
         batch = chunks[i:i + batch_size]
         ids, docs, metas, embeds = [], [], [], []
         for c in batch:
@@ -166,6 +170,8 @@ def upsert_chunks(col_id: str, chunks: list[dict]):
                 "metadatas": metas,
                 "embeddings": embeds
             })
+            pct = min(100, int((i + batch_size) / total * 100))
+            print(f"  [{pct}%] {i+len(ids)}/{total} chunks", flush=True)
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
@@ -231,18 +237,24 @@ def main():
         if not text:
             continue
 
-        chunks = chunk_text(text, rel)
-        log(f"  → {len(chunks)} chunks from {len(text)} chars")
+        try:
+            chunks = chunk_text(text, rel)
+            log(f"  → {len(chunks)} chunks from {len(text)} chars")
 
-        # Remove old chunks for this file
-        delete_chunks_for_file(col_id, rel, existing_ids)
+            # Remove old chunks for this file
+            delete_chunks_for_file(col_id, rel, existing_ids)
 
-        # Add hash marker chunk (to track file version)
-        chunks.append({"id": hash_id, "text": f"[file marker] {rel}", "source": rel, "chunk_index": -1})
+            # Add hash marker chunk (to track file version)
+            chunks.append({"id": hash_id, "text": f"[file marker] {rel}", "source": rel, "chunk_index": -1})
 
-        upsert_chunks(col_id, chunks)
-        log(f"  ✅ Indexed {rel}")
-        processed += 1
+            upsert_chunks(col_id, chunks)
+            log(f"  ✅ Indexed {rel}")
+            processed += 1
+        except Exception as e:
+            import traceback
+            log(f"  ❌ Failed to index {rel}: {e}")
+            traceback.print_exc()
+            continue
         time.sleep(0.2)  # Rate limit Ollama
 
     log(f"\n✅ Done: {processed} new/updated, {skipped} unchanged")
