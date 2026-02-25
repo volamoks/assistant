@@ -3,9 +3,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://localhost:11434";
-const CHROMA_HOST = process.env.CHROMA_HOST || "http://localhost:8002";
-const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || "/Users/abror_mac_mini/Library/Mobile Documents/com~apple~CloudDocs/abror";
+const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://ollama:11434";
+const CHROMA_HOST = process.env.CHROMA_HOST || "http://chromadb:8000";
+const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || "/data/obsidian";
 const COLLECTION_NAME = "obsidian_vault";
 const EMBEDDING_MODEL = "nomic-embed-text";
 

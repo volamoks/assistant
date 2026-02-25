@@ -14,7 +14,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK. Run this bash command and output nothing:\nbash: bash -c 'FILE=\"/data/obsidian/To claw/Bot/today-session.md\"; if [ ! -f \"$FILE\" ] || [ \"$(date +%Y-%m-%d)\" != \"$(head -1 \"$FILE\" | grep -oP \"\\d{4}-\\d{2}-\\d{2}\")\" ]; then echo \"# Session Log — $(date +\\'%Y-%m-%d\\')\" > \"$FILE\"; echo \"\" >> \"$FILE\"; echo \"_Agent will append actions here throughout the day._\" >> \"$FILE\"; fi'",
+        "message": "SILENT TASK. Run this bash script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh",
         "model": "ollama/llama3.2:1b"
       },
       "delivery": {
@@ -77,16 +77,16 @@
         "model": "ollama/llama3.2:1b"
       },
       "state": {
-        "nextRunAtMs": 1772010000000,
+        "nextRunAtMs": 1772020800000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772009400020,
+        "lastRunAtMs": 1772020200014,
         "lastStatus": "ok",
-        "lastDurationMs": 52324,
+        "lastDurationMs": 56601,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772009452344,
+      "updatedAtMs": 1772020256615,
       "delivery": {
         "mode": "none"
       }
@@ -104,7 +104,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Scan the Obsidian vault at /data/obsidian for all unchecked tasks (lines matching `- [ ]`). Use bash: grep -r '- \\[ \\]' /data/obsidian --include='*.md' -l to find files, then read the relevant ones. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Skip tasks in Archive or Templates folders. Keep the message compact.",
+        "message": "Run this script to find unchecked tasks: bash: /data/bot/openclaw-docker/scripts/jobs/morning_task_briefing.sh\nRead the relevant files returned. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Keep the message compact.",
         "thinking": "low",
         "model": "ollama/deepseek-r1:14b"
       },
@@ -136,7 +136,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run a system health check and send a status dashboard to Telegram. Check: (1) Docker containers — run `docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.RunningFor}}'` via bash tool; (2) Disk usage — `df -h /`; (3) Any recent entries in `/data/obsidian/To claw/Bot/lessons-learned.md` (last 3). Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
+        "message": "Run a system health check: bash: /data/bot/openclaw-docker/scripts/jobs/morning_system_status.sh\nSend a status dashboard to Telegram based on the output. Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
         "thinking": "low",
         "model": "ollama/llama3.2:1b"
       },
@@ -167,7 +167,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — only send to Telegram if issues are found.\n\nScan /data/obsidian/To claw/ for quality issues:\n1. Empty files: bash: find '/data/obsidian/To claw' -name '*.md' -empty\n2. Broken wikilinks: grep for [[links]] patterns and verify the target file exists in the vault\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
+        "message": "SILENT TASK — only send to Telegram if issues are found.\n\nRun the scan script: bash: /data/bot/openclaw-docker/scripts/jobs/vault_gardening.sh\nRead any reported empty files, and verify if the wikilinks reported match existing files in the vault.\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
         "thinking": "low",
         "model": "ollama/llama3.2:1b"
       },
@@ -196,23 +196,23 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: ACTUAL_URL=http://host.docker.internal:5006 ACTUAL_PASSWORD=${ACTUAL_PASSWORD} ACTUAL_FILE=13ff18b4-1062-4238-ab67-416f1bbf0ce9 python3 /data/bot/pfm/sync_to_actual.py 2>&1\n\nIf sync fails — send a brief error to Telegram.\nIf successful — complete silently.",
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: /data/bot/openclaw-docker/scripts/jobs/actual_sync.sh\n\nIf sync fails — send a brief error to Telegram. If successful — complete silently.",
         "model": "ollama/llama3.2:1b"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772010000000,
+        "nextRunAtMs": 1772020800000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772009052452,
+        "lastRunAtMs": 1772019056298,
         "lastStatus": "ok",
-        "lastDurationMs": 54713,
+        "lastDurationMs": 86323,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772009107165
+      "updatedAtMs": 1772019142621
     },
     {
       "id": "finance-enrichment",
@@ -227,7 +227,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: cd /data/bot/openclaw-docker/workspace/telegram && python3 enrichment.py --model qwen3:8b 2>&1\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram.\nIf successful — complete silently.",
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: /data/bot/openclaw-docker/scripts/jobs/finance_enrichment.sh\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram. If successful — complete silently.",
         "thinking": "low",
         "model": "ollama/llama3.2:1b"
       },
@@ -273,6 +273,31 @@
         "lastDurationMs": 19168
       },
       "updatedAtMs": 1771869621915
+    },
+    {
+      "id": "obsidian-reindex",
+      "name": "Obsidian RAG Reindex",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 3 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
+        "model": "ollama/llama3.2:1b"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1772056800000
+      },
+      "updatedAtMs": 1772019142621
     }
   ]
 }

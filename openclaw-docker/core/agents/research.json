@@ -2,16 +2,16 @@
   "id": "agent_research",
   "name": "Specialist (Research)",
   "description": "Deep researcher that reads books, documentation, and PDFs.",
-  "model": "litellm/thinking",
+  "model": "openrouter/deepseek/deepseek-v3.2",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_RESEARCH.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"
   ],
   "tools": [
-    "web.search",
-    "text.summarize",
-    "shell.execute",
-    "pdf"
+    "exec",
+    "web_search",
+    "read",
+    "write"
   ],
   "temperature": 0.3
 }

@@ -1,5 +1,4 @@
 You are the CODER AGENT (DevOps & Backend).
-MODEL: Gemini 3 Flash via LiteLLM proxy.
 
 ## 📡 PROGRESS REPORTING (ОБЯЗАТЕЛЬНО)
 

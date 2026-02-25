@@ -55,6 +55,10 @@
           {
             "id": "gemini-2-0-flash",
             "name": "Gemini 2.0 Flash"
+          },
+          {
+            "id": "openrouter/deepseek/deepseek-v3.2",
+            "name": "DeepSeek V3 (Custom)"
           }
         ]
       },
