@@ -42,7 +42,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Read through today's memory files and update MEMORY.md with distilled learnings. Remove outdated info from MEMORY.md that's no longer relevant.",
+        "message": "NIGHTLY EVOLUTION — 3 tasks, do all 3 in order:\n\n## TASK 1: Memory Consolidation\nRead `/home/node/.openclaw/prompts/MEMORY.md` and today's session log at `/data/obsidian/To claw/Bot/today-session.md`.\nUpdate MEMORY.md with distilled learnings from today. Remove outdated info.\n\n## TASK 2: Self-Improvement Research (web search)\nSearch the web for:\n1. web_search: \"OpenClaw AI agent new features 2025 OR 2026\"\n2. web_search: \"best AI automation tools self-hosted 2026\"\n3. web_search: \"LLM agent productivity tools new\"\n\nFor each interesting finding (max 3 total):\n- If it could improve our bot setup → append to `/data/obsidian/To claw/possible_improvements/new_ideas.md`\n  Format: `## [Date] [Tool/Feature name]\\n- What: one line\\n- Why useful: one line\\n- Source: [url]`\n- Skip anything we already have (ChromaDB, Ollama, LiteLLM, SearxNG, Crawl4AI, Ryot, n8n)\n\n## TASK 3: Brief Report\nSend ONE short Telegram message:\n```\n🌙 Nightly Evolution\n✅ Memory updated\n🔍 Found X new ideas → possible_improvements\n[list idea names if any, else \"nothing new today\"]\n```",
         "thinking": "medium",
         "model": "ollama/qwen3:8b"
       },
@@ -77,16 +77,16 @@
         "model": "ollama/llama3.2:1b"
       },
       "state": {
-        "nextRunAtMs": 1772020800000,
+        "nextRunAtMs": 1772026200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772020200014,
+        "lastRunAtMs": 1772025600012,
         "lastStatus": "ok",
-        "lastDurationMs": 56601,
+        "lastDurationMs": 114798,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772020256615,
+      "updatedAtMs": 1772025714810,
       "delivery": {
         "mode": "none"
       }
@@ -203,16 +203,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772020800000,
+        "nextRunAtMs": 1772026200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772019056298,
+        "lastRunAtMs": 1772024528247,
         "lastStatus": "ok",
-        "lastDurationMs": 86323,
+        "lastDurationMs": 133461,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772019142621
+      "updatedAtMs": 1772024661708
     },
     {
       "id": "finance-enrichment",
