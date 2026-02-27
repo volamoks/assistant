@@ -55,17 +55,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772214000000,
+        "nextRunAtMs": 1772300400000,
         "lastStatus": "error",
-        "consecutiveErrors": 2,
-        "lastRunAtMs": 1772127600027,
-        "lastDurationMs": 3666,
+        "consecutiveErrors": 3,
+        "lastRunAtMs": 1772214000031,
+        "lastDurationMs": 186,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "delivered",
-        "lastError": "HTTP 400: litellm.BadRequestError: litellm.BadRequestError: vertex_ai_betaException - b'{\\n  \"error\": {\\n    \"code\": 403,\\n    \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\\n    \"status\": \"PERMISSION_DENIED\",\\n    \"details\": [\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\\n        \"reason\": \"SERVICE_DISABLED\",\\n        \"domain\": \"googleapis.com\",\\n        \"metadata\": {\\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\",\\n          \"serviceTitle\": \"Vertex AI API\",\\n          \"containerInfo\": \"crucial-river-3zftk\",\\n          \"service\": \"aiplatform.googleapis.com\",\\n          \"consumer\": \"projects/crucial-river-3zftk\"\\n        }\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\\n        \"locale\": \"en-US\",\\n        \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\\n        \"links\": [\\n          {\\n            \"description\": \"Google developers console API activation\",\\n            \"url\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\"\\n          }\\n        ]\\n      }\\n    ]\\n  }\\n}\\n'",
-        "lastDelivered": true
+        "lastDeliveryStatus": "unknown",
+        "lastError": "Error: All models failed (2): litellm/routine: Unknown model: litellm/routine (model_not_found) | anthropic/claude-opus-4-6: No API key found for provider \"anthropic\". Auth store: /home/node/.openclaw/agents/main/agent/auth-profiles.json (agentDir: /home/node/.openclaw/agents/main/agent). Configure auth for this agent (openclaw agents add <id>) or copy auth-profiles.json from the main agentDir. (auth)"
       },
-      "updatedAtMs": 1772127603693
+      "updatedAtMs": 1772214000217
     },
     {
       "id": "crash-analysis",
@@ -84,16 +83,16 @@
         "model": "litellm/routine"
       },
       "state": {
-        "nextRunAtMs": 1772184000000,
+        "nextRunAtMs": 1772222400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772183400023,
+        "lastRunAtMs": 1772221800017,
         "lastStatus": "ok",
-        "lastDurationMs": 7466,
+        "lastDurationMs": 12995,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772183407489,
+      "updatedAtMs": 1772221813012,
       "delivery": {
         "mode": "none"
       }
@@ -188,7 +187,7 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772217000000,
+        "nextRunAtMs": 1772303400000,
         "lastRunAtMs": 1772130615053,
         "lastStatus": "error",
         "lastDurationMs": 54262,
@@ -196,7 +195,6 @@
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "lastError": "⚠️ ✉️ Message failed",
         "lastDeliveryError": "⚠️ ✉️ Message failed"
       },
       "updatedAtMs": 1772130669315
@@ -221,18 +219,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772184901021,
-        "consecutiveErrors": 11,
-        "lastRunAtMs": 1772181261797,
-        "lastStatus": "error",
-        "lastDurationMs": 39224,
-        "lastRunStatus": "error",
+        "nextRunAtMs": 1772222400000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772220607250,
+        "lastStatus": "ok",
+        "lastDurationMs": 11562,
+        "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "lastDeliveryError": "⚠️ ✉️ Message failed",
-        "lastError": "⚠️ ✉️ Message failed"
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772181301021
+      "updatedAtMs": 1772220618812
     },
     {
       "id": "finance-enrichment",
@@ -291,14 +287,13 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772215200000,
+        "nextRunAtMs": 1772301600000,
         "consecutiveErrors": 2,
         "lastRunAtMs": 1772128800018,
         "lastStatus": "error",
         "lastDurationMs": 3037,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "delivered",
-        "lastError": "HTTP 400: litellm.BadRequestError: litellm.BadRequestError: vertex_ai_betaException - b'{\\n  \"error\": {\\n    \"code\": 403,\\n    \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\\n    \"status\": \"PERMISSION_DENIED\",\\n    \"details\": [\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\\n        \"reason\": \"SERVICE_DISABLED\",\\n        \"domain\": \"googleapis.com\",\\n        \"metadata\": {\\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\",\\n          \"consumer\": \"projects/crucial-river-3zftk\",\\n          \"containerInfo\": \"crucial-river-3zftk\",\\n          \"service\": \"aiplatform.googleapis.com\",\\n          \"serviceTitle\": \"Vertex AI API\"\\n        }\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\\n        \"locale\": \"en-US\",\\n        \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\\n        \"links\": [\\n          {\\n            \"description\": \"Google developers console API activation\",\\n            \"url\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\"\\n          }\\n        ]\\n      }\\n    ]\\n  }\\n}\\n'",
         "lastDelivered": true
       },
       "updatedAtMs": 1772128803055
@@ -355,7 +350,7 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772215200000,
+        "nextRunAtMs": 1772301600000,
         "lastStatus": null,
         "consecutiveErrors": 0
       },
@@ -392,6 +387,56 @@
         "lastDeliveryStatus": "unknown"
       },
       "updatedAtMs": 1772164800202
+    },
+    {
+      "id": "watchdog",
+      "name": "OpenClaw Watchdog",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/5 * * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run /data/bot/openclaw-docker/scripts/watchdog.sh and report result"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": null,
+        "lastStatus": null,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1772200000000
+    },
+    {
+      "id": "git-backup",
+      "name": "Git Backup",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 3 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run: cd /data/bot/openclaw-docker && git add -A && git commit -m 'auto-backup $(date +%Y-%m-%d_%H:%M)' && git push origin main || echo 'No changes to commit'"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": null,
+        "lastStatus": null,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1772200000000
     }
   ]
 }

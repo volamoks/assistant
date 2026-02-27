@@ -316,7 +316,6 @@
       "dmPolicy": "pairing",
       "groups": {
         "-1003706226741": {
-          "requireMention": false,
           "topics": {
             "1": {
               "skills": [],
@@ -337,8 +336,12 @@
           }
         }
       },
-      "groupPolicy": "open",
-      "streaming": "off"
+      "groupPolicy": "allowlist",
+      "streaming": "off",
+      "allowFrom": [
+        "6053956251",
+        "3706226741"
+      ]
     }
   },
   "gateway": {

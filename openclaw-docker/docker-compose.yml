@@ -99,8 +99,14 @@ services:
       dockerfile: openclaw.Dockerfile
     container_name: openclaw-latest
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     user: "501:20" # Run as host user for correct file ownership
-    command: [ "sh", "-c", "python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -147,7 +153,11 @@ services:
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
       - VIKUNJA_TOKEN=${VIKUNJA_TOKEN}
-      - PYTHONPATH=/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
+      - PLAUD_TOKEN=${PLAUD_TOKEN}
+      - PLAUD_API_DOMAIN=${PLAUD_API_DOMAIN}
+      - RYOT_URL=http://ryot:8000/backend/graphql
+      - RYOT_TOKEN=openclaw-ryot-admin-token
+      - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
     networks:
       - default
       - jarvis_net
