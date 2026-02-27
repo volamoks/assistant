@@ -3,11 +3,15 @@ FROM ghcr.io/openclaw/openclaw:main
 # Temporarily switch to root to install system dependencies
 USER root
 
-# Install docker CLI and sudo
+# Install docker CLI, sudo, and python tools
 RUN apt-get update && apt-get install -y \
     docker.io \
     sudo \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+# Install actualpy and other dependencies globally
+RUN pip3 install --break-system-packages actualpy python-dotenv telethon pandas
 
 # Add a mock host user mapping for the volume bounds and add to dialout
 RUN groupadd -g 20 dialout_host 2>/dev/null || true; \

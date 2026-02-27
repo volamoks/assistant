@@ -5,7 +5,7 @@
 set -e
 
 # Configuration
-VIKUNJA_URL="${VIKUNJA_URL:-http://localhost:3456/api/v1}"
+VIKUNJA_URL="${VIKUNJA_URL:-http://vikunja:3456/api/v1}"
 VIKUNJA_TOKEN="${VIKUNJA_TOKEN:-}"
 
 if [ -z "$VIKUNJA_TOKEN" ]; then

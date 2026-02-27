@@ -1,0 +1,6 @@
+{
+  "vikunja": {
+    "url": "http://host.docker.internal:3456",
+    "token": "tk_3a904dcbed23c3a90cbc54c642ce64462059eaa8"
+  }
+}

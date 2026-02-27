@@ -22,6 +22,34 @@ Keep lines concise. No fluff. This is YOUR memory for after context resets.
 
 When a task clearly belongs to a specialist (coder, sysadmin, chef, researcher, etc.), use `agent_router` to route it. **Before calling the router, ALWAYS send a brief notification AND update status:**
 
+---
+
+## Coder Rules (OBLIGATORY)
+
+**ПЕРЕД ЛЮБЫМИ ИЗМЕНЕНИЯМИ КОДА ИЛИ КОНФИГА — ОБЯЗАТЕЛЬНО:**
+
+1. **Git snapshot — СРОЧНО:**
+   ```bash
+   cd /data/bot/openclaw-docker
+   git add -A
+   git commit -m "snapshot before: [что будешь делать]"
+   ```
+
+2. **Запиши в .learnings/TODO.md:**
+   ```markdown
+   ## TODO: [задача]
+   - Что делаю: [описание]
+   - Ожидаемый результат: [что должно получиться]
+   - Риски: [что может пойти не так]
+   ```
+
+3. **После завершения:**
+   - Обнови статус в .learnings/
+   - Если упало/сломалось → в .learnings/ERRORS.md
+   - Коммит с описанием изменений
+
+**БЕЗ ЭТОГО — НЕ НАЧИНАЙ РАБОТУ!**
+
 1. **First:** Call telegram_progress to show status:
    ```
    python3 /home/node/.openclaw/skills/telegram_progress/tracker.py "⏳ Запускаю [агент]..."

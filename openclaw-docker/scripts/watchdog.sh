@@ -3,22 +3,21 @@
 # Checks if Gateway is healthy and restarts if not
 
 LOG="/tmp/openclaw_watchdog.log"
-GATEWAY_URL="http://localhost:3000/health"
-MAX_RETRIES=3
+PORT=18789
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOG
 }
 
 check_gateway() {
-    curl -sf --max-time 5 "$GATEWAY_URL" > /dev/null 2>&1
+    curl -sf --max-time 5 "http://localhost:$PORT" > /dev/null 2>&1
     return $?
 }
 
 restart_gateway() {
     log "⚠️ Gateway unhealthy, restarting..."
     docker restart openclaw-latest 2>&1 | tee -a $LOG
-    sleep 10
+    sleep 15
     if check_gateway; then
         log "✅ Gateway restarted successfully"
     else

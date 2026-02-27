@@ -83,16 +83,16 @@
         "model": "litellm/routine"
       },
       "state": {
-        "nextRunAtMs": 1772222400000,
+        "nextRunAtMs": 1772223600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772221800017,
+        "lastRunAtMs": 1772223000029,
         "lastStatus": "ok",
-        "lastDurationMs": 12995,
+        "lastDurationMs": 8893,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772221813012,
+      "updatedAtMs": 1772223008922,
       "delivery": {
         "mode": "none"
       }
@@ -219,16 +219,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772222400000,
+        "nextRunAtMs": 1772224200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772220607250,
+        "lastRunAtMs": 1772222411031,
         "lastStatus": "ok",
-        "lastDurationMs": 11562,
+        "lastDurationMs": 14480,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772220618812
+      "updatedAtMs": 1772222425511
     },
     {
       "id": "finance-enrichment",
@@ -407,11 +407,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": null,
-        "lastStatus": null,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1772223300000,
+        "lastStatus": "ok",
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772223008922,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 30355,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772200000000
+      "updatedAtMs": 1772223039277
     },
     {
       "id": "git-backup",
@@ -432,7 +437,7 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": null,
+        "nextRunAtMs": 1772229600000,
         "lastStatus": null,
         "consecutiveErrors": 0
       },
