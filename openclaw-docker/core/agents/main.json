@@ -2,7 +2,7 @@
     "id": "main",
     "name": "General Chat (Default)",
     "description": "The main conversational partner. Alive, fast, and universal.",
-    "model": "litellm/smart",
+    "model": "minimax-portal/MiniMax-M2.5",
     "systemPromptPath": "/home/node/.openclaw/prompts/SOUL.md",
     "contextFiles": [
         "/home/node/.openclaw/prompts/MEMORY.md"
@@ -10,7 +10,11 @@
     "tools": [
         "agent_router",
         "web.search",
-        "obsidian_search"
+        "obsidian_search",
+        "read",
+        "write",
+        "apply_patch",
+        "edit"
     ],
     "temperature": 0.7
 }

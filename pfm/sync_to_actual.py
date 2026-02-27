@@ -11,52 +11,14 @@ Usage:
 """
 
 import argparse
-import os
 import sqlite3
 import sys
 from datetime import datetime
-from pathlib import Path
 
-from actual import Actual, get_accounts
-from actual.queries import create_account, create_transaction
+from actual import get_accounts
 
-# ── Config ────────────────────────────────────────────
-ACTUAL_URL      = os.environ.get("ACTUAL_URL") or os.getenv("ACTUAL_URL", "http://localhost:5006")
-ACTUAL_PASSWORD = os.environ.get("ACTUAL_PASSWORD")
-ACTUAL_FILE     = os.environ.get("ACTUAL_FILE")
-
-# Validate required environment variables
-if not ACTUAL_PASSWORD:
-    sys.exit("❌ Error: ACTUAL_PASSWORD environment variable is required")
-if not ACTUAL_FILE:
-    sys.exit("❌ Error: ACTUAL_FILE environment variable is required")
-
-DB_PATHS = [
-    Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db",
-    Path.home() / "Library/Mobile Documents/com~apple~CloudDocs/abror/Attachments/finance.db",
-    Path("/data/obsidian/Attachments/finance.db"),
-]
-
-# Map our categories → Actual Budget category names
-CATEGORY_MAP = {
-    "FOOD":       "Food",
-    "TRANSPORT":  "Transport",
-    "SHOPPING":   "Shopping",
-    "HEALTH":     "Health",
-    "UTILITIES":  "Utilities",
-    "TELECOM":    "Telecom",
-    "ATM":        "ATM",
-    "TRANSFER":   "Transfer",
-    "OTHER":      "General",
-}
-
-
-def find_db() -> Path:
-    for p in DB_PATHS:
-        if p.exists():
-            return p
-    sys.exit("❌ finance.db not found")
-
+from config import CATEGORY_MAP, find_db
+from actual_client import get_actual_client, get_or_create_account, add_transaction
 
 def ensure_actual_synced_column(con: sqlite3.Connection) -> None:
     try:
@@ -65,17 +27,6 @@ def ensure_actual_synced_column(con: sqlite3.Connection) -> None:
         con.commit()
     except sqlite3.OperationalError:
         pass  # columns already exist
-
-
-def get_or_create_account(s, accounts: list, card_last4: str):
-    name = f"HUMO *{card_last4}" if card_last4 else "HUMO"
-    acc = next((a for a in accounts if a.name == name), None)
-    if not acc:
-        acc = create_account(s, name, initial_balance=0)
-        accounts.append(acc)
-        print(f"  Created account: {name}")
-    return acc
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -109,8 +60,7 @@ def main():
         con.close()
         return
 
-    with Actual(base_url=ACTUAL_URL, password=ACTUAL_PASSWORD, file=ACTUAL_FILE) as actual:
-        actual.download_budget()
+    with get_actual_client() as actual:
         s = actual.session
         accounts = get_accounts(s)
 
@@ -119,7 +69,8 @@ def main():
             row_id, date_str, amount, currency, category, merchant, \
                 card_last4, tx_type, payment_method, raw_text = row
 
-            acc = get_or_create_account(s, accounts, card_last4)
+            account_name = f"HUMO *{card_last4}" if card_last4 else "HUMO"
+            acc = get_or_create_account(s, accounts, account_name)
 
             try:
                 tx_date = datetime.strptime(date_str, "%Y-%m-%d").date()
@@ -131,16 +82,15 @@ def main():
             actual_category = CATEGORY_MAP.get((category or "OTHER").upper(), "General")
             imported_id = f"humo-{row_id}-{date_str}-{amount}"
 
-            tx = create_transaction(
-                s,
-                date=tx_date,
+            tx = add_transaction(
+                session=s,
                 account=acc,
-                payee=merchant or "Unknown",
+                date=tx_date,
+                payee=merchant,
                 notes=f"{payment_method or ''} | {currency}",
                 category=actual_category,
                 amount=actual_amount,
                 imported_id=imported_id,
-                cleared=True,
             )
 
             con.execute(

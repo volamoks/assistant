@@ -16,13 +16,21 @@ Credentials setup:
 import os
 import sys
 
+# Auto-detect: use container paths if inside Docker, otherwise use local Mac paths
+if os.path.exists("/.dockerenv") or os.path.exists("/home/node"):
+    # Running inside Docker container
+    DEFAULT_SHARED_PATH = "/home/node/.openclaw/shared"
+else:
+    # Running on local Mac
+    DEFAULT_SHARED_PATH = "/Users/abror_mac_mini/Projects/bot/openclaw-docker/shared"
+
 CREDENTIALS_FILE = os.environ.get(
     "GOOGLE_CREDENTIALS",
-    "/home/node/.openclaw/shared/google_credentials.json"
+    f"{DEFAULT_SHARED_PATH}/google_credentials.json"
 )
 TOKEN_FILE = os.environ.get(
     "GOOGLE_TOKEN",
-    "/home/node/.openclaw/shared/google_token.json"
+    f"{DEFAULT_SHARED_PATH}/google_token.json"
 )
 
 SCOPES = [
@@ -33,6 +41,8 @@ SCOPES = [
 ]
 
 def main():
+    global CREDENTIALS_FILE
+    
     try:
         from google_auth_oauthlib.flow import InstalledAppFlow
         from google.auth.transport.requests import Request
@@ -44,10 +54,15 @@ def main():
         sys.exit(1)
 
     if not os.path.exists(CREDENTIALS_FILE):
-        print(f"❌ credentials.json not found at: {CREDENTIALS_FILE}")
-        print("   Download from: https://console.cloud.google.com → APIs & Services → Credentials")
-        print(f"   Then place it at: {CREDENTIALS_FILE}")
-        sys.exit(1)
+        # Try alternative local path
+        alt_creds = "/Users/abror_mac_mini/Projects/bot/openclaw-docker/shared/google_credentials.json"
+        if os.path.exists(alt_creds):
+            CREDENTIALS_FILE = alt_creds
+        else:
+            print(f"❌ credentials.json not found at: {CREDENTIALS_FILE}")
+            print("   Download from: https://console.cloud.google.com → APIs & Services → Credentials")
+            print(f"   Then place it at: {CREDENTIALS_FILE}")
+            sys.exit(1)
 
     creds = None
 
@@ -61,11 +76,25 @@ def main():
             creds.refresh(Request())
             print("✅ Token refreshed.")
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-            # Try local server first, fallback to console (for headless)
+            # Works for both 'web' and 'installed' credential types
+            # Try browser first, fallback to console for headless environments
             try:
-                creds = flow.run_local_server(port=0)
-            except Exception:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    CREDENTIALS_FILE, 
+                    SCOPES
+                )
+                creds = flow.run_local_server(
+                    port=8080,
+                    prompt="consent",
+                    access_type="offline"
+                )
+            except Exception as e:
+                # Fallback to console mode for headless/container environments
+                print(f"⚠️ Browser not available ({e}), using console mode...")
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    CREDENTIALS_FILE, 
+                    SCOPES
+                )
                 creds = flow.run_console()
 
         # Save token

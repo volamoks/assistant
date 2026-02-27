@@ -2,7 +2,7 @@
   "id": "agent_research",
   "name": "Specialist (Research)",
   "description": "Deep researcher that reads books, documentation, and PDFs.",
-  "model": "openrouter/deepseek/deepseek-v3.2",
+  "model": "minimax-portal/MiniMax-M2.5",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_RESEARCH.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/MEMORY.md"

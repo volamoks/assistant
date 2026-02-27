@@ -2,7 +2,7 @@
     "id": "agent_career",
     "name": "Career",
     "description": "Resume strategist, ATS optimizer, cover letter writer, job application tracker, salary negotiation coach. Routes deep mock interviews to agent_interviewer.",
-    "model": "google-antigravity/gemini-2-5-flash",
+    "model": "minimax-portal/MiniMax-M2.5",
     "systemPromptPath": "prompts/SOUL_CAREER.md",
     "tools": [
         "exec",

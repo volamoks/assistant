@@ -61,7 +61,7 @@ Save to `openclaw-docker/core/agents/<agentname>.json`:
 - `agent_coder`, `agent_research`, `agent_analyst` — specialist subagents
 - `obsidian_search` — semantic Obsidian vault search (RAG)
 - `web_search` — SearxNG web search
-- `shell.execute` — run bash commands
+- `exec` — run bash commands
 
 ### Step 3 — Register in openclaw.json
 

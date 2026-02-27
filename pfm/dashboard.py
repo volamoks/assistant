@@ -19,29 +19,7 @@ import streamlit as st
 # Config
 # ──────────────────────────────────────────────
 
-DB_PATHS = [
-    # Obsidian iCloud path (primary)
-    Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db",
-    # iCloud drive path variant
-    Path.home() / "Library/Mobile Documents/com~apple~CloudDocs/abror/Attachments/finance.db",
-    # Docker container path (if running inside container)
-    Path("/data/obsidian/Attachments/finance.db"),
-    # Fallback: same directory as this script
-    Path(__file__).parent / "finance.db",
-]
-
-CATEGORY_COLORS = {
-    "FOOD": "#FF6B6B",
-    "TRANSPORT": "#4ECDC4",
-    "SHOPPING": "#45B7D1",
-    "HEALTH": "#96CEB4",
-    "UTILITIES": "#FECA57",
-    "TELECOM": "#FF9FF3",
-    "ATM": "#A29BFE",
-    "TRANSFER": "#74B9FF",
-    "OTHER": "#636E72",
-}
-
+from config import DB_PATHS, CATEGORY_COLORS
 st.set_page_config(
     page_title="💳 PFM Dashboard",
     page_icon="💳",
@@ -243,7 +221,7 @@ def transactions_table(df: pd.DataFrame) -> None:
     last20["card_last4"] = last20["card_last4"].apply(lambda x: f"*{x}" if pd.notna(x) else "—")
     last20["is_enriched"] = last20["is_enriched"].map({1: "✅", 0: "🔄"})
     last20.columns = ["Дата", "Сумма", "Валюта", "Категория", "Мерчант", "Карта", "LLM"]
-    st.dataframe(last20, use_container_width=True, hide_index=True)
+    st.dataframe(last20, hide_index=True)
 
 
 # ──────────────────────────────────────────────

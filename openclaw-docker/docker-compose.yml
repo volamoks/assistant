@@ -26,16 +26,26 @@ services:
     volumes:
       - ./litellm/config.yaml:/app/config.yaml
       - ./litellm/.env:/app/.env
+      # - ./litellm/vertex_credentials.json:/app/vertex_credentials.json
     env_file:
       - ./litellm/.env
     environment:
       # No master key — LiteLLM accepts any Bearer token from openclaw
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
-      - GOOGLE_OAUTH_ACCESS_TOKEN=${LITELLM_GOOGLE_TOKEN}
+      - UI_USERNAME=${UI_USERNAME}
+      - UI_PASSWORD=${UI_PASSWORD}
+      # - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
-      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      # === ADD MORE AI STUDIO KEYS HERE ===
+      # Uncomment and add more keys below:
+      # - AI_STUDIO_KEY_4=${AI_STUDIO_KEY_4}
+      # - AI_STUDIO_KEY_5=${AI_STUDIO_KEY_5}
+      # - AI_STUDIO_KEY_6=${AI_STUDIO_KEY_6}
+      - DATABASE_URL=postgresql://postgres:postgres@langfuse-db:5432/langfuse
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
+      - LANGFUSE_HOST=http://langfuse-server:3000
     depends_on:
       - redis
     command: --config /app/config.yaml --port 4000 --num_workers 1
@@ -44,6 +54,9 @@ services:
         limits:
           memory: 1g
           cpus: '1.0'
+    networks:
+      - default
+      - jarvis_net
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
@@ -81,11 +94,13 @@ services:
       - jarvis_net
 
   openclaw:
-    image: ghcr.io/openclaw/openclaw:main
+    build:
+      context: .
+      dockerfile: openclaw.Dockerfile
     container_name: openclaw-latest
     restart: unless-stopped
-    # user: "root"  # Change to non-root if needed
-    command: [ "sh", "-c", "npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    user: "501:20" # Run as host user for correct file ownership
+    command: [ "sh", "-c", "python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -110,6 +125,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       # Gemini CLI credentials (for gemini-3.1-pro access)
       - /Users/abror_mac_mini/.gemini:/home/node/.gemini
+      # Pip packages for Google API access
+      - ./pip:/opt/pip-packages:ro
     environment:
       - NODE_ENV=production
       - HOME=/home/node
@@ -118,7 +135,6 @@ services:
       - OPENCLAW_PROJECT_ID=${OPENCLAW_PROJECT_ID}
       - OPENCLAW_EMAIL=${OPENCLAW_EMAIL}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OLLAMA_API_KEY=${OLLAMA_API_KEY}
@@ -130,6 +146,8 @@ services:
       - BOT_PROJECT_PATH=/data/bot
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
+      - VIKUNJA_TOKEN=${VIKUNJA_TOKEN}
+      - PYTHONPATH=/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
     networks:
       - default
       - jarvis_net
@@ -206,6 +224,54 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  langfuse-db:
+    image: postgres:15
+    container_name: langfuse-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=langfuse
+    volumes:
+      - ./langfuse-data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: '1.0'
+    networks:
+      - default
+      - jarvis_net
+
+  # === OBSERVABILITY ===
+  # Langfuse requires NEXTAUTH_SECRET and NEXTAUTH_SALT environment variables.
+  # Add to .env file:
+  # NEXTAUTH_SECRET=your-secret-key-min-32-chars
+  # NEXTAUTH_SALT=your-salt-min-32-chars
+
+  langfuse-server:
+    image: langfuse/langfuse:2
+    container_name: langfuse-server
+    restart: unless-stopped
+    depends_on:
+      - langfuse-db
+    ports:
+      - "3030:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@langfuse-db:5432/langfuse
+      - NEXTAUTH_URL=http://localhost:3030
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - SALT=${NEXTAUTH_SALT}
+      - TELEMETRY_ENABLED=false
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: '1.0'
+    networks:
+      - default
+      - jarvis_net
 
 networks:
   default:

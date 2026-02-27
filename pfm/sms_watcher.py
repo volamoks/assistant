@@ -41,8 +41,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 from parsers.kapital import parse_kapital
 from parsers.uzum    import parse_uzum
 from sink            import push_to_actual
-
-
 # ── State (processed rowids) ─────────────────────────────────────────────
 
 def load_state() -> set:

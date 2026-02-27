@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.openclaw.vertex-token-refresh</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/abror_mac_mini/Projects/bot/openclaw-docker/scripts/refresh_vertex_token.sh</string>
+    </array>
+
+    <!-- Run every 50 minutes (3000 seconds) — tokens expire in ~60 min -->
+    <key>StartInterval</key>
+    <integer>3000</integer>
+
+    <!-- Also run at launch (so token is refreshed on Mac startup) -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/abror_mac_mini/Projects/bot/openclaw-docker/scripts/token_refresh.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/abror_mac_mini/Projects/bot/openclaw-docker/scripts/token_refresh.log</string>
+
+    <!-- Required for docker to be accessible -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+        <key>HOME</key>
+        <string>/Users/abror_mac_mini</string>
+    </dict>
+</dict>
+</plist>

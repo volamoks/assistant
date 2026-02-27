@@ -16,8 +16,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from dotenv import load_dotenv
 from telethon import TelegramClient
+
+from config import find_db, validate_actual_config
+from actual_client import get_actual_client, get_or_create_account, add_transaction
 
 # Add handler path
 sys.path.insert(0, str(Path(__file__).parent.parent / "openclaw-docker/workspace/telegram"))
@@ -31,6 +33,7 @@ def strip_markdown(text: str) -> str:
     text = _re.sub(r'`(.+?)`',       r'\1', text, flags=_re.DOTALL)
     return text
 
+from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / "openclaw-docker/workspace/telegram/.env")
 
 API_ID   = int(os.getenv("TELEGRAM_API_ID", "0"))
@@ -39,11 +42,7 @@ SESSION  = str(Path(__file__).parent.parent / "openclaw-docker/workspace/telegra
 
 SOURCES = ["@HUMOcardbot", "@abror_komalov"]
 
-DB_PATH = Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db"
-
-ACTUAL_URL      = os.environ.get("ACTUAL_URL") or os.getenv("ACTUAL_URL", "http://localhost:5006")
-ACTUAL_PASSWORD = os.environ["ACTUAL_PASSWORD"]  # Required - no default for security
-ACTUAL_FILE     = os.environ["ACTUAL_FILE"]  # Required - no default for security
+DB_PATH = find_db()
 
 
 def init_db(con: sqlite3.Connection):
@@ -100,22 +99,16 @@ def save_to_db(con: sqlite3.Connection, parsed: dict) -> int:
 
 
 def push_to_actual(rows: list):
-    from actual import Actual, get_accounts
-    from actual.queries import create_account, create_transaction
+    from actual import get_accounts
 
-    with Actual(base_url=ACTUAL_URL, password=ACTUAL_PASSWORD, file=ACTUAL_FILE) as actual:
-        actual.download_budget()
+    with get_actual_client() as actual:
         s = actual.session
         accounts = get_accounts(s)
 
         for row_id, parsed in rows:
             card_last4 = parsed["card_last4"]
             acc_name = f"HUMO *{card_last4}" if card_last4 else "HUMO"
-            acc = next((a for a in accounts if a.name == acc_name), None)
-            if not acc:
-                acc = create_account(s, acc_name, initial_balance=0)
-                accounts.append(acc)
-                print(f"  Created account: {acc_name}")
+            acc = get_or_create_account(s, accounts, acc_name)
 
             try:
                 tx_date = datetime.strptime(parsed["date"], "%Y-%m-%d").date()
@@ -123,13 +116,20 @@ def push_to_actual(rows: list):
                 tx_date = datetime.now().date()
 
             actual_amount = -parsed["amount"] if parsed["transaction_type"] == "debit" else parsed["amount"]
-            tx = create_transaction(
-                s, date=tx_date, account=acc,
-                payee=parsed["merchant"] or "Unknown",
+            
+            # Use 'General' as a fallback if the category isn't properly mapped during parsing yet
+            from config import CATEGORY_MAP
+            actual_category = CATEGORY_MAP.get((parsed.get("category") or "OTHER").upper(), "General")
+
+            tx = add_transaction(
+                session=s,
+                account=acc,
+                date=tx_date,
+                payee=parsed["merchant"],
                 notes=parsed["payment_method"] or "",
+                category=actual_category,
                 amount=actual_amount,
                 imported_id=f"humo-{row_id}-{parsed['date']}-{parsed['amount']}",
-                cleared=True,
             )
             # Mark synced in DB
             # (done in batch after commit below)

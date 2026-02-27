@@ -1,1 +1,44 @@
 .env
+.env.*
+
+# Logs and databases
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+pfm/logs/*.log
+pfm/finance.db
+
+# Internal runtime
+core/.openclaw/
+core/core/
+core/workspace-*/
+
+# Secrets and Tokens
+litellm/*_credentials.json
+litellm/vertex_credentials.json
+*token*.json
+session/
+*/session/
+session.journal
+*.session
+*.session-journal
+core/agents/*/agent/auth.json
+core/agents/*/agent/auth-profiles.json
+core/agents/*/agent/models.json
+core/credentials/telegram-*.json
+
+# Temp and OS
+.DS_Store
+/tmp/
+__pycache__/
+*.py[cod]
+
+# IDE
+.idea/
+.vscode/
+
+# Ignore specific personal test scripts (optional)
+test_env.sh
+

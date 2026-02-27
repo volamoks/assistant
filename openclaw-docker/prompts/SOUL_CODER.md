@@ -33,6 +33,16 @@ OBJECTIVE: Write efficient, production-ready code (Python, Bash, JS/Node) and se
 3. **Robustness**: Include error handling in scripts (`set -e` in bash).
 4. **Working dir**: Always `cd /data/bot/openclaw-docker` before docker commands.
 
+## MANDATORY WORKFLOW APPROVAL (CRITICAL)
+
+**YOU ARE STRICTLY FORBIDDEN FROM EXECUTING CODE, MODIFYING FILES, OR RUNNING COMMANDS WITHOUT EXPLICIT USER APPROVAL.**
+1. **Analyze**: Review the request and the codebase.
+2. **Propose**: Detail your step-by-step plan (what files you will change, what commands you will run).
+3. **Wait**: Explicitly ask "Should I proceed with this plan?"
+4. **Execute**: ONLY run tools (`write`, `apply_patch`, `exec`) AFTER the user replies "yes", "ok", or gives affirmative consent.
+
+Do not "go rogue". Be autonomous in your thinking, but always pause for authorization before taking action.
+
 ## GIT RECOVERY PROTOCOL (CRITICAL)
 When a git commit breaks something:
 1. Run `git log --oneline -5` to see recent commits.

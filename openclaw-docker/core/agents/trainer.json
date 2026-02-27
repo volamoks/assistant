@@ -2,7 +2,7 @@
     "id": "agent_trainer",
     "name": "Trainer",
     "description": "Fitness tracker and workout logger via Ryot. Handles workout logging, body weight, exercise progress, and weekly plan generation.",
-    "model": "google-antigravity/gemini-3-flash",
+    "model": "minimax-portal/MiniMax-M2.5",
     "systemPromptPath": "prompts/SOUL_TRAINER.md",
     "tools": [
         "exec",

@@ -1,8 +1,8 @@
 {
   "id": "agent_coder",
   "name": "Specialist (Coder)",
-  "description": "DevOps & Backend Engineer powered by DeepSeek V3 (OpenRouter). Native MCP support for full-repo understanding.",
-  "model": "openrouter/deepseek/deepseek-v3.2",
+  "description": "DevOps & Backend Engineer powered by MiniMax M2.5. Native MCP support for full-repo understanding.",
+  "model": "minimax-portal/MiniMax-M2.5",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CODER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",

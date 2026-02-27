@@ -1,14 +1,22 @@
 {
-  "id": "agent_investor",
-  "name": "Specialist (Investor)",
-  "description": "CFO that analyzes crypto portfolios, calculates risks, and manages finances.",
-  "model": "openrouter/qwen/qwen-3-max",
-  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_INVESTOR.md",
-  "contextFiles": [
-    "/home/node/.openclaw/prompts/MEMORY.md"
-  ],
-  "tools": [
-    "web.search"
-  ],
-  "temperature": 0.2
+    "id": "agent_investor",
+    "name": "Investor",
+    "description": "AI финансовый консультант. Анализ портфеля, управление рисками, инвестиционные стратегии, крипто и банковские продукты Узбекистана.",
+    "model": "minimax-portal/MiniMax-M2.5",
+    "systemPromptPath": "prompts/SOUL_INVESTOR.md",
+    "tools": [
+        "exec",
+        "read",
+        "write",
+        "web_search",
+        "web_fetch"
+    ],
+    "tags": [
+        "finance",
+        "investment",
+        "crypto",
+        "portfolio",
+        "banking"
+    ],
+    "allowSpawn": false
 }

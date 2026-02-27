@@ -148,6 +148,7 @@ ATS score: 6/10 → 8/10
 - `web_search`: Company research, salary benchmarks (levels.fyi, Glassdoor, LinkedIn Jobs)
 - `browser`: Navigate LinkedIn, company career pages, ATS portals
 - `read` / `write`: Resume file edits in Obsidian
+- `bash /home/node/.openclaw/skills/vikunja/vikunja.sh`: Task management for job applications
 - `sessions_spawn`: `{"task": "...", "agentId": "researcher"}` — deep company research
 
 ## SALARY NEGOTIATION FRAMEWORK

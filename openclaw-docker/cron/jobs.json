@@ -15,19 +15,22 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this bash script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772074800000,
-        "lastRunAtMs": 1771993592460,
+        "nextRunAtMs": 1772247600000,
+        "lastRunAtMs": 1772161200012,
         "lastStatus": "ok",
-        "lastDurationMs": 48474,
-        "consecutiveErrors": 0
+        "lastDurationMs": 14291,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1771993640934
+      "updatedAtMs": 1772161214303
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -44,7 +47,7 @@
         "kind": "agentTurn",
         "message": "NIGHTLY EVOLUTION — 3 tasks, do all 3 in order:\n\n## TASK 1: Memory Consolidation\nRead `/home/node/.openclaw/prompts/MEMORY.md` and today's session log at `/data/obsidian/To claw/Bot/today-session.md`.\nUpdate MEMORY.md with distilled learnings from today. Remove outdated info.\n\n## TASK 2: Self-Improvement Research (web search)\nSearch the web for:\n1. web_search: \"OpenClaw AI agent new features 2025 OR 2026\"\n2. web_search: \"best AI automation tools self-hosted 2026\"\n3. web_search: \"LLM agent productivity tools new\"\n\nFor each interesting finding (max 3 total):\n- If it could improve our bot setup → append to `/data/obsidian/To claw/possible_improvements/new_ideas.md`\n  Format: `## [Date] [Tool/Feature name]\\n- What: one line\\n- Why useful: one line\\n- Source: [url]`\n- Skip anything we already have (ChromaDB, Ollama, LiteLLM, SearxNG, Crawl4AI, Ryot, n8n)\n\n## TASK 3: Brief Report\nSend ONE short Telegram message:\n```\n🌙 Nightly Evolution\n✅ Memory updated\n🔍 Found X new ideas → possible_improvements\n[list idea names if any, else \"nothing new today\"]\n```",
         "thinking": "medium",
-        "model": "ollama/qwen3:8b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "announce",
@@ -52,13 +55,17 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772041200000,
-        "lastStatus": "ok",
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1771868400019,
-        "lastDurationMs": 146065
+        "nextRunAtMs": 1772214000000,
+        "lastStatus": "error",
+        "consecutiveErrors": 2,
+        "lastRunAtMs": 1772127600027,
+        "lastDurationMs": 3666,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "delivered",
+        "lastError": "HTTP 400: litellm.BadRequestError: litellm.BadRequestError: vertex_ai_betaException - b'{\\n  \"error\": {\\n    \"code\": 403,\\n    \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\\n    \"status\": \"PERMISSION_DENIED\",\\n    \"details\": [\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\\n        \"reason\": \"SERVICE_DISABLED\",\\n        \"domain\": \"googleapis.com\",\\n        \"metadata\": {\\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\",\\n          \"serviceTitle\": \"Vertex AI API\",\\n          \"containerInfo\": \"crucial-river-3zftk\",\\n          \"service\": \"aiplatform.googleapis.com\",\\n          \"consumer\": \"projects/crucial-river-3zftk\"\\n        }\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\\n        \"locale\": \"en-US\",\\n        \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\\n        \"links\": [\\n          {\\n            \"description\": \"Google developers console API activation\",\\n            \"url\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\"\\n          }\\n        ]\\n      }\\n    ]\\n  }\\n}\\n'",
+        "lastDelivered": true
       },
-      "updatedAtMs": 1771868546084
+      "updatedAtMs": 1772127603693
     },
     {
       "id": "crash-analysis",
@@ -74,19 +81,19 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim.",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "state": {
-        "nextRunAtMs": 1772026200000,
+        "nextRunAtMs": 1772184000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772025600012,
+        "lastRunAtMs": 1772183400023,
         "lastStatus": "ok",
-        "lastDurationMs": 114798,
+        "lastDurationMs": 7466,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772025714810,
+      "updatedAtMs": 1772183407489,
       "delivery": {
         "mode": "none"
       }
@@ -106,7 +113,7 @@
         "kind": "agentTurn",
         "message": "Run this script to find unchecked tasks: bash: /data/bot/openclaw-docker/scripts/jobs/morning_task_briefing.sh\nRead the relevant files returned. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Keep the message compact.",
         "thinking": "low",
-        "model": "ollama/deepseek-r1:14b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "announce",
@@ -114,14 +121,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772074800000,
-        "lastRunAtMs": 1771993686433,
-        "lastStatus": "error",
-        "lastDurationMs": 1,
-        "consecutiveErrors": 1,
-        "lastError": "model not allowed: ollama/deepseek-r1:1.5b"
+        "nextRunAtMs": 1772247600000,
+        "lastRunAtMs": 1772161222075,
+        "lastStatus": "ok",
+        "lastDurationMs": 105818,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered"
       },
-      "updatedAtMs": 1771993686434
+      "updatedAtMs": 1772161327893
     },
     {
       "id": "telegram-dashboard",
@@ -138,7 +147,7 @@
         "kind": "agentTurn",
         "message": "Run a system health check: bash: /data/bot/openclaw-docker/scripts/jobs/morning_system_status.sh\nSend a status dashboard to Telegram based on the output. Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
         "thinking": "low",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "announce",
@@ -146,13 +155,17 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772076600000,
-        "lastRunAtMs": 1771993686434,
-        "lastStatus": "ok",
-        "lastDurationMs": 42468,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1772249400000,
+        "lastRunAtMs": 1772163014771,
+        "lastStatus": "error",
+        "lastDurationMs": 51266,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1771993728902
+      "updatedAtMs": 1772163066037
     },
     {
       "id": "vault-gardening",
@@ -169,19 +182,24 @@
         "kind": "agentTurn",
         "message": "SILENT TASK — only send to Telegram if issues are found.\n\nRun the scan script: bash: /data/bot/openclaw-docker/scripts/jobs/vault_gardening.sh\nRead any reported empty files, and verify if the wikilinks reported match existing files in the vault.\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
         "thinking": "low",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772044200000,
-        "lastRunAtMs": 1771871403277,
-        "lastStatus": "ok",
-        "lastDurationMs": 134467,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1772217000000,
+        "lastRunAtMs": 1772130615053,
+        "lastStatus": "error",
+        "lastDurationMs": 54262,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "lastError": "⚠️ ✉️ Message failed",
+        "lastDeliveryError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1771871537744
+      "updatedAtMs": 1772130669315
     },
     {
       "id": "actual-sync",
@@ -197,22 +215,24 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: /data/bot/openclaw-docker/scripts/jobs/actual_sync.sh\n\nIf sync fails — send a brief error to Telegram. If successful — complete silently.",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772026200000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1772024528247,
-        "lastStatus": "ok",
-        "lastDurationMs": 133461,
-        "lastRunStatus": "ok",
+        "nextRunAtMs": 1772184901021,
+        "consecutiveErrors": 11,
+        "lastRunAtMs": 1772181261797,
+        "lastStatus": "error",
+        "lastDurationMs": 39224,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "lastDeliveryStatus": "not-delivered"
+        "lastDeliveryError": "⚠️ ✉️ Message failed",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772024661708
+      "updatedAtMs": 1772181301021
     },
     {
       "id": "finance-enrichment",
@@ -229,19 +249,24 @@
         "kind": "agentTurn",
         "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: /data/bot/openclaw-docker/scripts/jobs/finance_enrichment.sh\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram. If successful — complete silently.",
         "thinking": "low",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772053200000,
-        "lastRunAtMs": 1771993770928,
-        "lastStatus": "ok",
-        "lastDurationMs": 42812,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1772226000000,
+        "lastRunAtMs": 1772139650272,
+        "lastStatus": "error",
+        "lastDurationMs": 28966,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "lastError": "⚠️ ✉️ Message failed",
+        "lastDeliveryError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1771993813740
+      "updatedAtMs": 1772139679238
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -258,7 +283,7 @@
         "kind": "agentTurn",
         "message": "Summarize what was done today based on memory files and current status of projects. Report any issues.",
         "thinking": "low",
-        "model": "ollama/qwen3:8b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "announce",
@@ -266,13 +291,17 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772042400000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1771869602747,
-        "lastStatus": "ok",
-        "lastDurationMs": 19168
+        "nextRunAtMs": 1772215200000,
+        "consecutiveErrors": 2,
+        "lastRunAtMs": 1772128800018,
+        "lastStatus": "error",
+        "lastDurationMs": 3037,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "delivered",
+        "lastError": "HTTP 400: litellm.BadRequestError: litellm.BadRequestError: vertex_ai_betaException - b'{\\n  \"error\": {\\n    \"code\": 403,\\n    \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\\n    \"status\": \"PERMISSION_DENIED\",\\n    \"details\": [\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\\n        \"reason\": \"SERVICE_DISABLED\",\\n        \"domain\": \"googleapis.com\",\\n        \"metadata\": {\\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\",\\n          \"consumer\": \"projects/crucial-river-3zftk\",\\n          \"containerInfo\": \"crucial-river-3zftk\",\\n          \"service\": \"aiplatform.googleapis.com\",\\n          \"serviceTitle\": \"Vertex AI API\"\\n        }\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\\n        \"locale\": \"en-US\",\\n        \"message\": \"Vertex AI API has not been used in project crucial-river-3zftk before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\\n        \"links\": [\\n          {\\n            \"description\": \"Google developers console API activation\",\\n            \"url\": \"https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=crucial-river-3zftk\"\\n          }\\n        ]\\n      }\\n    ]\\n  }\\n}\\n'",
+        "lastDelivered": true
       },
-      "updatedAtMs": 1771869621915
+      "updatedAtMs": 1772128803055
     },
     {
       "id": "obsidian-reindex",
@@ -288,16 +317,81 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
-        "model": "ollama/llama3.2:1b"
+        "model": "litellm/routine"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772056800000
+        "nextRunAtMs": 1772229600000,
+        "lastRunAtMs": 1772143234242,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 81956,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772019142621
+      "updatedAtMs": 1772143316198
+    },
+    {
+      "id": "context-logger",
+      "name": "Daily Context Logger",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 23 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "skill",
+        "skillId": "context-logger"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1772215200000,
+        "lastStatus": null,
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1772200000000
+    },
+    {
+      "id": "telegram-monitor",
+      "name": "Telegram Channel Monitor",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "skill",
+        "skillId": "telegram-monitor"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1772251200000,
+        "lastStatus": "skipped",
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772164800202,
+        "lastRunStatus": "skipped",
+        "lastDurationMs": 0,
+        "lastError": "isolated job requires payload.kind=agentTurn",
+        "lastDeliveryStatus": "unknown"
+      },
+      "updatedAtMs": 1772164800202
     }
   ]
 }

@@ -107,3 +107,16 @@ Go straight to Phase 2 if:
 - **Web search** as last resort when internal context missing
 
 *CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*
+
+---
+
+## 📝 OBSIDIAN OUTPUT RULE (ОБЯЗАТЕЛЬНО)
+
+**После каждого исследования:**
+
+1. Сохрани результат в `/data/obsidian/To claw/Agents/Research/`
+   - Формат: `YYYY-MM-DD_<label>.md`
+
+2. Включи полный текст выводов
+
+3. НЕ отправляй в Telegram — только в Obsidian

@@ -1,16 +1,42 @@
 model_list:
-  # === GENERIC ALIASES (use these instead of specific models) ===
   - model_name: smart
     litellm_params:
-      model: vertex_ai/gemini-2.5-pro-preview-0506
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-pro-exp-02-05
+      api_key: os.environ/AI_STUDIO_KEY_1
+
+  - model_name: smart
+    litellm_params:
+      model: gemini/gemini-2.0-pro-exp-02-05
+      api_key: os.environ/AI_STUDIO_KEY_2
 
   - model_name: fast
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash-001
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/AI_STUDIO_KEY_3
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/AI_STUDIO_KEY_4
+
+  # === VERTEX AI DISABLED - Uncomment when needed ===
+  # - model_name: smart-secondary
+  #   litellm_params:
+  #     model: vertex_ai/gemini-2.5-pro-preview-0506
+  #     vertex_project: fresh-tangent-j4g6t
+  #     vertex_location: asia-south1
+  #
+  #     extra_headers:
+  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
+  #
+  # - model_name: fast-secondary
+  #   litellm_params:
+  #     model: vertex_ai/gemini-2.0-flash-001
+  #     vertex_project: fresh-tangent-j4g6t
+  #     vertex_location: asia-south1
+  #
+  #     extra_headers:
+  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
 
   - model_name: thinking
     litellm_params:
@@ -18,63 +44,59 @@ model_list:
       api_key: os.environ/DEEPSEEK_API_KEY
       api_base: https://api.deepseek.com/v1
 
-  - model_name: embedding
-    litellm_params:
-      model: vertex_ai/text-embedding-004
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+  # === VERTEX AI DISABLED - Uncomment when needed ===
+  # - model_name: embedding
+  #   litellm_params:
+  #     model: vertex_ai/text-embedding-004
+  #     vertex_project: crucial-river-3zftk
+  #     vertex_location: asia-south1
+  #
+  #     extra_headers:
+  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
 
-  # === SPECIFIC MODELS ===
-  # Gemini 2.5 Flash & Pro (latest)
+  # === SPECIFIC MODELS (using AI Studio instead of Vertex) ===
+  # Gemini 2.5 Flash & Pro (via AI Studio)
   - model_name: gemini-2-5-flash
     litellm_params:
-      model: vertex_ai/gemini-2.5-flash-preview-0506
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: gemini-2-5-pro
     litellm_params:
-      model: vertex_ai/gemini-2.5-pro-preview-0506
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-pro-exp-02-05
+      api_key: os.environ/AI_STUDIO_KEY_1
 
-  # Gemini 2.0 Flash
+  # Gemini 2.0 Flash (via AI Studio)
   - model_name: gemini-2-0-flash
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash-001
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: gemini-2-0-flash-2-0
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash-001
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/AI_STUDIO_KEY_1
 
-  # Legacy Gemini 3 models (maps to 2.0)
+  # Legacy Gemini 3 models (via AI Studio)
   - model_name: gemini-3-flash
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash-001
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: google-antigravity/gemini-3-flash
     litellm_params:
-      model: vertex_ai/gemini-2.0-flash-001
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: gemini-3-pro-high
     litellm_params:
-      model: vertex_ai/gemini-2.0-pro-exp
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-pro-exp-02-05
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   - model_name: google-antigravity/gemini-3-pro-high
     litellm_params:
-      model: vertex_ai/gemini-2.0-pro-exp
-      vertex_project: crucial-river-3zftk
-      vertex_location: asia-south1
+      model: gemini/gemini-2.0-pro-exp-02-05
+      api_key: os.environ/AI_STUDIO_KEY_1
 
   # DeepSeek via API
   - model_name: deepseek/deepseek-chat
@@ -115,13 +137,21 @@ model_list:
       model: openrouter/minimax/minimax-01
       api_key: os.environ/OPENROUTER_API_KEY
 
-  # Minimax via LiteLLM
+  # Minimax via OpenAI compatible endpoint (using OAuth token string)
   - model_name: minimax/MiniMax-M2.5
     litellm_params:
-      model: minimax/MiniMax-M2.5
-      api_key: os.environ/MINIMAX_API_KEY
+      model: openai/MiniMax-M2.5
+      api_key: "minimax-oauth"
+      api_base: https://api.minimax.io/v1
 
-  # === AI Studio keys (load balanced — fallback when Vertex AI throttles) ===
+  # Minimax-portal for Openclaw OAuth mapping
+  - model_name: minimax-portal/MiniMax-M2.5
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: "minimax-oauth"
+      api_base: https://api.minimax.io/v1
+
+  # === AI Studio keys (load balanced) ===
   - model_name: gemini-3-flash
     litellm_params:
       model: gemini/gemini-3-flash-preview
@@ -166,6 +196,70 @@ model_list:
     litellm_params:
       model: gemini/gemini-3-flash-preview
       api_key: os.environ/AI_STUDIO_KEY_3
+
+  - model_name: routine
+    litellm_params:
+      model: gemini/gemma-3-27b-it
+      api_key: os.environ/AI_STUDIO_KEY_1
+
+  - model_name: routine
+    litellm_params:
+      model: gemini/gemma-3-27b-it
+      api_key: os.environ/AI_STUDIO_KEY_2
+
+  - model_name: routine
+    litellm_params:
+      model: gemini/gemma-3-27b-it
+      api_key: os.environ/AI_STUDIO_KEY_3
+
+  # === ADD MORE AI STUDIO KEYS HERE ===
+  # Uncomment and add more keys below (KEY_4, KEY_5, KEY_6, etc.):
+
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_4
+
+  - model_name: gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_5
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_4
+
+  - model_name: fast
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_5
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_4
+
+  - model_name: google-antigravity/gemini-3-flash
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/AI_STUDIO_KEY_5
+
+  - model_name: routine
+    litellm_params:
+      model: gemini/gemma-3-27b-it
+      api_key: os.environ/AI_STUDIO_KEY_4
+
+  - model_name: routine
+    litellm_params:
+      model: gemini/gemma-3-27b-it
+      api_key: os.environ/AI_STUDIO_KEY_5
+
+  # Uncomment for KEY_6 when needed:
+  # - model_name: gemini-3-flash
+  #   litellm_params:
+  #     model: gemini/gemini-3-flash-preview
+  #     api_key: os.environ/AI_STUDIO_KEY_6
 
   # Local Ollama
   - model_name: ollama/llama3.2:1b
@@ -189,6 +283,7 @@ model_list:
       api_base: http://ollama:11434
 
 litellm_settings:
+  success_callback: ["langfuse"]
   drop_params: true
   request_timeout: 600
   num_retries: 2
@@ -196,6 +291,8 @@ litellm_settings:
   log_level: DEBUG
   log_requests: true
   log_cache_stats: true
+  # Drop any headers from incoming requests that could identify the client app
+  forward_client_headers_to_llm_api: false
 
 router_settings:
   # Add generic aliases to fallbacks
@@ -210,7 +307,9 @@ router_settings:
     - gemini-2-0-flash: ["gemini-3-flash", "deepseek/deepseek-chat"]
     - gemini-2-0-flash-2-0: ["gemini-3-flash", "deepseek/deepseek-chat"]
     - minimax/MiniMax-M2.5: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
+    - minimax-portal/MiniMax-M2.5: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
     - openrouter/deepseek/deepseek-chat: ["deepseek/deepseek-reasoner"]
+    - routine: ["gemini-3-flash", "deepseek/deepseek-chat"]
   retry_policy:
     RateLimitError: 2
     ServiceUnavailableError: 2

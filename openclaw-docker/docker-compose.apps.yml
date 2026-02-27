@@ -48,35 +48,13 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_HOST: apps-postgres
-      POSTGRES_DB: planka,ryot,shlink
+      POSTGRES_DB: ryot
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       SCHEDULE: "@daily"
       BACKUP_KEEP_DAYS: 7
     volumes:
       - postgres_backup:/backups
-    networks:
-      - jarvis_net
-    depends_on:
-      apps-postgres:
-        condition: service_healthy
-
-  # --- 📝 PRODUCTIVITY & ORGANIZATION ---
-  planka:
-    image: ghcr.io/plankanban/planka:latest
-    container_name: planka
-    restart: unless-stopped
-    volumes:
-      - planka_avatars:/app/public/user-avatars
-      - planka_project_backgrounds:/app/public/project-backgrounds
-      - planka_attachments:/app/private/attachments
-    ports:
-      - "3010:1337"
-    environment:
-      - BASE_URL=http://localhost:3010
-      - TRUST_PROXY=0
-      - DATABASE_URL=postgresql://admin:${POSTGRES_PASSWORD}@apps-postgres/planka
-      - SECRET_KEY=${SECRET_KEY}
     networks:
       - jarvis_net
     depends_on:
@@ -111,38 +89,6 @@ services:
     networks:
       - jarvis_net
 
-  shlink-backend:
-    image: shlinkio/shlink:stable
-    container_name: shlink-backend
-    restart: unless-stopped
-    environment:
-      - DB_DRIVER=postgres
-      - DB_USER=admin
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_NAME=shlink
-      - DB_HOST=apps-postgres
-      - DEFAULT_DOMAIN=localhost:8081
-      - IS_HTTPS_ENABLED=false
-    ports:
-      - "8081:8080"
-    networks:
-      - jarvis_net
-    depends_on:
-      apps-postgres:
-        condition: service_healthy
-
-  shlink-web-client:
-    image: shlinkio/shlink-web-client
-    container_name: shlink-web-client
-    restart: unless-stopped
-    ports:
-      - "3011:8080"
-    environment:
-      - SHLINK_SERVER_URL=http://localhost:8081
-      - SHLINK_SERVER_API_KEY=YOUR_API_KEY_HERE
-    networks:
-      - jarvis_net
-
   # --- 🧠 AI FOUNDATION (JARVIS EXTENSIONS) ---
   browserless:
     image: ghcr.io/browserless/chromium
@@ -161,41 +107,6 @@ services:
           cpus: '1.0'
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - jarvis_net
-
-  searxng:
-    image: searxng/searxng:latest
-    container_name: searxng
-    restart: unless-stopped
-    ports:
-      - "3017:8080"
-    volumes:
-      - ./searxng:/etc/searxng
-    environment:
-      - SEARXNG_BASE_URL=http://localhost:3017/
-    networks:
-      - jarvis_net
-
-  chromadb:
-    image: chromadb/chroma:latest
-    container_name: chromadb
-    restart: unless-stopped
-    ports:
-      - "3018:8000"
-    volumes:
-      - chromadb_data:/chroma/chroma
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: '2.0'
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -240,27 +151,6 @@ services:
     networks:
       - jarvis_net
 
-  # --- 🏠 HOME AUTOMATION ---
-  homeassistant:
-    image: homeassistant/home-assistant:stable
-    container_name: homeassistant
-    restart: unless-stopped
-    ports:
-      - "8123:8123"
-    volumes:
-      - ./homeassistant:/config
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - TZ=Asia/Tashkent
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8123/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - jarvis_net
-
   # --- 🔍 NETWORK MONITORING ---
   beszel:
     image: henrygd/beszel:latest
@@ -280,17 +170,22 @@ services:
 
   # --- 📺 TORRENT SERVER ---
   torrserver:
-    image: teslavn/torrserver:latest
+    image: ghcr.io/yourok/torrserver:latest
     container_name: torrserver
-    restart: unless-stopped
-    ports:
-      - "8090:8090"
+    restart: always # restart even after manual stop / Mac reboot
+    network_mode: host # bypass Docker NAT → full 250 MB/s bandwidth
     volumes:
       - torrserver_data:/data
     environment:
       - TS_PORT=8090
-    networks:
-      - jarvis_net
+      - TS_CACHE_SIZE=2048 # disk cache in MB (increase if you have space)
+      - TS_PRELOAD_BUFFER=true # pre-buffer pieces for smoother playback
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8090/echo" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   # --- 🛡️ ADGUARD HOME ---
   adguard:
@@ -310,18 +205,6 @@ services:
     networks:
       - jarvis_net
 
-  # --- 🍎 HOMEBRIDGE FOR APPLE HOME ---
-  homebridge:
-    image: oznu/homebridge:ubuntu
-    container_name: homebridge
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - ./homebridge:/homebridge
-    environment:
-      - TZ=Asia/Tashkent
-      - HOMEBRIDGE_CONFIG_UI_PORT=8080
-
   # --- 🏠 HOMEPAGE DASHBOARD ---
   homepage:
     image: gethomepage/homepage:latest
@@ -339,3 +222,23 @@ services:
       - HOMEPAGE_ALLOWED_HOSTS=localhost:3012,host.docker.internal:3012
     networks:
       - jarvis_net
+
+  # --- 📋 VIKUNJA (Task Manager) ---
+  vikunja:
+    image: vikunja/vikunja
+    container_name: vikunja
+    restart: unless-stopped
+    user: "501:20"
+    environment:
+      - VIKUNJA_SERVICE_JWTSECRET=vikunja-secret-change-me
+      - VIKUNJA_SERVICE_TIMEZONE=Asia/Tashkent
+      - VIKUNJA_SERVICE_MAXITEMSPERPAGE=100
+      - VIKUNJA_SERVICE_PUBLICURL=http://localhost:3456/
+      - VIKUNJA_DATABASE_TYPE=sqlite
+      - VIKUNJA_DATABASE_PATH=/app/vikunja/files/vikunja.db
+    volumes:
+      - ./vikunja:/app/vikunja/files
+    networks:
+      - jarvis_net
+    ports:
+      - "3456:3456"

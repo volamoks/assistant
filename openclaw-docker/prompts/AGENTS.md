@@ -14,7 +14,7 @@
 
 ## 🟢 /alive COMMAND
 When user sends `/alive`:
-1. Respond: "🟢 Alive! Model: google-antigravity/gemini-3-flash | Time: <current UTC time>"
+1. Respond: "🟢 Alive! Model: minimax-portal/MiniMax-M2.5 | Time: <current UTC time>"
 2. Check if any git repos in `/data/bot/` have uncommitted or broken state:
    - Run: `cd /data/bot && git status --short 2>/dev/null || echo "no git"`
 3. If broken git found: offer to run `git reset --soft HEAD~1` to recover.
@@ -45,83 +45,52 @@ Examples that trigger trainer:
 agent_trainer uses: `bash /data/bot/openclaw-docker/scripts/ryot.sh <command>`
 Ryot API: `http://ryot:8000/backend/graphql`
 
+## 📝 TASK MANAGEMENT (/task, /todo)
+When user sends `/task`, `/todo` or asks to manage tasks:
+1.  **List tasks**: `bash /home/node/.openclaw/skills/vikunja/vikunja.sh list`
+2.  **Create task**: `bash /home/node/.openclaw/skills/vikunja/vikunja.sh create "[title]" "[description]"`
+3.  **Complete task**: `bash /home/node/.openclaw/skills/vikunja/vikunja.sh done [id]`
+4.  **Show projects**: `bash /home/node/.openclaw/skills/vikunja/vikunja.sh projects`
+
+*Note*: Use `/home/node/.openclaw/skills/` path inside the container.
+
 ## 1. Orchestrator (Router)
 ### A. Router Agent (`agent_router`)
-- **Model**: **Gemini 3 Flash** (Technical Brain)
+- **Model**: **MiniMax M2.5** (Primary Brain)
 - **Role**: CEO / Dispatcher.
-- **Why**: Best instruction following, cheap.
+- **Why**: Best instruction following, fast, cost-effective.
 
 ## 2. Core Specialists
-### B. Work Agent (`agent_work`)
-- **Model**: **Qwen 3.5 Plus** (GPT-5 Level)
-- **Role**: PM Strategy.
-- **Why**: Native Visual Agent. 397B params but fast (DeltaNet).
+
+### B. Main Chat (Default)
+- **Model**: **MiniMax M2.5** (The King)
+- **Role**: General Q&A.
+- **Why**: Most alive, fast, universal.
+- **ID**: `main`
 
 ### C. Researcher Agent (`agent_research`)
-- **Model**: **Kimi K2.5** (Context King)
+- **Model**: **MiniMax M2.5**
 - **Role**: Researcher.
-- **Why**: Top-2 Market. Reads books/PDFs/Docs.
+- **Why**: Reads books/PDFs/Docs, web search.
 
 ### D. Coder Agent (`agent_coder`)
-- **Model**: **Qwen 3.5 (397B)** (Native MCP)
+- **Model**: **MiniMax M2.5** (Native MCP)
 - **Role**: DevOps / Coder.
-- **Why**: Understands full repo context via Linear Attention.
+- **Why**: Understands full repo context via MCP.
 
-### E. Sysadmin Agent (`agent_sysadmin`)
-- **Model**: **DeepSeek V3.2** (Watchdog)
-- **Role**: Watchdog / Monitor.
-- **Why**: Fixes TorrServer, monitors logs.
-
-### F. Interviewer Agent (`agent_interviewer`)
-- **Model**: **Gemini 3 Deep Think** (Coach)
+### E. Interviewer Agent (`agent_interviewer`)
+- **Model**: **MiniMax M2.5**
 - **Role**: Bar Raiser.
-- **Why**: Mock Agoda interviews. System Design.
+- **Why**: Mock Agoda interviews. System Design, Behavioral (STAR), Product Sense.
 
-### F2. Career Agent (`agent_career`)
-- **Model**: **gemini-2-5-flash** (Strategic)
+### F. Career Agent (`agent_career`)
+- **Model**: **MiniMax M2.5**
 - **Role**: Resume + ATS + Job Search Advisor.
 - **SOUL**: `prompts/SOUL_CAREER.md`
 - **Why**: ATS optimization, cover letters, salary negotiation, application tracking in Obsidian.
 - **Handoff**: Deep mock interviews → Interviewer Agent.
 
-### G. Investor Agent (`agent_investor`)
-- **Model**: **Qwen 3 Max** (CFO)
-- **Role**: Finance / Crypto.
-- **Why**: Math/Risk analysis.
-
-### H. Networker Agent (`agent_networker`)
-- **Model**: **Minimax M2.5** (Vibe)
-- **Role**: PR / Community.
-- **Why**: Writes posts for Product Choyxona. Zero corporate fluff.
-
-## 3. Lifestyle Specialists
-### I. Psychologist Agent (`agent_psychologist`)
-- **Model**: **Minimax M2.5** (EQ)
-- **Role**: Therapist.
-- **Why**: Best EQ. Supports burnout.
-
-### J. Chef Agent (`agent_chef`)
-- **Model**: **Gemini 3 Flash** (Vision)
-- **Role**: Sous-Chef.
-- **Why**: Sees food from photos.
-
-### K. Travel Agent (`agent_travel`)
-- **Model**: **Gemini 3 Flash** (Docs)
-- **Role**: Logistics.
-- **Why**: Visas, Tickets.
-
-### L. Transport Agent (`agent_transport`)
-- **Model**: **Gemini 3 Flash** (Maps)
-- **Role**: Navigator.
-- **Why**: Routes.
-
-### M. Shopper Agent (`agent_shopper`)
-- **Model**: **DeepSeek V3.2** (Extraction)
-- **Role**: Procurement.
-- **Why**: Parsers prices/specs.
-
-## 4. Default / General
-### Default Chat
-- **Model**: **Minimax M2.5** (The King)
-- **Role**: General Q&A.
-- **Why**: Most alive, fast, universal.
+### G. Trainer Agent (`agent_trainer`)
+- **Model**: **MiniMax M2.5**
+- **Role**: Language learning, skill development, practice sessions.
+- **Uses**: Ryot API for fitness tracking.

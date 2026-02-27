@@ -2,33 +2,18 @@
   "id": "agent_router",
   "name": "Orchestrator (Router)",
   "description": "The entry point for all requests. Never executes tasks itself. Analyzes intent and routes to the correct specialist.",
-  "model": "litellm/fast",
+  "model": "minimax-portal/MiniMax-M2.5",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",
     "/home/node/.openclaw/prompts/MEMORY.md"
   ],
   "tools": [
-    "agent_personal",
-    "agent_chef",
-    "agent_fitness",
-    "agent_cynologist",
-    "agent_psychologist",
-    "agent_shopper",
-    "agent_work",
-    "agent_editor",
-    "agent_interviewer",
-    "agent_investor",
-    "agent_networker",
-    "agent_learning",
+    "agent_career",
     "agent_coder",
-    "agent_sysadmin",
-    "agent_browser",
-    "agent_automator",
+    "agent_interviewer",
     "agent_research",
-    "agent_travel",
-    "agent_transport",
-    "agent_general"
+    "agent_trainer"
   ],
   "temperature": 0.1,
   "subagents": {

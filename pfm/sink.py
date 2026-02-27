@@ -14,43 +14,10 @@ Deduplication & transfer-linking:
 import os
 import time
 from datetime import datetime
-from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
-
-# Try multiple locations for .env file
-ENV_PATHS = [
-    Path(__file__).parent / ".env",
-    Path.home() / ".env",
-    Path("/data/bot/.env"),
-]
-for env_path in ENV_PATHS:
-    if env_path.exists():
-        load_dotenv(env_path)
-        break
-
-ACTUAL_URL      = os.environ.get("ACTUAL_URL") or os.getenv("ACTUAL_URL", "http://localhost:5006")
-ACTUAL_PASSWORD = os.environ.get("ACTUAL_PASSWORD")
-ACTUAL_FILE     = os.environ.get("ACTUAL_FILE")
-
-if not ACTUAL_PASSWORD:
-    raise ValueError("ACTUAL_PASSWORD environment variable is required")
-if not ACTUAL_FILE:
-    raise ValueError("ACTUAL_FILE environment variable is required")
-
-CATEGORY_MAP = {
-    "FOOD":      "Food",
-    "TRANSPORT": "Transport",
-    "SHOPPING":  "Shopping",
-    "HEALTH":    "Health",
-    "UTILITIES": "Utilities",
-    "TELECOM":   "Telecom",
-    "ATM":       "ATM",
-    "TRANSFER":  "Transfer",
-    "OTHER":     "General",
-}
-
+from config import CATEGORY_MAP, validate_actual_config
+from actual_client import get_actual_client, get_or_create_account, add_transaction
 
 def push_to_actual(parsed: dict, account_name: Optional[str] = None, retries: int = 3) -> bool:
     """
@@ -61,9 +28,10 @@ def push_to_actual(parsed: dict, account_name: Optional[str] = None, retries: in
         date, time, amount, currency, category, merchant,
         payment_method, card_last4, transaction_type, source, raw_text
     """
-    from actual import Actual, get_accounts
-    from actual.queries import create_account, create_transaction
+    from actual import get_accounts
     from dedup import check_and_handle
+
+    validate_actual_config()
 
     # Determine account name from parsed data if not provided
     if not account_name:
@@ -89,15 +57,11 @@ def push_to_actual(parsed: dict, account_name: Optional[str] = None, retries: in
 
     for attempt in range(1, retries + 1):
         try:
-            with Actual(base_url=ACTUAL_URL, password=ACTUAL_PASSWORD, file=ACTUAL_FILE) as actual:
-                actual.download_budget()
+            with get_actual_client() as actual:
                 s        = actual.session
                 accounts = get_accounts(s)
 
-                acc = next((a for a in accounts if a.name == account_name), None)
-                if not acc:
-                    acc = create_account(s, account_name, initial_balance=0)
-                    print(f"  📂 Created account: {account_name}")
+                acc = get_or_create_account(s, accounts, account_name)
 
                 # ── Smart dedup / transfer linking ────────────────────────────
                 result = check_and_handle(
@@ -114,16 +78,15 @@ def push_to_actual(parsed: dict, account_name: Optional[str] = None, retries: in
                     return True
 
                 # ── result == "new" → write normal transaction ────────────────
-                create_transaction(
-                    s,
-                    date=tx_date,
+                add_transaction(
+                    session=s,
                     account=acc,
-                    payee=parsed.get("merchant") or "Unknown",
+                    date=tx_date,
+                    payee=parsed.get("merchant"),
                     notes=f"{parsed.get('payment_method') or ''} | {parsed.get('currency', 'UZS')}",
                     category=category,
                     amount=actual_amount,
                     imported_id=imported_id,
-                    cleared=True,
                 )
                 actual.commit()
             return True

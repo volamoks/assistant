@@ -14,19 +14,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from dotenv import load_dotenv
-from telethon import TelegramClient, events
+from config import ENV_PATHS
 
-# Try multiple locations for .env file
-ENV_PATHS = [
-    Path(__file__).parent / ".env",
-    Path.home() / ".env",
-    Path("/data/bot/.env"),
-]
-for env_path in ENV_PATHS:
-    if env_path.exists():
-        load_dotenv(env_path)
-        break
+from telethon import TelegramClient, events
 
 API_ID   = int(os.getenv("TELEGRAM_API_ID", "0"))
 API_HASH = os.getenv("TELEGRAM_API_HASH", "")

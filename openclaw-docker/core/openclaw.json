@@ -1,13 +1,25 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.2.25",
-    "lastTouchedAt": "2026-02-25T06:40:44.321Z"
+    "lastTouchedAt": "2026-02-27T06:25:57.254Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-25T06:26:05.779Z",
     "lastRunVersion": "2026.2.17",
     "lastRunCommand": "doctor",
     "lastRunMode": "local"
+  },
+  "browser": {
+    "enabled": true,
+    "cdpUrl": "http://browserless:3000"
+  },
+  "auth": {
+    "profiles": {
+      "minimax-portal:default": {
+        "provider": "minimax-portal",
+        "mode": "oauth"
+      }
+    }
   },
   "models": {
     "providers": {
@@ -59,6 +71,10 @@
           {
             "id": "openrouter/deepseek/deepseek-v3.2",
             "name": "DeepSeek V3 (Custom)"
+          },
+          {
+            "id": "minimax-portal/MiniMax-M2.5",
+            "name": "MiniMax M2.5 (litellm)"
           }
         ]
       },
@@ -85,13 +101,52 @@
             "reasoning": true
           }
         ]
+      },
+      "minimax-portal": {
+        "baseUrl": "https://api.minimax.io/anthropic",
+        "apiKey": "minimax-oauth",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "MiniMax-M2.1",
+            "name": "MiniMax M2.1",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax M2.5",
+            "reasoning": true,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
       }
     }
   },
   "agents": {
     "defaults": {
       "model": {
-        "primary": "litellm/or-deepseek-chat"
+        "primary": "minimax-portal/MiniMax-M2.5"
       },
       "models": {
         "litellm/smart": {
@@ -138,15 +193,23 @@
         },
         "ollama/deepseek-r1:14b": {
           "streaming": true
+        },
+        "minimax-portal/MiniMax-M2.5": {
+          "alias": "minimax-m2.5"
+        },
+        "minimax/MiniMax-M2.1": {},
+        "minimax-portal/MiniMax-M2.1": {
+          "alias": "minimax-m2.1"
         }
       },
+      "workspace": "/home/node/.openclaw/workspace",
       "memorySearch": {
         "enabled": false
       },
       "compaction": {
         "mode": "safeguard"
       },
-      "timeoutSeconds": 600,
+      "timeoutSeconds": 1800,
       "heartbeat": {
         "every": "30s",
         "model": "litellm/fast"
@@ -161,14 +224,19 @@
         "id": "main",
         "heartbeat": {
           "every": "15m",
-          "model": "litellm/or-deepseek-chat",
+          "model": "litellm/fast",
           "target": "telegram"
         },
         "subagents": {
           "allowAgents": [
             "coder",
             "researcher",
-            "analyst"
+            "analyst",
+            "career",
+            "interviewer",
+            "trainer",
+            "investor",
+            "work"
           ]
         }
       },
@@ -177,50 +245,124 @@
         "name": "coder",
         "workspace": "/data/bot/openclaw-docker/workspace",
         "agentDir": "/home/node/.openclaw/agents/coder/agent",
-        "model": "openrouter/deepseek/deepseek-r1"
+        "model": "minimax-portal/MiniMax-M2.5"
       },
       {
         "id": "researcher",
         "name": "researcher",
         "workspace": "/home/node/.openclaw/workspace-researcher",
         "agentDir": "/home/node/.openclaw/agents/researcher/agent",
-        "model": "litellm/or-deepseek-chat"
+        "model": "minimax-portal/MiniMax-M2.5"
       },
       {
         "id": "analyst",
         "name": "analyst",
         "workspace": "/home/node/.openclaw/workspace-analyst",
         "agentDir": "/home/node/.openclaw/agents/analyst/agent",
-        "model": "litellm/or-deepseek-chat"
+        "model": "minimax-portal/MiniMax-M2.5"
+      },
+      {
+        "id": "career",
+        "name": "career",
+        "workspace": "/home/node/.openclaw/workspace-career",
+        "agentDir": "/home/node/.openclaw/agents/career/agent",
+        "model": "minimax-portal/MiniMax-M2.5"
+      },
+      {
+        "id": "interviewer",
+        "name": "interviewer",
+        "workspace": "/home/node/.openclaw/workspace-interviewer",
+        "agentDir": "/home/node/.openclaw/agents/interviewer/agent",
+        "model": "minimax-portal/MiniMax-M2.5"
+      },
+      {
+        "id": "trainer",
+        "name": "trainer",
+        "workspace": "/home/node/.openclaw/workspace-trainer",
+        "agentDir": "/home/node/.openclaw/agents/trainer/agent",
+        "model": "minimax-portal/MiniMax-M2.5"
+      },
+      {
+        "id": "work",
+        "name": "Work",
+        "workspace": "/home/node/.openclaw/workspace-work",
+        "agentDir": "/home/node/.openclaw/agents/work/agent",
+        "model": "minimax-portal/MiniMax-M2.5"
+      },
+      {
+        "id": "investor",
+        "name": "Investor",
+        "model": "minimax-portal/MiniMax-M2.5"
       }
     ]
+  },
+  "tools": {
+    "sessions": {
+      "visibility": "all"
+    }
   },
   "commands": {
     "native": "auto",
     "nativeSkills": "auto",
-    "restart": true
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
   },
   "channels": {
     "telegram": {
       "enabled": true,
       "dmPolicy": "pairing",
-      "groupPolicy": "allowlist",
+      "groups": {
+        "-1003706226741": {
+          "requireMention": false,
+          "topics": {
+            "1": {
+              "skills": [],
+              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 General. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/01_general.md"
+            },
+            "2": {
+              "skills": [],
+              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 \u0424\u0438\u043d\u0430\u043d\u0441\u044b. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/02_finance.md"
+            },
+            "3": {
+              "skills": [],
+              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 Dev. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/03_dev.md"
+            },
+            "4": {
+              "skills": [],
+              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 \u041e\u0442\u0434\u044b\u0445. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/04_fun.md"
+            }
+          }
+        }
+      },
+      "groupPolicy": "open",
       "streaming": "off"
     }
   },
   "gateway": {
+    "port": 18789,
     "mode": "local",
+    "bind": "loopback",
     "controlUi": {
       "dangerouslyAllowHostHeaderOriginFallback": true
     },
     "auth": {
       "mode": "token",
       "token": "7d1b19d965d62e7106f69e4317d43584d2150a91a6260c77"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
     }
   },
   "plugins": {
     "entries": {
       "telegram": {
+        "enabled": true
+      },
+      "minimax-portal-auth": {
         "enabled": true
       }
     }
