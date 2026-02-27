@@ -287,3 +287,16 @@ networks:
   default:
   jarvis_net:
     external: true
+
+  slidev:
+    image: ghcr.io/slidevjs/slidev:latest
+    container_name: slidev
+    restart: unless-stopped
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./slidev:/slidev/app
+    working_dir: /slidev/app
+    command: --port 3030
+    networks:
+      - jarvis_net

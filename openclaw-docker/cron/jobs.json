@@ -14,8 +14,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK. Run this bash script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh",
-        "model": "litellm/routine"
+        "message": "SILENT TASK. Run this bash script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh"
       },
       "delivery": {
         "mode": "none"
@@ -46,8 +45,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "NIGHTLY EVOLUTION — 3 tasks, do all 3 in order:\n\n## TASK 1: Memory Consolidation\nRead `/home/node/.openclaw/prompts/MEMORY.md` and today's session log at `/data/obsidian/To claw/Bot/today-session.md`.\nUpdate MEMORY.md with distilled learnings from today. Remove outdated info.\n\n## TASK 2: Self-Improvement Research (web search)\nSearch the web for:\n1. web_search: \"OpenClaw AI agent new features 2025 OR 2026\"\n2. web_search: \"best AI automation tools self-hosted 2026\"\n3. web_search: \"LLM agent productivity tools new\"\n\nFor each interesting finding (max 3 total):\n- If it could improve our bot setup → append to `/data/obsidian/To claw/possible_improvements/new_ideas.md`\n  Format: `## [Date] [Tool/Feature name]\\n- What: one line\\n- Why useful: one line\\n- Source: [url]`\n- Skip anything we already have (ChromaDB, Ollama, LiteLLM, SearxNG, Crawl4AI, Ryot, n8n)\n\n## TASK 3: Brief Report\nSend ONE short Telegram message:\n```\n🌙 Nightly Evolution\n✅ Memory updated\n🔍 Found X new ideas → possible_improvements\n[list idea names if any, else \"nothing new today\"]\n```",
-        "thinking": "medium",
-        "model": "litellm/routine"
+        "thinking": "medium"
       },
       "delivery": {
         "mode": "announce",
@@ -79,20 +77,20 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim.",
-        "model": "litellm/routine"
+        "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim."
       },
       "state": {
-        "nextRunAtMs": 1772223600000,
+        "nextRunAtMs": 1772229600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772223000029,
+        "lastRunAtMs": 1772229000030,
         "lastStatus": "ok",
-        "lastDurationMs": 8893,
+        "lastDurationMs": 7058,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "lastDelivered": false,
+        "runningAtMs": 1772229600012
       },
-      "updatedAtMs": 1772223008922,
+      "updatedAtMs": 1772229007088,
       "delivery": {
         "mode": "none"
       }
@@ -111,8 +109,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Run this script to find unchecked tasks: bash: /data/bot/openclaw-docker/scripts/jobs/morning_task_briefing.sh\nRead the relevant files returned. Group tasks by project/folder. Send a concise morning briefing to Telegram: what needs attention today. Prioritize tasks from '01_Projects' and 'To claw' folders. Keep the message compact.",
-        "thinking": "low",
-        "model": "litellm/routine"
+        "thinking": "low"
       },
       "delivery": {
         "mode": "announce",
@@ -145,8 +142,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Run a system health check: bash: /data/bot/openclaw-docker/scripts/jobs/morning_system_status.sh\nSend a status dashboard to Telegram based on the output. Format as a clean status report with emoji indicators: ✅ healthy, ⚠️ warning, ❌ issue.",
-        "thinking": "low",
-        "model": "litellm/routine"
+        "thinking": "low"
       },
       "delivery": {
         "mode": "announce",
@@ -180,8 +176,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — only send to Telegram if issues are found.\n\nRun the scan script: bash: /data/bot/openclaw-docker/scripts/jobs/vault_gardening.sh\nRead any reported empty files, and verify if the wikilinks reported match existing files in the vault.\n\nIf issues found: send a brief summary to Telegram with file paths and issue types. If nothing found: complete silently with no output.",
-        "thinking": "low",
-        "model": "litellm/routine"
+        "thinking": "low"
       },
       "delivery": {
         "mode": "none"
@@ -212,23 +207,23 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: /data/bot/openclaw-docker/scripts/jobs/actual_sync.sh\n\nIf sync fails — send a brief error to Telegram. If successful — complete silently.",
-        "model": "litellm/routine"
+        "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun Actual Budget sync:\nbash: /data/bot/openclaw-docker/scripts/jobs/actual_sync.sh\n\nIf sync fails — send a brief error to Telegram. If successful — complete silently."
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772224200000,
+        "nextRunAtMs": 1772229600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772222411031,
+        "lastRunAtMs": 1772227811428,
         "lastStatus": "ok",
-        "lastDurationMs": 14480,
+        "lastDurationMs": 6738,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "lastDelivered": false,
+        "runningAtMs": 1772229600012
       },
-      "updatedAtMs": 1772222425511
+      "updatedAtMs": 1772227818166
     },
     {
       "id": "finance-enrichment",
@@ -244,25 +239,24 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — only send Telegram message if errors occur.\n\nRun nightly finance enrichment:\nbash: /data/bot/openclaw-docker/scripts/jobs/finance_enrichment.sh\n\nIf enrichment fails or Ollama is unreachable — send a brief error to Telegram. If successful — complete silently.",
-        "thinking": "low",
-        "model": "litellm/routine"
+        "thinking": "low"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772226000000,
-        "lastRunAtMs": 1772139650272,
+        "nextRunAtMs": 1772312400000,
+        "lastRunAtMs": 1772226026358,
         "lastStatus": "error",
-        "lastDurationMs": 28966,
-        "consecutiveErrors": 1,
+        "lastDurationMs": 43827,
+        "consecutiveErrors": 2,
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "lastError": "⚠️ ✉️ Message failed",
-        "lastDeliveryError": "⚠️ ✉️ Message failed"
+        "lastDeliveryError": "⚠️ ✉️ Message failed",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772139679238
+      "updatedAtMs": 1772226070185
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -278,8 +272,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Summarize what was done today based on memory files and current status of projects. Report any issues.",
-        "thinking": "low",
-        "model": "litellm/routine"
+        "thinking": "low"
       },
       "delivery": {
         "mode": "announce",
@@ -311,8 +304,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
-        "model": "litellm/routine"
+        "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh"
       },
       "delivery": {
         "mode": "none"
@@ -325,7 +317,8 @@
         "lastStatus": "ok",
         "lastDurationMs": 81956,
         "lastDelivered": false,
-        "lastDeliveryStatus": "not-delivered"
+        "lastDeliveryStatus": "not-delivered",
+        "runningAtMs": 1772229600012
       },
       "updatedAtMs": 1772143316198
     },
@@ -407,16 +400,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772223300000,
+        "nextRunAtMs": 1772229600000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772223008922,
+        "lastRunAtMs": 1772229300019,
         "lastRunStatus": "ok",
-        "lastDurationMs": 30355,
+        "lastDurationMs": 7832,
         "lastDelivered": false,
-        "lastDeliveryStatus": "not-delivered"
+        "lastDeliveryStatus": "not-delivered",
+        "runningAtMs": 1772229600012
       },
-      "updatedAtMs": 1772223039277
+      "updatedAtMs": 1772229307851
     },
     {
       "id": "git-backup",
@@ -439,7 +433,8 @@
       "state": {
         "nextRunAtMs": 1772229600000,
         "lastStatus": null,
-        "consecutiveErrors": 0
+        "consecutiveErrors": 0,
+        "runningAtMs": 1772229600012
       },
       "updatedAtMs": 1772200000000
     }
