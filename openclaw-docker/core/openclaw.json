@@ -315,25 +315,11 @@
       "enabled": true,
       "dmPolicy": "pairing",
       "groups": {
+        "*": {
+          "requireMention": false
+        },
         "-1003706226741": {
-          "topics": {
-            "1": {
-              "skills": [],
-              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 General. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/01_general.md"
-            },
-            "2": {
-              "skills": [],
-              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 \u0424\u0438\u043d\u0430\u043d\u0441\u044b. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/02_finance.md"
-            },
-            "3": {
-              "skills": [],
-              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 Dev. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/03_dev.md"
-            },
-            "4": {
-              "skills": [],
-              "systemPrompt": "\u0422\u044b \u0432 \u0442\u043e\u043f\u0438\u043a\u0435 \u041e\u0442\u0434\u044b\u0445. \u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442: /data/obsidian/To claw/Topics/04_fun.md"
-            }
-          }
+          "requireMention": false
         }
       },
       "groupPolicy": "allowlist",
@@ -341,7 +327,12 @@
       "allowFrom": [
         "6053956251",
         "3706226741"
-      ]
+      ],
+      "accounts": {
+        "default": {
+          "botToken": "8183387556:AAG7_Gw-XmQkW1G_4Jj-JtnxgrYzcw3bKa8"
+        }
+      }
     }
   },
   "gateway": {
