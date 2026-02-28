@@ -1,0 +1,304 @@
+/* BossOffice.css */
+.boss-office {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Стол руководителя */
+.boss-desk-unit {
+  position: absolute;
+}
+
+.boss-desk {
+  width: 100px;
+  height: 50px;
+  position: relative;
+}
+
+.desk-top {
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 120px;
+  height: 12px;
+  background: linear-gradient(180deg, #4a2a1a 0%, #3a1a0a 100%);
+  border-radius: 3px;
+  border: 2px solid #2a0a00;
+}
+
+.desk-lamp {
+  position: absolute;
+  top: -20px;
+  left: 5px;
+  width: 15px;
+  height: 20px;
+  background: linear-gradient(180deg, #ccaa44 0%, #aa8822 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+.desk-lamp::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 2px;
+  width: 11px;
+  height: 8px;
+  background: #ffee88;
+  border-radius: 2px;
+  box-shadow: 0 0 10px #ffee88;
+}
+
+.desk-computer {
+  position: absolute;
+  top: -30px;
+  left: 30px;
+}
+
+.boss-monitor {
+  width: 35px;
+  height: 25px;
+  background: #222;
+  border: 2px solid #444;
+  border-radius: 2px;
+  position: relative;
+}
+
+.boss-screen {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 6px;
+  background: linear-gradient(135deg, #00aaff 0%, #0066aa 100%);
+  border-radius: 1px;
+  animation: screenGlow 4s infinite;
+}
+
+@keyframes screenGlow {
+  0%, 100% { box-shadow: 0 0 5px #00aaff; }
+  50% { box-shadow: 0 0 15px #00aaff; }
+}
+
+.desk-items {
+  position: absolute;
+  top: -15px;
+  right: 5px;
+  display: flex;
+  gap: 5px;
+}
+
+.desk-phone {
+  width: 12px;
+  height: 15px;
+  background: #222;
+  border-radius: 2px;
+}
+
+.desk-papers {
+  width: 15px;
+  height: 12px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.desk-body {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100px;
+  height: 40px;
+  background: linear-gradient(180deg, #3a2010 0%, #2a1000 100%);
+  border-radius: 0 0 3px 3px;
+}
+
+.desk-leg {
+  position: absolute;
+  bottom: -20px;
+  width: 8px;
+  height: 20px;
+  background: #2a1000;
+}
+
+.leg-1 { left: 10px; }
+.leg-2 { right: 10px; }
+
+/* Кресло руководителя */
+.boss-chair-unit {
+  position: absolute;
+}
+
+.boss-chair {
+  width: 40px;
+  height: 50px;
+  position: relative;
+}
+
+.chair-back-large {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 30px;
+  height: 35px;
+  background: linear-gradient(180deg, #662200 0%, #441100 100%);
+  border-radius: 5px 5px 0 0;
+  border: 2px solid #330000;
+}
+
+.chair-seat-large {
+  position: absolute;
+  top: 30px;
+  left: 2px;
+  width: 36px;
+  height: 18px;
+  background: linear-gradient(180deg, #772211 0%, #551100 100%);
+  border-radius: 3px;
+  border: 2px solid #330000;
+}
+
+.chair-arm {
+  position: absolute;
+  top: 20px;
+  width: 8px;
+  height: 25px;
+  background: linear-gradient(180deg, #662200 0%, #441100 100%);
+  border-radius: 2px;
+}
+
+.arm-1 { left: -3px; }
+.arm-2 { right: -3px; }
+
+.chair-pillar {
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 15px;
+  background: #333;
+}
+
+.chair-base {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 8px;
+  background: #222;
+}
+
+.wheel {
+  position: absolute;
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  background: #111;
+  border-radius: 50%;
+}
+
+.w1 { left: 2px; }
+.w2 { left: 50%;
+  transform: translateX(-50%);
+}
+.w3 { right: 2px; }
+
+/* Сейф */
+.safe-unit {
+  position: absolute;
+}
+
+.pixel-safe {
+  width: 35px;
+  height: 45px;
+  position: relative;
+  border-radius: 3px;
+}
+
+.safe-door {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  border-radius: 2px;
+  border: 2px solid #222;
+}
+
+.safe-dial {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #888;
+  border-radius: 50%;
+  border: 2px solid #444;
+}
+
+.safe-handle {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 4px;
+  background: #aaa;
+  border-radius: 1px;
+}
+
+/* Декор */
+.decor-unit {
+  position: absolute;
+}
+
+.flag-pole {
+  width: 4px;
+  height: 50px;
+  background: #886622;
+  position: relative;
+}
+
+.flag {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 25px;
+  height: 18px;
+  background: linear-gradient(135deg, #cc3333 0%, #aa1111 100%);
+  border-radius: 0 3px 3px 0;
+  animation: flagWave 2s infinite;
+}
+
+@keyframes flagWave {
+  0%, 100% { transform: skewY(0deg); }
+  50% { transform: skewY(-5deg); }
+}
+
+/* Растение */
+.plant-boss {
+  position: absolute;
+}
+
+.plant.pot {
+  width: 25px;
+  height: 20px;
+  background: linear-gradient(180deg, #cc6644 0%, #aa4422 100%);
+  border-radius: 2px 2px 4px 4px;
+  border: 2px solid #882211;
+  position: relative;
+}
+
+.plant-leaves {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.leaf {
+  font-size: 1.4rem;
+}

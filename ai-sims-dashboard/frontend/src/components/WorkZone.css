@@ -1,0 +1,92 @@
+/* WorkZone.css */
+.work-zone {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.desk-unit {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+}
+
+.pixel-desk {
+  width: 60px;
+  height: 35px;
+  position: relative;
+  border-radius: 2px;
+}
+
+.desk-top {
+  position: absolute;
+  top: -15px;
+  left: 5px;
+}
+
+.monitor {
+  width: 35px;
+  height: 25px;
+  position: relative;
+  border-radius: 2px;
+}
+
+.screen-glow {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 8px;
+  background: linear-gradient(135deg, #00ff88 0%, #00aa55 100%);
+  border-radius: 1px;
+  animation: screenFlicker 2s infinite;
+}
+
+@keyframes screenFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0.95; }
+}
+
+.pixel-chair {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: -10px;
+  left: 20px;
+  border-radius: 3px 3px 0 0;
+}
+
+.pixel-chair::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 2px;
+  width: 16px;
+  height: 10px;
+  background: inherit;
+  border-radius: 2px;
+}
+
+.floor-details {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+}
+
+.floor-tile {
+  width: 15px;
+  height: 15px;
+  background: #1a1a2e;
+  border: 1px solid #2a2a4e;
+  border-radius: 1px;
+}
+
+.tile-1 { background: #16213e; }
+.tile-2 { background: #1a1a2e; }
+.tile-3 { background: #1a1a2e; }
+.tile-4 { background: #0f3460; }

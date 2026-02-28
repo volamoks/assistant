@@ -30,29 +30,23 @@ triggers:
 
 ### 1. Что посмотреть / почитать
 
-**GraphQL запрос к Ryot:**
+Используется скрипт `ryot_media.sh` (через Docker-контейнер):
 
 ```bash
-curl -s -X POST http://host:3014/backend/graphql \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer openclaw-ryot-admin-token" \
-  -d '{
-    "query": "query { me { listOfAllMedia(limit: 20, metadataTypes: [MOVIE]) { items { name details { metadata { ... on MovieDetails { overview } } } } } } }"
-  }'
+docker exec openclaw-latest bash /data/bot/openclaw-docker/scripts/ryot_media.sh recommend MOVIE # или SHOW, BOOK
 ```
 
-### 2. Рандомная рекомендация
+Скрипт:
+1. Получает список "Want to watch" / "Want to read" (статус UNFINISHED)
+2. Выбирает рандомный элемент
+3. Возвращает краткое описание жанров и года
 
-1. Получить список "Want to watch" / "Want to read"
-2. Выбрать рандомный элемент
-3. Вернуть с кратким описанием
+### 2. Добавить в список
 
-### 3. Добавить в список
+Добавление кастомных медиа через API Key временно не поддерживается Ryot (ошибка `NO_USER_ID`), но скрипт может попытаться это сделать. Рекомендуется использовать Web UI:
 
 ```bash
-curl -s -X POST http://host:3014/backend/graphql \
-  -H "Authorization: Bearer openclaw-ryot-admin-token" \
-  -d '{"query":"mutation { addToList(mediaName: \"$TITLE\", metadataType: MOVIE, list: WANT_TO_WATCH) { success } }"}'
+docker exec openclaw-latest bash /data/bot/openclaw-docker/scripts/ryot_media.sh add MOVIE "Название" "Описание"
 ```
 
 ## Примеры ответов

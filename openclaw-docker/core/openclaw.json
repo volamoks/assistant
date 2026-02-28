@@ -78,6 +78,17 @@
           }
         ]
       },
+      "groq": {
+        "baseUrl": "https://api.groq.com/openai/v1",
+        "apiKey": "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",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "whisper-large-v3",
+            "name": "Whisper Large V3"
+          }
+        ]
+      },
       "ollama": {
         "baseUrl": "http://ollama:11434/v1",
         "apiKey": "ollama-local",
@@ -147,6 +158,9 @@
     "defaults": {
       "model": {
         "primary": "minimax-portal/MiniMax-M2.5"
+      },
+      "imageModel": {
+        "primary": "litellm/routine"
       },
       "models": {
         "litellm/smart": {
@@ -297,6 +311,18 @@
     ]
   },
   "tools": {
+    "media": {
+      "audio": {
+        "enabled": true,
+        "models": [
+          {
+            "type": "provider",
+            "provider": "groq",
+            "model": "whisper-large-v3"
+          }
+        ]
+      }
+    },
     "sessions": {
       "visibility": "all"
     }

@@ -1,0 +1,204 @@
+/* Kitchen.css */
+.kitchen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Холодильник */
+.fridge-unit {
+  position: absolute;
+}
+
+.pixel-fridge {
+  width: 40px;
+  height: 80px;
+  position: relative;
+  border-radius: 3px;
+}
+
+.fridge-door-top,
+.fridge-door-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #bbddff 0%, #99ccdd 100%);
+  border: 2px solid #667788;
+}
+
+.fridge-door-top {
+  top: 0;
+  height: 45%;
+}
+
+.fridge-door-bottom {
+  top: 45%;
+  height: 55%;
+}
+
+.fridge-handle {
+  position: absolute;
+  right: 5px;
+  width: 4px;
+  height: 15px;
+  background: #888;
+  border-radius: 1px;
+}
+
+.handle-top {
+  top: 20%;
+}
+
+.handle-bottom {
+  top: 60%;
+}
+
+/* Кофемашина */
+.coffee-unit {
+  position: absolute;
+}
+
+.pixel-coffee-machine {
+  width: 30px;
+  height: 40px;
+  position: relative;
+}
+
+.coffee-top {
+  position: absolute;
+  top: 0;
+  left: 2px;
+  width: 26px;
+  height: 10px;
+  background: linear-gradient(180deg, #ddd 0%, #aaa 100%);
+  border-radius: 2px 2px 0 0;
+  border: 2px solid #666;
+}
+
+.coffee-body {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 30px;
+  height: 20px;
+  background: linear-gradient(180deg, #ccc 0%, #999 100%);
+  border: 2px solid #666;
+  border-radius: 0 0 2px 2px;
+}
+
+.coffee-spout {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 10px;
+  background: #666;
+  border-radius: 0 0 2px 2px;
+}
+
+.coffee-cup {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0 0 2px 2px;
+}
+
+.coffee-cup::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 4px;
+  background: #6b4423;
+  border-radius: 1px;
+}
+
+/* Стол */
+.table-unit {
+  position: absolute;
+}
+
+.pixel-table {
+  width: 60px;
+  height: 8px;
+  position: relative;
+  border-radius: 2px;
+}
+
+.table-surface {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 70px;
+  height: 8px;
+  background: linear-gradient(180deg, #6b5a4a 0%, #4b3a2a 100%);
+  border-radius: 2px;
+  border: 2px solid #3a2a1a;
+}
+
+.table-leg {
+  position: absolute;
+  width: 5px;
+  height: 25px;
+  background: #4b3a2a;
+  border-radius: 0 0 1px 1px;
+}
+
+.leg-1 { left: 5px; top: 3px; }
+.leg-2 { right: 5px; top: 3px; }
+.leg-3 { left: 20px; top: 3px; }
+.leg-4 { right: 20px; top: 3px; }
+
+/* Микроволновка */
+.microwave-unit {
+  position: absolute;
+}
+
+.microwave {
+  width: 35px;
+  height: 25px;
+  background: #ddd;
+  border: 2px solid #999;
+  border-radius: 2px;
+}
+
+.microwave-door {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.microwave-window {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #333 0%, #111 100%);
+}
+
+.microwave-panel {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.microwave-btn {
+  width: 8px;
+  height: 3px;
+  background: #666;
+  border-radius: 1px;
+}

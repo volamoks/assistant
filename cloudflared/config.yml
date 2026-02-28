@@ -1,0 +1,9 @@
+tunnel: Jarvis
+ingress:
+  - hostname: sims.volamoks.store
+    service: http://192.168.147.20:5174
+  - hostname: tasks.volamoks.store
+    service: http://host.docker.internal:3456
+  - hostname: budget.volamoks.store
+    service: http://host.docker.internal:5006
+  - service: http_status:404

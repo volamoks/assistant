@@ -58,13 +58,18 @@ EOF
             -d "parse_mode=Markdown" > /dev/null
     fi
 
-    echo "$(date): Restoring Git repository at $PROJECT_DIR..." >> "$LOG_FILE"
+    echo "$(date): Restoring Last Known Good (LKG) config..." >> "$LOG_FILE"
 
-    # Restore all modified files to HEAD
-    git checkout -- . >> "$LOG_FILE" 2>&1
-
-    # Remove any new untracked files (like newly created broken json schemas)
-    git clean -fd >> "$LOG_FILE" 2>&1
+    LKG_FILE="$PROJECT_DIR/openclaw-docker/core/openclaw.json.lkg"
+    TARGET_FILE="$PROJECT_DIR/openclaw-docker/core/openclaw.json"
+    
+    if [ -f "$LKG_FILE" ]; then
+        cp "$LKG_FILE" "$TARGET_FILE" >> "$LOG_FILE" 2>&1
+        echo "$(date): LKG config restored successfully." >> "$LOG_FILE"
+    else
+        echo "$(date): WARNING: LKG file not found! Falling back to Git restore." >> "$LOG_FILE"
+        git checkout -- "$TARGET_FILE" >> "$LOG_FILE" 2>&1
+    fi
 
     echo "$(date): Restarting Docker container..." >> "$LOG_FILE"
     docker restart "$CONTAINER_NAME" >> "$LOG_FILE" 2>&1
@@ -79,6 +84,23 @@ EOF
 
     echo "$(date): Recovery complete." >> "$LOG_FILE"
 else
-    # Everything is fine, no logging needed to avoid spam
+    # Everything is fine, check uptime to create LKG
+    STARTED_AT=$(docker container inspect -f '{{.State.StartedAt}}' "$CONTAINER_NAME" | cut -d. -f1)
+    if [ ! -z "$STARTED_AT" ]; then
+        STARTED_SEC=$(date -j -u -f "%Y-%m-%dT%H:%M:%S" "$STARTED_AT" "+%s" 2>/dev/null || echo 0)
+        NOW_SEC=$(date -u "+%s")
+        UPTIME_SEC=$((NOW_SEC - STARTED_SEC))
+        
+        # If running for more than 3 minutes (180s) without restarting, save LKG
+        if [ "$UPTIME_SEC" -gt 180 ]; then
+            TARGET_FILE="$PROJECT_DIR/openclaw-docker/core/openclaw.json"
+            LKG_FILE="$PROJECT_DIR/openclaw-docker/core/openclaw.json.lkg"
+            # Only copy if the LKG doesn't exist or is different
+            if ! cmp -s "$TARGET_FILE" "$LKG_FILE" 2>/dev/null; then
+                cp "$TARGET_FILE" "$LKG_FILE"
+                echo "$(date): New LKG config saved (uptime: ${UPTIME_SEC}s)" >> "$LOG_FILE"
+            fi
+        fi
+    fi
     exit 0
 fi

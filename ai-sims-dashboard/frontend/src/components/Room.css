@@ -1,0 +1,145 @@
+/* Room.css - Изометрический вид комнат */
+.room {
+  width: 200px;
+  height: 150px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.room:hover {
+  transform: translateZ(5px);
+}
+
+.room-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80%;
+  background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+  border: 2px solid #4a4a6e;
+  border-radius: 4px;
+  transform-origin: bottom;
+}
+
+.room-walls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+}
+
+.wall {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(180deg, #3a3a5e 0%, #2a2a4e 100%);
+}
+
+.wall-left {
+  left: 0;
+  width: 30%;
+  transform: skewY(-30deg);
+  transform-origin: bottom left;
+  border-right: 1px solid #4a4a6e;
+}
+
+.wall-right {
+  right: 0;
+  width: 30%;
+  transform: skewY(30deg);
+  transform-origin: bottom right;
+  border-left: 1px solid #4a4a6e;
+}
+
+.room-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.room-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.room:hover .room-icon {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.room-agent-count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+}
+
+.agent-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: #00ff88;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 255, 136, 0.4);
+}
+
+/* Типы комнат */
+.room.work_zone {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 50%, #16213e 100%);
+}
+
+.room.game_room {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 50%, #1a1a2e 100%);
+}
+
+.room.kitchen {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2a2a1a 50%, #1a2a1a 100%);
+}
+
+.room.meeting_room {
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2a2a 50%, #0f1a1a 100%);
+}
+
+.room.boss_office {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2a1a1a 50%, #1a0f0f 100%);
+}
+
+/* Изометрический эффект */
+.room::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  height: 10px;
+  background: #1a1a2e;
+  transform: skewX(-45deg);
+  transform-origin: top;
+  z-index: -1;
+}
+
+.room::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 10px;
+  height: 100%;
+  background: #0f0f1a;
+  transform: skewY(-45deg);
+  transform-origin: top left;
+  z-index: -1;
+}

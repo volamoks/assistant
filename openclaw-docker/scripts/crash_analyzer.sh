@@ -5,6 +5,7 @@
 
 CRASH_DIR="/data/obsidian/To claw/Bot/crash-configs"
 LESSONS_FILE="/data/obsidian/To claw/Bot/lessons-learned.md"
+AGENT_ERRORS_FILE="/data/bot/openclaw-docker/workspace/.learnings/ERRORS.md"
 OLLAMA_URL="${OLLAMA_URL:-http://ollama:11434/api/generate}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-deepseek-r1:1.5b}"
 TELEGRAM_TOKEN="${TELEGRAM_BOT_TOKEN}"
@@ -24,6 +25,9 @@ fi
 
 # --- Шаг 2: Есть файлы — подключаем LLM ---
 echo "Found ${#FILES[@]} crash file(s). Invoking LLM analysis..." >&2
+
+# Убедимся, что папка для уроков агента существует
+mkdir -p "$(dirname "$AGENT_ERRORS_FILE")"
 
 for FILE in "${FILES[@]}"; do
   FILENAME=$(basename "$FILE")
@@ -49,15 +53,23 @@ ${CONTENT}"
     -d "{\"model\": \"$OLLAMA_MODEL\", \"prompt\": $(echo "$PROMPT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'), \"stream\": false}" \
     | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("response",""))' 2>/dev/null)
 
-  if [ -z "$RESPONSE" ]; then
+  # Если модель DeepSeek возвращает теги <think>, вырезаем их для чистоты лога
+  CLEAN_RESPONSE=$(echo "$RESPONSE" | sed -e 's/<think>.*<\/think>//g' | sed '/^$/N;/^\n$/D')
+
+  if [ -z "$CLEAN_RESPONSE" ]; then
     echo "LLM failed for $FILENAME, skipping" >&2
     continue
   fi
 
-  # Добавляем урок в lessons-learned.md
+  # Добавляем урок в lessons-learned.md (Obsidian)
   echo "" >> "$LESSONS_FILE"
-  echo "$RESPONSE" >> "$LESSONS_FILE"
+  echo "$CLEAN_RESPONSE" >> "$LESSONS_FILE"
   echo "" >> "$LESSONS_FILE"
+
+  # Дублируем урок в мозг агенту (Workspace)
+  echo "" >> "$AGENT_ERRORS_FILE"
+  echo "$CLEAN_RESPONSE" >> "$AGENT_ERRORS_FILE"
+  echo "" >> "$AGENT_ERRORS_FILE"
 
   # Удаляем обработанный crash-файл
   rm -f "$FILE"

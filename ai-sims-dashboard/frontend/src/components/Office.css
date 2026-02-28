@@ -1,0 +1,193 @@
+/* Office.css - True Isometric Layout */
+
+:root {
+  --tile-size: 80px;
+  --bg-color: #0f172a;
+  --floor-color: #1e293b;
+  --grid-color: rgba(255, 255, 255, 0.05);
+  --wall-color: #334155;
+  --wall-highlight: #475569;
+}
+
+.office-container {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  background: var(--bg-color);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+/* Наклон всего офиса */
+.office-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(2, 200px);
+  gap: 20px;
+  transform: rotateX(60deg) rotateZ(45deg);
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  padding: 100px; /* Чтобы не обрезалось по краям */
+}
+
+/* Адаптивность для iPhone */
+@media (max-width: 768px) {
+  .office-grid {
+    transform: rotateX(60deg) rotateZ(45deg) scale(0.6);
+    grid-template-columns: repeat(2, 180px);
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .office-grid {
+    transform: rotateX(60deg) rotateZ(45deg) scale(0.45);
+    grid-template-columns: repeat(2, 160px);
+    margin-top: -100px;
+  }
+}
+
+/* Изометрическая мебель */
+.isometric-furniture {
+  position: absolute;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+.isometric-furniture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.1);
+  transform: translateZ(-1px);
+}
+
+.desk {
+  width: 60px;
+  height: 40px;
+  background: #7c2d12;
+  border: 1px solid #451a03;
+  transform: translateZ(15px);
+}
+
+.chair {
+  width: 25px;
+  height: 25px;
+  background: #1e293b;
+  transform: translateZ(10px);
+}
+
+.fridge {
+  width: 30px;
+  height: 40px;
+  background: #cbd5e1;
+  transform: translateZ(30px);
+}
+
+/* Комната как объемный куб */
+.office-room {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: var(--floor-color);
+  border: 2px solid var(--grid-color);
+  transform-style: preserve-3d;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* Стены комнаты (псевдо-3D) */
+.office-room::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 10px;
+  height: 100%;
+  background: var(--wall-color);
+  transform: skewY(-45deg);
+  transform-origin: right;
+}
+
+.office-room::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: var(--wall-highlight);
+  transform: skewX(-45deg);
+  transform-origin: bottom;
+}
+
+.room-label {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  transform: rotateZ(-45deg) rotateX(-60deg);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 2px 2px 0 #000;
+}
+
+/* Сетка на полу (тайлы) */
+.office-floor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Цвета комнат */
+.room-work_zone { --floor-color: #0c4a6e; }
+.room-game_room { --floor-color: #701a75; }
+.room-kitchen { --floor-color: #78350f; }
+.room-meeting_room { --floor-color: #312e81; }
+.room-boss_office { --floor-color: #450a0a; grid-column: span 2; }
+
+/* Агенты внутри комнаты */
+.room-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+/* Вертикальный человечек */
+.agent-sprite-wrapper {
+  position: absolute;
+  transform: rotateZ(-45deg) rotateX(-60deg) translateY(-20px);
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agent-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 20px;
+  height: 10px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  transform: translateX(-50%) translateZ(-1px);
+}

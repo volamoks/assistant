@@ -100,7 +100,7 @@ services:
     container_name: openclaw-latest
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:18789/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -156,7 +156,7 @@ services:
       - PLAUD_TOKEN=${PLAUD_TOKEN}
       - PLAUD_API_DOMAIN=${PLAUD_API_DOMAIN}
       - RYOT_URL=http://ryot:8000/backend/graphql
-      - RYOT_TOKEN=openclaw-ryot-admin-token
+      - RYOT_TOKEN=XHMBDNX63Y3JSDNZDAHJ645PJHP7ZOLQUI2WMRWFUOKRWXV63JZQ====
       - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
     networks:
       - default

@@ -20,16 +20,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772247600000,
-        "lastRunAtMs": 1772161200012,
+        "nextRunAtMs": 1772334000000,
+        "lastRunAtMs": 1772247600036,
         "lastStatus": "ok",
-        "lastDurationMs": 14291,
+        "lastDurationMs": 16152,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772161214303
+      "updatedAtMs": 1772247616188
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -48,21 +48,20 @@
         "thinking": "medium"
       },
       "delivery": {
-        "mode": "announce",
-        "channel": "last",
-        "to": "telegram:6053956251"
+        "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772300400000,
+        "nextRunAtMs": 1772386800000,
         "lastStatus": "error",
-        "consecutiveErrors": 3,
-        "lastRunAtMs": 1772214000031,
-        "lastDurationMs": 186,
+        "consecutiveErrors": 4,
+        "lastRunAtMs": 1772300400030,
+        "lastDurationMs": 163872,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "lastError": "Error: All models failed (2): litellm/routine: Unknown model: litellm/routine (model_not_found) | anthropic/claude-opus-4-6: No API key found for provider \"anthropic\". Auth store: /home/node/.openclaw/agents/main/agent/auth-profiles.json (agentDir: /home/node/.openclaw/agents/main/agent). Configure auth for this agent (openclaw agents add <id>) or copy auth-profiles.json from the main agentDir. (auth)"
+        "lastDeliveryStatus": "delivered",
+        "lastError": "⚠️ ✉️ Message failed",
+        "lastDelivered": true
       },
-      "updatedAtMs": 1772214000217
+      "updatedAtMs": 1772300563902
     },
     {
       "id": "crash-analysis",
@@ -80,17 +79,17 @@
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim."
       },
       "state": {
-        "nextRunAtMs": 1772229600000,
+        "nextRunAtMs": 1772316000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772229000030,
+        "lastRunAtMs": 1772315400034,
         "lastStatus": "ok",
-        "lastDurationMs": 7058,
+        "lastDurationMs": 9823,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "runningAtMs": 1772229600012
+        "runningAtMs": 1772316000025
       },
-      "updatedAtMs": 1772229007088,
+      "updatedAtMs": 1772315409857,
       "delivery": {
         "mode": "none"
       }
@@ -112,21 +111,20 @@
         "thinking": "low"
       },
       "delivery": {
-        "mode": "announce",
-        "channel": "last",
-        "to": "telegram:6053956251"
+        "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772247600000,
-        "lastRunAtMs": 1772161222075,
-        "lastStatus": "ok",
-        "lastDurationMs": 105818,
-        "consecutiveErrors": 0,
-        "lastRunStatus": "ok",
+        "nextRunAtMs": 1772334000000,
+        "lastRunAtMs": 1772248631625,
+        "lastStatus": "error",
+        "lastDurationMs": 76246,
+        "consecutiveErrors": 3,
+        "lastRunStatus": "error",
         "lastDelivered": true,
-        "lastDeliveryStatus": "delivered"
+        "lastDeliveryStatus": "delivered",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772161327893
+      "updatedAtMs": 1772248707871
     },
     {
       "id": "telegram-dashboard",
@@ -146,19 +144,18 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last",
+        "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772249400000,
+        "nextRunAtMs": 1772335800000,
         "lastRunAtMs": 1772163014771,
         "lastStatus": "error",
         "lastDurationMs": 51266,
         "consecutiveErrors": 1,
         "lastRunStatus": "error",
         "lastDelivered": true,
-        "lastDeliveryStatus": "delivered",
-        "lastError": "⚠️ ✉️ Message failed"
+        "lastDeliveryStatus": "delivered"
       },
       "updatedAtMs": 1772163066037
     },
@@ -182,17 +179,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772303400000,
-        "lastRunAtMs": 1772130615053,
+        "nextRunAtMs": 1772389800000,
+        "lastRunAtMs": 1772303421309,
         "lastStatus": "error",
-        "lastDurationMs": 54262,
-        "consecutiveErrors": 1,
+        "lastDurationMs": 72621,
+        "consecutiveErrors": 2,
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "lastDeliveryError": "⚠️ ✉️ Message failed"
+        "lastDeliveryError": "⚠️ ✉️ Message failed",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772130669315
+      "updatedAtMs": 1772303493930
     },
     {
       "id": "actual-sync",
@@ -213,17 +211,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772229600000,
+        "nextRunAtMs": 1772316000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772227811428,
+        "lastRunAtMs": 1772314210976,
         "lastStatus": "ok",
-        "lastDurationMs": 6738,
+        "lastDurationMs": 8104,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "runningAtMs": 1772229600012
+        "runningAtMs": 1772316000025
       },
-      "updatedAtMs": 1772227818166
+      "updatedAtMs": 1772314219080
     },
     {
       "id": "finance-enrichment",
@@ -245,18 +243,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772312400000,
-        "lastRunAtMs": 1772226026358,
+        "nextRunAtMs": 1772398800000,
+        "lastRunAtMs": 1772312438369,
         "lastStatus": "error",
-        "lastDurationMs": 43827,
-        "consecutiveErrors": 2,
+        "lastDurationMs": 39578,
+        "consecutiveErrors": 3,
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "lastDeliveryError": "⚠️ ✉️ Message failed",
         "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772226070185
+      "updatedAtMs": 1772312477947
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -276,20 +274,20 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last",
+        "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772301600000,
-        "consecutiveErrors": 2,
-        "lastRunAtMs": 1772128800018,
-        "lastStatus": "error",
-        "lastDurationMs": 3037,
-        "lastRunStatus": "error",
+        "nextRunAtMs": 1772388000000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772301617015,
+        "lastStatus": "ok",
+        "lastDurationMs": 73395,
+        "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1772128803055
+      "updatedAtMs": 1772301690410
     },
     {
       "id": "obsidian-reindex",
@@ -311,16 +309,16 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772229600000,
-        "lastRunAtMs": 1772143234242,
+        "nextRunAtMs": 1772316000000,
+        "lastRunAtMs": 1772229623306,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 81956,
+        "lastDurationMs": 143536,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "runningAtMs": 1772229600012
+        "runningAtMs": 1772316000025
       },
-      "updatedAtMs": 1772143316198
+      "updatedAtMs": 1772229766842
     },
     {
       "id": "context-logger",
@@ -339,15 +337,20 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last",
+        "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772301600000,
-        "lastStatus": null,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1772388000000,
+        "lastStatus": "skipped",
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772301690410,
+        "lastRunStatus": "skipped",
+        "lastDurationMs": 1,
+        "lastError": "isolated job requires payload.kind=agentTurn",
+        "lastDeliveryStatus": "unknown"
       },
-      "updatedAtMs": 1772200000000
+      "updatedAtMs": 1772301690411
     },
     {
       "id": "telegram-monitor",
@@ -366,17 +369,16 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last",
+        "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772251200000,
+        "nextRunAtMs": 1772337600000,
         "lastStatus": "skipped",
         "consecutiveErrors": 0,
         "lastRunAtMs": 1772164800202,
         "lastRunStatus": "skipped",
         "lastDurationMs": 0,
-        "lastError": "isolated job requires payload.kind=agentTurn",
         "lastDeliveryStatus": "unknown"
       },
       "updatedAtMs": 1772164800202
@@ -400,17 +402,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772229600000,
+        "nextRunAtMs": 1772316000000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772229300019,
+        "lastRunAtMs": 1772315700023,
         "lastRunStatus": "ok",
-        "lastDurationMs": 7832,
-        "lastDelivered": false,
+        "lastDurationMs": 8853,
         "lastDeliveryStatus": "not-delivered",
-        "runningAtMs": 1772229600012
+        "lastDelivered": false,
+        "runningAtMs": 1772316000025
       },
-      "updatedAtMs": 1772229307851
+      "updatedAtMs": 1772315708876
     },
     {
       "id": "git-backup",
@@ -431,12 +433,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772229600000,
-        "lastStatus": null,
+        "nextRunAtMs": 1772316000000,
+        "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "runningAtMs": 1772229600012
+        "lastRunAtMs": 1772229777133,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 24608,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "runningAtMs": 1772316000025
       },
-      "updatedAtMs": 1772200000000
+      "updatedAtMs": 1772229801741
     }
   ]
 }
