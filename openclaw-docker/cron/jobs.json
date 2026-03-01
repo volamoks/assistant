@@ -20,16 +20,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772334000000,
-        "lastRunAtMs": 1772247600036,
+        "nextRunAtMs": 1772420400000,
+        "lastRunAtMs": 1772334000035,
         "lastStatus": "ok",
-        "lastDurationMs": 16152,
+        "lastDurationMs": 20586,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772247616188
+      "updatedAtMs": 1772334020621
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -51,17 +51,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772386800000,
+        "nextRunAtMs": 1772473200000,
         "lastStatus": "error",
-        "consecutiveErrors": 4,
-        "lastRunAtMs": 1772300400030,
-        "lastDurationMs": 163872,
+        "consecutiveErrors": 5,
+        "lastRunAtMs": 1772386800047,
+        "lastDurationMs": 151468,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "delivered",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false,
         "lastError": "⚠️ ✉️ Message failed",
-        "lastDelivered": true
+        "lastDeliveryError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772300563902
+      "updatedAtMs": 1772386951515
     },
     {
       "id": "crash-analysis",
@@ -79,17 +80,17 @@
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim."
       },
       "state": {
-        "nextRunAtMs": 1772316000000,
+        "nextRunAtMs": 1772402400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772315400034,
+        "lastRunAtMs": 1772401800067,
         "lastStatus": "ok",
-        "lastDurationMs": 9823,
+        "lastDurationMs": 8210,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "runningAtMs": 1772316000025
+        "runningAtMs": 1772402400027
       },
-      "updatedAtMs": 1772315409857,
+      "updatedAtMs": 1772401808277,
       "delivery": {
         "mode": "none"
       }
@@ -114,17 +115,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772334000000,
-        "lastRunAtMs": 1772248631625,
+        "nextRunAtMs": 1772420400000,
+        "lastRunAtMs": 1772334029782,
         "lastStatus": "error",
-        "lastDurationMs": 76246,
-        "consecutiveErrors": 3,
+        "lastDurationMs": 72375,
+        "consecutiveErrors": 4,
         "lastRunStatus": "error",
-        "lastDelivered": true,
-        "lastDeliveryStatus": "delivered",
-        "lastError": "⚠️ ✉️ Message failed"
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "lastError": "⚠️ ✉️ Message failed",
+        "lastDeliveryError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772248707871
+      "updatedAtMs": 1772334102157
     },
     {
       "id": "telegram-dashboard",
@@ -143,21 +145,20 @@
         "thinking": "low"
       },
       "delivery": {
-        "mode": "announce",
-        "channel": "telegram",
-        "to": "telegram:6053956251"
+        "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772335800000,
-        "lastRunAtMs": 1772163014771,
+        "nextRunAtMs": 1772422200000,
+        "lastRunAtMs": 1772335817031,
         "lastStatus": "error",
-        "lastDurationMs": 51266,
-        "consecutiveErrors": 1,
+        "lastDurationMs": 58601,
+        "consecutiveErrors": 2,
         "lastRunStatus": "error",
         "lastDelivered": true,
-        "lastDeliveryStatus": "delivered"
+        "lastDeliveryStatus": "delivered",
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772163066037
+      "updatedAtMs": 1772335875632
     },
     {
       "id": "vault-gardening",
@@ -179,18 +180,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772389800000,
-        "lastRunAtMs": 1772303421309,
+        "nextRunAtMs": 1772476200000,
+        "lastRunAtMs": 1772389809925,
         "lastStatus": "error",
-        "lastDurationMs": 72621,
-        "consecutiveErrors": 2,
+        "lastDurationMs": 29624,
+        "consecutiveErrors": 3,
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "lastDeliveryError": "⚠️ ✉️ Message failed",
         "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772303493930
+      "updatedAtMs": 1772389839549
     },
     {
       "id": "actual-sync",
@@ -211,17 +212,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772316000000,
+        "nextRunAtMs": 1772402400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772314210976,
+        "lastRunAtMs": 1772400607176,
         "lastStatus": "ok",
-        "lastDurationMs": 8104,
+        "lastDurationMs": 16148,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "runningAtMs": 1772316000025
+        "runningAtMs": 1772402400027
       },
-      "updatedAtMs": 1772314219080
+      "updatedAtMs": 1772400623324
     },
     {
       "id": "finance-enrichment",
@@ -243,18 +244,18 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772398800000,
-        "lastRunAtMs": 1772312438369,
+        "nextRunAtMs": 1772485200000,
+        "lastRunAtMs": 1772398833588,
         "lastStatus": "error",
-        "lastDurationMs": 39578,
-        "consecutiveErrors": 3,
+        "lastDurationMs": 31500,
+        "consecutiveErrors": 4,
         "lastRunStatus": "error",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "lastDeliveryError": "⚠️ ✉️ Message failed",
         "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1772312477947
+      "updatedAtMs": 1772398865088
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -278,16 +279,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772388000000,
+        "nextRunAtMs": 1772474400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772301617015,
+        "lastRunAtMs": 1772388019618,
         "lastStatus": "ok",
-        "lastDurationMs": 73395,
+        "lastDurationMs": 68359,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1772301690410
+      "updatedAtMs": 1772388087977
     },
     {
       "id": "obsidian-reindex",
@@ -309,16 +310,16 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772316000000,
-        "lastRunAtMs": 1772229623306,
+        "nextRunAtMs": 1772402400000,
+        "lastRunAtMs": 1772316025989,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 143536,
+        "lastDurationMs": 132248,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "runningAtMs": 1772316000025
+        "runningAtMs": 1772402400027
       },
-      "updatedAtMs": 1772229766842
+      "updatedAtMs": 1772316158237
     },
     {
       "id": "context-logger",
@@ -332,8 +333,9 @@
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
-        "kind": "skill",
-        "skillId": "context-logger"
+        "kind": "agentTurn",
+        "message": "Execute the context-logger skill: get today sessions from last 24h using sessions_list tool (activeMinutes: 1440), fetch each session history, extract key insights (tasks done, decisions made, errors, learnings), write daily diary to /data/obsidian/Inbox/Дневник_YYYY-MM-DD.md (use actual date). Send brief confirmation to Telegram when done.",
+        "thinking": "low"
       },
       "delivery": {
         "mode": "announce",
@@ -341,16 +343,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772388000000,
+        "nextRunAtMs": 1772474400000,
         "lastStatus": "skipped",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772301690410,
+        "lastRunAtMs": 1772388087980,
         "lastRunStatus": "skipped",
-        "lastDurationMs": 1,
-        "lastError": "isolated job requires payload.kind=agentTurn",
-        "lastDeliveryStatus": "unknown"
+        "lastDurationMs": 43,
+        "lastDeliveryStatus": "unknown",
+        "lastError": "isolated job requires payload.kind=agentTurn"
       },
-      "updatedAtMs": 1772301690411
+      "updatedAtMs": 1772388088023
     },
     {
       "id": "telegram-monitor",
@@ -364,8 +366,9 @@
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
-        "kind": "skill",
-        "skillId": "telegram-monitor"
+        "kind": "agentTurn",
+        "message": "Execute the telegram-monitor skill: read channel list from /data/obsidian/To claw/Telegram/Channels/README.md, fetch recent posts from each channel via Telegram API, create digest at /data/obsidian/To claw/Telegram/Digest_YYYY-MM-DD.md (use actual date), send brief summary to Telegram.",
+        "thinking": "low"
       },
       "delivery": {
         "mode": "announce",
@@ -373,15 +376,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772337600000,
+        "nextRunAtMs": 1772424000000,
         "lastStatus": "skipped",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772164800202,
+        "lastRunAtMs": 1772337628814,
         "lastRunStatus": "skipped",
         "lastDurationMs": 0,
-        "lastDeliveryStatus": "unknown"
+        "lastDeliveryStatus": "unknown",
+        "lastError": "isolated job requires payload.kind=agentTurn"
       },
-      "updatedAtMs": 1772164800202
+      "updatedAtMs": 1772337628814
     },
     {
       "id": "watchdog",
@@ -396,23 +400,23 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run /data/bot/openclaw-docker/scripts/watchdog.sh and report result"
+        "message": "SILENT TASK — only alert if restart occurred.\nbash: bash /data/bot/openclaw-docker/scripts/watchdog.sh\nIf output contains restarting or failure → send brief alert to Telegram. If gateway is healthy → complete silently, no output."
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772316000000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772315700023,
+        "lastRunAtMs": 1772402100036,
         "lastRunStatus": "ok",
-        "lastDurationMs": 8853,
+        "lastDurationMs": 7518,
         "lastDeliveryStatus": "not-delivered",
+        "nextRunAtMs": 1772402400000,
         "lastDelivered": false,
-        "runningAtMs": 1772316000025
+        "runningAtMs": 1772402400027
       },
-      "updatedAtMs": 1772315708876
+      "updatedAtMs": 1772402107554
     },
     {
       "id": "git-backup",
@@ -433,17 +437,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772316000000,
+        "nextRunAtMs": 1772402400000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772229777133,
+        "lastRunAtMs": 1772316166264,
         "lastRunStatus": "ok",
-        "lastDurationMs": 24608,
+        "lastDurationMs": 16463,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
-        "runningAtMs": 1772316000025
+        "runningAtMs": 1772402400027
       },
-      "updatedAtMs": 1772229801741
+      "updatedAtMs": 1772316182727
     }
   ]
 }

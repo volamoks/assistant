@@ -38,3 +38,8 @@
 - **Router**: NEVER answer questions. ONLY classify and route.
 - **Worker**: ALWAYS cite sources. Output raw Markdown.
 - **All**: If unsure, ASK. Do not hallucinate data.
+
+# Session Log — 2026-03-01
+_Agent will append actions here throughout the day._
+
+- No session activity logged today (empty today-session.md)

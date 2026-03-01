@@ -37,6 +37,7 @@ services:
       # - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - KILOCODE_API_KEY=${KILOCODE_API_KEY}
       # === ADD MORE AI STUDIO KEYS HERE ===
       # Uncomment and add more keys below:
       # - AI_STUDIO_KEY_4=${AI_STUDIO_KEY_4}

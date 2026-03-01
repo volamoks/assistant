@@ -1,7 +1,7 @@
 {
   "id": "agent_router",
-  "name": "Orchestrator (Router)",
-  "description": "The entry point for all requests. Never executes tasks itself. Analyzes intent and routes to the correct specialist.",
+  "name": "Orchestrator (PM)",
+  "description": "Project Manager and Pipeline Orchestrator. Analyzes intent, coordinates task execution across Architect, Coder, and other specialists.",
   "model": "minimax-portal/MiniMax-M2.5",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
@@ -9,10 +9,11 @@
     "/home/node/.openclaw/prompts/MEMORY.md"
   ],
   "tools": [
-    "agent_career",
+    "agent_architect",
     "agent_coder",
-    "agent_interviewer",
     "agent_research",
+    "agent_career",
+    "agent_interviewer",
     "agent_trainer"
   ],
   "temperature": 0.1,

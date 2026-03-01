@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
-import Office from './components/Office';
+import CanvasOffice from './canvas/CanvasOffice';
 import AgentInfo from './components/AgentInfo';
 import useAgents from './hooks/useAgents';
 import './App.css';
@@ -17,9 +17,9 @@ function App() {
         <span className="status-text">{isConnected ? 'LIVE' : 'RECONNECTING...'}</span>
       </div>
 
-      {/* Основная 3D сцена (Офис) */}
+      {/* Pixel-art офис в стиле Stardew Valley */}
       <main className="game-world">
-        <Office agents={agents} onAgentClick={setSelectedAgent} />
+        <CanvasOffice agents={agents} onAgentClick={setSelectedAgent} />
       </main>
 
       {/* Панель информации (выезжает при клике на агента) */}
@@ -33,7 +33,7 @@ function App() {
       {/* Список агентов внизу (как в играх выбор персонажа) */}
       <div className="agent-hotbar">
         {agents.map(agent => (
-          <div 
+          <div
             key={agent.id}
             className={`hotbar-item ${selectedAgent?.id === agent.id ? 'active' : ''}`}
             onClick={() => setSelectedAgent(agent)}

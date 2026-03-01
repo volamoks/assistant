@@ -160,12 +160,30 @@ services:
       - "8096:8090"
     volumes:
       - beszel_data:/beszel_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - PORT=8090
+      - DOCKER_HOST=unix:///var/run/docker.sock
     networks:
       - jarvis_net
 
-  # beszel-agent: disabled — native agent runs via Homebrew (brew services start beszel-agent)
+  # beszel-agent для мониторинга хоста (Mac)
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/proc:ro
+      - /sys:/sys:ro
+      - /:/hostfs:ro
+    environment:
+      - KEY=${BESZEL_AGENT_KEY}
+      - PORT=45876
+    # Отключён по умолчанию — включить после генерации ключа в UI
   # Config: ~/.config/beszel/beszel-agent.env  |  Logs: ~/.cache/beszel/beszel-agent.log
 
   # --- 📺 TORRENT SERVER ---

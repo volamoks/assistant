@@ -3,11 +3,13 @@ FROM ghcr.io/openclaw/openclaw:main
 # Temporarily switch to root to install system dependencies
 USER root
 
-# Install docker CLI, sudo, and python tools
+# Install docker CLI, sudo, python tools, jq, and column (bsdmainutils)
 RUN apt-get update && apt-get install -y \
     docker.io \
     sudo \
     python3-pip \
+    jq \
+    bsdmainutils \
     && rm -rf /var/lib/apt/lists/*
 
 # Install actualpy and other dependencies globally

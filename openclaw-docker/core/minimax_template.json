@@ -1,0 +1,11 @@
+{
+  "model": "MiniMax-Text-01",
+  "messages": [
+    {"sender_type": "USER", "sender_name": "User", "text": "{{prompt}}"}
+  ],
+  "bot_setting": [
+    {"bot_name": "Assistant", "content": "You are a helpful AI assistant."}
+  ],
+  "reply_constraints": {"sender_type": "BOT", "sender_name": "Assistant"},
+  "max_tokens": 4096
+}

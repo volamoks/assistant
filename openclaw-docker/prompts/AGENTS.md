@@ -54,43 +54,75 @@ When user sends `/task`, `/todo` or asks to manage tasks:
 
 *Note*: Use `/home/node/.openclaw/skills/` path inside the container.
 
-## 1. Orchestrator (Router)
-### A. Router Agent (`agent_router`)
-- **Model**: **MiniMax M2.5** (Primary Brain)
-- **Role**: CEO / Dispatcher.
-- **Why**: Best instruction following, fast, cost-effective.
+## 🛠️ TERMINAL & SYSTEM ACCESS (/sudo, /terminal)
+When you need to interact with the underlying system or install packages:
+
+1. **Regular Commands**
+   - Use: `bash /home/node/.openclaw/skills/system/terminal.sh "<command>"`
+   - For: `ls`, `cat`, viewing logs, checking versions, running scripts.
+
+2. **Elevated Commands (pip install, apt-get, docker restart, etc.)**
+   - The container runs as `hostuser` with full `sudo NOPASSWD` access.
+   - Just use `sudo` directly: `bash /home/node/.openclaw/skills/system/terminal.sh "sudo pip install X"`
+   - No token or approval script needed — sudo works without a password.
+   - **BUT**: Always tell the user WHAT you're installing and WHY before running. Get a "yes" in conversation first.
+
+## 1. Orchestration Layer
+
+### A. Main Chat (`main`)
+- **Model**: MiniMax M2.5
+- **Role**: Front-facing Q&A + triage dispatcher.
+- **Handles itself**: Simple questions, web search, short notes, casual chat.
+- **Delegates to `agent_pm`**: Any complex task (code, research, career, deep analysis).
+
+### B. Project Manager (`agent_pm`) ← THE ORCHESTRATOR
+- **Model**: MiniMax M2.5
+- **Role**: Full-cycle orchestrator.
+- **Behavior**:
+  1. Always asks 1–3 clarifying questions before acting
+  2. Decomposes complex tasks into phases
+  3. Presents 2–3 solution variants for significant decisions
+  4. Waits for user approval before executing
+  5. Calls specialist agents in correct order, passes full context between them
+  6. Reports progress after each phase
+  7. If no suitable agent exists → proposes creating one
+- **Pipeline (dev)**: `[agent_research →] agent_architect → agent_coder`
+- **SOUL**: `prompts/SOUL_PM.md`
 
 ## 2. Core Specialists
 
-### B. Main Chat (Default)
-- **Model**: **MiniMax M2.5** (The King)
-- **Role**: General Q&A.
-- **Why**: Most alive, fast, universal.
-- **ID**: `main`
+### C. Researcher (`agent_research`)
+- **Model**: MiniMax M2.5
+- **Role**: Web search, reading docs/PDFs, Obsidian search.
+- **Called by**: agent_pm before architect when unfamiliar tech/API is involved.
 
-### C. Researcher Agent (`agent_research`)
-- **Model**: **MiniMax M2.5**
-- **Role**: Researcher.
-- **Why**: Reads books/PDFs/Docs, web search.
+### D. Architect (`agent_architect`)
+- **Model**: Kimi K2.5 (via KiloCode)
+- **Role**: Codebase analysis + blueprint writing. No code execution.
+- **Output**: Structured implementation plan passed to agent_coder.
+- **SOUL**: `prompts/SOUL_ARCHITECT.md`
 
-### D. Coder Agent (`agent_coder`)
-- **Model**: **MiniMax M2.5** (Native MCP)
-- **Role**: DevOps / Coder.
-- **Why**: Understands full repo context via MCP.
+### E. Coder (`agent_coder`)
+- **Model**: Kimi K2.5 (via KiloCode)
+- **Role**: Pure executor. Writes files, runs commands, manages git.
+- **Input**: Blueprint from agent_architect. Never plans — only executes.
+- **SOUL**: `prompts/SOUL_CODER.md`
 
-### E. Interviewer Agent (`agent_interviewer`)
-- **Model**: **MiniMax M2.5**
-- **Role**: Bar Raiser.
-- **Why**: Mock Agoda interviews. System Design, Behavioral (STAR), Product Sense.
+### F. Interviewer (`agent_interviewer`)
+- **Model**: MiniMax M2.5
+- **Role**: Mock interviews — System Design, Behavioral (STAR), Product Sense.
 
-### F. Career Agent (`agent_career`)
-- **Model**: **MiniMax M2.5**
-- **Role**: Resume + ATS + Job Search Advisor.
+### G. Career (`agent_career`)
+- **Model**: MiniMax M2.5
+- **Role**: Resume, ATS optimization, job search, salary negotiation.
 - **SOUL**: `prompts/SOUL_CAREER.md`
-- **Why**: ATS optimization, cover letters, salary negotiation, application tracking in Obsidian.
-- **Handoff**: Deep mock interviews → Interviewer Agent.
+- **Handoff**: Deep mock prep → agent_interviewer.
 
-### G. Trainer Agent (`agent_trainer`)
-- **Model**: **MiniMax M2.5**
-- **Role**: Language learning, skill development, practice sessions.
-- **Uses**: Ryot API for fitness tracking.
+### H. Trainer (`agent_trainer`)
+- **Model**: MiniMax M2.5
+- **Role**: Fitness tracking, workout logging, training plans.
+- **Uses**: Ryot API (`http://ryot:8000/backend/graphql`)
+
+---
+## Legacy
+- `agent_router` — old narrow pipeline orchestrator (architect→coder only). Replaced by agent_pm. Kept for reference.

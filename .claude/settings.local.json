@@ -72,7 +72,13 @@
       "Bash(time FINANCE_DB=\"/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db\" ENRICH_CALL_BATCH=5 python3:*)",
       "Bash(time FINANCE_DB=\"/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db\" LLM_BASE_URL=https://api.deepseek.com/v1 LLM_API_KEY=sk-e542a527bc5b4cb4a1b82294e6ebb4f3 python3:*)",
       "Bash(FINANCE_DB=\"/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db\" ENRICH_CALL_BATCH=1 python3:*)",
-      "Bash(time FINANCE_DB=\"/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db\" ENRICH_CALL_BATCH=1 python3:*)"
+      "Bash(time FINANCE_DB=\"/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Attachments/finance.db\" ENRICH_CALL_BATCH=1 python3:*)",
+      "Bash(dig:*)",
+      "Bash(BOT_TOKEN=\"8183387556:AAG7_Gw-XmQkW1G_4Jj-JtnxgrYzcw3bKa8\")",
+      "WebFetch(domain:community.n8n.io)",
+      "WebFetch(domain:nusendra.com)",
+      "WebFetch(domain:core.telegram.org)",
+      "WebFetch(domain:platform.minimax.io)"
     ],
     "additionalDirectories": [
       "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/To claw/Bot",

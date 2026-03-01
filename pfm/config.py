@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 # Try multiple locations for .env file
 ENV_PATHS = [
     Path(__file__).parent / ".env",
+    Path(__file__).parent.parent / "openclaw-docker" / ".env",
     Path.home() / ".env",
     Path("/data/bot/.env"),
 ]

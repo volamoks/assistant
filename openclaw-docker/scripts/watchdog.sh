@@ -10,7 +10,7 @@ log() {
 }
 
 check_gateway() {
-    curl -sf --max-time 5 "http://localhost:$PORT" > /dev/null 2>&1
+    bash -c ">/dev/tcp/localhost/$PORT" 2>/dev/null
     return $?
 }
 
