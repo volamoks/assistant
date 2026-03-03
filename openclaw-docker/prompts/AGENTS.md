@@ -25,7 +25,7 @@ When user sends `/index` or `/index_docs`:
 1. Reply immediately: "📚 Indexing documents from Obsidian vault... This may take 5-15 minutes."
 2. Run in background:
    ```
-   OBSIDIAN_VAULT_PATH=/data/obsidian OLLAMA_HOST=http://ollama:11434 CHROMA_HOST=http://chromadb:8000 python3 /data/bot/openclaw-docker/scripts/ingest_docs.py 2>&1 | tail -20
+   OBSIDIAN_VAULT_PATH=/data/obsidian OLLAMA_HOST=http://host.docker.internal:11434 CHROMA_HOST=http://chromadb:8000 python3 /data/bot/openclaw-docker/scripts/ingest_docs.py 2>&1 | tail -20
    ```
 3. Report results: how many new docs indexed, how many skipped.
 4. Offer: "Do you want to also reindex .md notes? (`bash /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh`)"

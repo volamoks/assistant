@@ -14,14 +14,14 @@ triggers:
 
 ## Workflow
 
-1. **Прочитай список каналов** из `/data/obsidian/To claw/Telegram/Channels/README.md`
+1. **Прочитай список каналов** из `/data/obsidian/vault/Telegram/Channels/README.md`
 
 2. **Для каждого канала:**
    - Получи последние 10 постов через Telegram API
    - Оцени интересность (AI, tech, полезное)
    - Если интересно → добав в дайджест
 
-3. **Создай файл** `/data/obsidian/To claw/Telegram/Digest_YYYY-MM-DD.md`
+3. **Создай файл** `/data/obsidian/vault/Telegram/Digest_YYYY-MM-DD.md`
 
    Формат:
    ```markdown

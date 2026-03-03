@@ -26,7 +26,6 @@ services:
     volumes:
       - ./litellm/config.yaml:/app/config.yaml
       - ./litellm/.env:/app/.env
-      # - ./litellm/vertex_credentials.json:/app/vertex_credentials.json
     env_file:
       - ./litellm/.env
     environment:
@@ -34,15 +33,12 @@ services:
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - UI_USERNAME=${UI_USERNAME}
       - UI_PASSWORD=${UI_PASSWORD}
-      # - VERTEXAI_PROJECT=${LITELLM_VERTEX_PROJECT}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - KILOCODE_API_KEY=${KILOCODE_API_KEY}
-      # === ADD MORE AI STUDIO KEYS HERE ===
-      # Uncomment and add more keys below:
-      # - AI_STUDIO_KEY_4=${AI_STUDIO_KEY_4}
-      # - AI_STUDIO_KEY_5=${AI_STUDIO_KEY_5}
-      # - AI_STUDIO_KEY_6=${AI_STUDIO_KEY_6}
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      - DASHSCOPE_API_BASE=${DASHSCOPE_API_BASE}
+      - OLLAMA_HOST=http://host.docker.internal:11434
       - DATABASE_URL=postgresql://postgres:postgres@langfuse-db:5432/langfuse
       - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
       - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
@@ -50,6 +46,8 @@ services:
     depends_on:
       - redis
     command: --config /app/config.yaml --port 4000 --num_workers 1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:
@@ -58,25 +56,6 @@ services:
     networks:
       - default
       - jarvis_net
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    restart: unless-stopped
-    ports:
-      - "11434:11434"
-    volumes:
-      - ./ollama:/root/.ollama
-    environment:
-      - OLLAMA_KEEP_ALIVE=0
-    deploy:
-      resources:
-        limits:
-          memory: 6g
-          cpus: '4.0'
-    networks:
-      - default
-      - jarvis_net
-
   chromadb:
     image: chromadb/chroma:0.5.5
     container_name: chromadb
@@ -101,17 +80,18 @@ services:
     container_name: openclaw-latest
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:18789/health" ]
+      test: [ "CMD-SHELL", "curl -s -o /dev/null http://localhost:18789/ || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
     user: "501:20" # Run as host user for correct file ownership
-    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; npm install -g @google/gemini-cli --loglevel=error 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "18789:18789"
+      - "18790:18790"
     depends_on:
       - litellm
     volumes:
@@ -124,14 +104,12 @@ services:
       - ./canvas:/home/node/.openclaw/canvas
       - ./cron:/home/node/.openclaw/cron
       - ./telegram:/home/node/.openclaw/telegram
-      # Obsidian vault — full My Docs vault (bot files in To claw/ subfolder)
+      # Obsidian vault — full My Docs vault (bot files in Claw/ subfolder, accessed via vault/ symlink)
       - "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs:/data/obsidian"
       # Bot project for coder agent (git + configs)
       - /Users/abror_mac_mini/Projects/bot:/data/bot
       # Docker socket so coder can restart containers
       - /var/run/docker.sock:/var/run/docker.sock
-      # Gemini CLI credentials (for gemini-3.1-pro access)
-      - /Users/abror_mac_mini/.gemini:/home/node/.gemini
       # Pip packages for Google API access
       - ./pip:/opt/pip-packages:ro
     environment:
@@ -146,10 +124,9 @@ services:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OLLAMA_API_KEY=${OLLAMA_API_KEY}
       - OLLAMA_HOST=${OLLAMA_HOST}
-      - GEMINI_API_KEY=${AI_STUDIO_KEY_1}
       - LITELLM_HOST=http://litellm:4000
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - OBSIDIAN_VAULT_PATH=/data/obsidian/To claw
+      - OBSIDIAN_VAULT_PATH=/data/obsidian/vault
       - BOT_PROJECT_PATH=/data/bot
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
@@ -162,6 +139,35 @@ services:
     networks:
       - default
       - jarvis_net
+
+  gemini-cli:
+    build:
+      context: ./gemini-cli
+      dockerfile: Dockerfile
+    container_name: gemini-cli
+    restart: unless-stopped
+    environment:
+      - COMPOSIO_API_KEY=${COMPOSIO_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - NODE_ENV=production
+    volumes:
+      - ./gemini-cli/data:/home/gemini/.gemini
+      - ./shared:/home/gemini/shared:ro
+      - ./workspace:/home/gemini/workspace:rw
+    networks:
+      - default
+      - jarvis_net
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: '0.5'
+    healthcheck:
+      test: [ "CMD-SHELL", "gemini --version || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   searxng:
     image: searxng/searxng:latest

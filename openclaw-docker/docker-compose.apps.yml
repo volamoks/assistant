@@ -106,7 +106,7 @@ services:
           memory: 1G
           cpus: '1.0'
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/json/version" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -167,24 +167,10 @@ services:
     networks:
       - jarvis_net
 
-  # beszel-agent для мониторинга хоста (Mac)
-  beszel-agent:
-    image: henrygd/beszel-agent:latest
-    container_name: beszel-agent
-    restart: unless-stopped
-    network_mode: host
-    pid: host
-    privileged: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc:/proc:ro
-      - /sys:/sys:ro
-      - /:/hostfs:ro
-    environment:
-      - KEY=${BESZEL_AGENT_KEY}
-      - PORT=45876
-    # Отключён по умолчанию — включить после генерации ключа в UI
+  # beszel-agent — запущен нативно на Mac для полных метрик хоста (диски, CPU, RAM)
+  # brew install henrygd/beszel/beszel-agent && brew services start beszel-agent
   # Config: ~/.config/beszel/beszel-agent.env  |  Logs: ~/.cache/beszel/beszel-agent.log
+  # Beszel hub подключается к агенту по: host.docker.internal:45876
 
   # --- 📺 TORRENT SERVER ---
   torrserver:
@@ -199,7 +185,7 @@ services:
       - TS_CACHE_SIZE=2048 # disk cache in MB (increase if you have space)
       - TS_PRELOAD_BUFFER=true # pre-buffer pieces for smoother playback
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8090/echo" ]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8090/echo > /dev/null || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -238,6 +224,17 @@ services:
       - PGID=1000
       - TZ=Asia/Tashkent
       - HOMEPAGE_ALLOWED_HOSTS=localhost:3012,host.docker.internal:3012
+    networks:
+      - jarvis_net
+
+  # --- 🌐 CLOUDFLARE TUNNEL ---
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARED_TUNNEL_TOKEN}
     networks:
       - jarvis_net
 

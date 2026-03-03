@@ -1,3 +1,14 @@
+---
+name: terminal
+description: "Execute basic shell commands inside the container: list files, read files, run scripts, check environment. For root/sudo operations use the sudo skill instead."
+triggers:
+  - выполни команду
+  - запусти скрипт
+  - terminal
+  - exec command
+  - run command
+---
+
 # /terminal — System Command Execution
 
 ## When to use

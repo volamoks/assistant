@@ -53,7 +53,7 @@ Save to `openclaw-docker/core/agents/<agentname>.json`:
 | `litellm/smart` | Complex reasoning, long tasks |
 | `litellm/fast` | Routing, quick replies, light tasks |
 | `litellm/thinking` | Deep analysis, DeepSeek R1 |
-| `ollama/llama3.2:1b` | Silent background cron jobs |
+| `ollama/qwen3.5:0.8b` | Silent background cron jobs |
 | `ollama/qwen3:8b` | Nightly jobs needing reasoning |
 
 **Available tools (reference real names):**
@@ -136,7 +136,7 @@ chmod +x openclaw-docker/scripts/jobs/<job_name>.sh
   "payload": {
     "kind": "agentTurn",
     "message": "SILENT TASK. Run the script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/<job_name>.sh",
-    "model": "ollama/llama3.2:1b"
+    "model": "ollama/qwen3.5:0.8b"
   },
   "delivery": {
     "mode": "none"

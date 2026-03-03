@@ -1,0 +1,19 @@
+{
+  "sessionId": "120209d9-fc44-4536-8036-4baaf84198df",
+  "projectHash": "799a9ef528654a4921ac92359a5a2f87a0795e95e7bc2baa14672136a67e8293",
+  "startTime": "2026-03-03T19:53:46.659Z",
+  "lastUpdated": "2026-03-03T19:53:46.660Z",
+  "messages": [
+    {
+      "id": "aead9eb1-1413-4537-9168-6867257227fd",
+      "timestamp": "2026-03-03T19:53:46.660Z",
+      "type": "user",
+      "content": [
+        {
+          "text": "Say hello"
+        }
+      ]
+    }
+  ],
+  "kind": "main"
+}

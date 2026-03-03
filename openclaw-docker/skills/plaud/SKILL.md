@@ -1,26 +1,85 @@
+---
+name: plaud
+description: "Sync, transcribe and analyze recordings from Plaud Note voice recorder. Lists recordings, downloads audio, transcribes via Whisper (Groq), and analyzes the transcript."
+triggers:
+  - plaud
+  - plaud recordings
+  - list recordings
+  - plaud transcript
+  - transcribe plaud
+  - расшифровать запись
+  - запись plaud
+  - расшифровка plaud
+  - analyze recording
+  - анализ записи
+---
+
 # Plaud Skill
 
-Sync and summarize recordings from Plaud Note devices using the Plaud.ai API.
+Sync and analyze recordings from Plaud Note devices.
 
-## Commands
+## Typical workflow
 
-### `node skills/plaud/scripts/plaud.mjs list`
-Lists recent recordings with their IDs, titles, and creation times.
+### 1. List recordings
 
-### `node skills/plaud/scripts/plaud.mjs summary <FILE_ID>`
-Retrieves the transcript and AI-generated summary for a specific recording.
+```bash
+bash /data/bot/openclaw-docker/skills/plaud/plaud.sh list
+```
 
-### `node skills/plaud/scripts/plaud.mjs download <FILE_ID>`
-Downloads the MP3 audio file for a recording.
+Shows: ID, title, date. Ask the user which recording to process if not specified.
+
+### 2a. Transcribe via Whisper (recommended)
+
+Downloads audio + transcribes with Groq `whisper-large-v3`. Supports ru/uz/en, auto-detects language.
+
+```bash
+bash /data/bot/openclaw-docker/skills/plaud/plaud.sh transcribe <FILE_ID>
+```
+
+Output: prints full transcript to stdout. Optionally save to file:
+
+```bash
+bash /data/bot/openclaw-docker/skills/plaud/plaud.sh transcribe <FILE_ID> /tmp/transcript.txt
+```
+
+### 2b. Get Plaud built-in summary (alternative)
+
+Uses Plaud's own AI — faster but lower quality, no ru/uz language control.
+
+```bash
+bash /data/bot/openclaw-docker/skills/plaud/plaud.sh summary <FILE_ID>
+```
+
+### 3. Analyze transcript
+
+After getting the transcript text, analyze it based on what the user asked:
+- Summarize key points
+- Extract action items / tasks
+- Identify decisions made
+- Answer specific questions about the content
+- Translate to another language
+- Structure into sections
+
+Always present the analysis in the language the user is communicating in.
+
+## Download audio only
+
+```bash
+bash /data/bot/openclaw-docker/skills/plaud/plaud.sh download <FILE_ID> /tmp/recording.mp3
+```
 
 ## Configuration
 
-Required environment variables:
-- `PLAUD_TOKEN`: Your Plaud.ai authentication token.
-- `PLAUD_API_DOMAIN`: The API endpoint for your region (e.g., `https://api-euc1.plaud.ai`).
+Required environment variables (set in `.env`):
+- `PLAUD_TOKEN` — Plaud.ai auth token
+- `PLAUD_API_DOMAIN` — API endpoint (e.g. `https://api-euc1.plaud.ai`)
+- `GROQ_API_KEY` — for Whisper transcription
 
-## Usage Examples
+## Usage examples
 
-- "List my recent Plaud recordings"
-- "Summarize my last recording from Plaud"
-- "Download the audio for Plaud recording <ID>"
+- "List my Plaud recordings"
+- "Transcribe my last recording from Plaud"
+- "Summarize the meeting recorded in Plaud"
+- "What action items were discussed in recording <ID>?"
+- "Расшифруй последнюю запись с Plaud"
+- "Какие задачи обсудили на встрече? (запись plaud <ID>)"

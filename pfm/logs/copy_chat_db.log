@@ -1141,3 +1141,13 @@
 [20:28:01] Copied chat.db → /tmp/chat_sms_copy.db
 [10:27:00] Copied chat.db → /tmp/chat_sms_copy.db
 [15:09:00] Copied chat.db → /tmp/chat_sms_copy.db
+[10:27:00] Copied chat.db → /tmp/chat_sms_copy.db
+[11:25:00] Copied chat.db → /tmp/chat_sms_copy.db
+[20:41:01] Copied chat.db → /tmp/chat_sms_copy.db
+[23:12:00] Copied chat.db → /tmp/chat_sms_copy.db
+📋 chat.db watcher started (checks every 300s, copies only on change)
+[01:11:00] Copied chat.db → /tmp/chat_sms_copy.db
+[10:28:00] Copied chat.db → /tmp/chat_sms_copy.db
+[20:56:00] Copied chat.db → /tmp/chat_sms_copy.db
+[02:47:56] ❌ Failed (FDA needed?)
+[02:48:00] Copied chat.db → /tmp/chat_sms_copy.db

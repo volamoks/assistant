@@ -1,0 +1,18 @@
+{
+    "mcp": {
+        "servers": {
+            "composio": {
+                "command": "npx",
+                "args": [
+                    "-y",
+                    "composio-core@latest",
+                    "mcp",
+                    "start"
+                ],
+                "env": {
+                    "COMPOSIO_API_KEY": "${COMPOSIO_API_KEY}"
+                }
+            }
+        }
+    }
+}

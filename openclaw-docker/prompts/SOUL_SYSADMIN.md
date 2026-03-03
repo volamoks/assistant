@@ -47,8 +47,8 @@ bash /data/bot/openclaw-docker/scripts/obsidian_search.sh "query" --limit 5 --va
 - Returns the markdown section containing the match
 - Best for: fuzzy search, recently updated files, when index may be stale
 
-**Index location:** `/data/obsidian/To claw/Bot/obsidian.db`
+**Index location:** `/data/obsidian/vault/Bot/obsidian.db`
 **Vault root in container:** `/data/obsidian` (= full My Docs vault)
-**Bot files:** `/data/obsidian/To claw/` (Agents, Memory, Tools, Manual)
+**Bot files:** `/data/obsidian/vault/` (Agents, Memory, Tools, Manual)
 
 *CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*

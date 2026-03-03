@@ -16,7 +16,7 @@ Owner-only status command. Perform a quick system health check and report back.
 
 1. **Container status:**
 ```bash
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.RunningFor}}" | grep -E "openclaw|litellm|ollama|chromadb|searxng"
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.RunningFor}}" | grep -E "openclaw|litellm|chromadb|searxng"
 ```
 
 2. **Recent errors:**

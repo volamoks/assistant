@@ -1,3 +1,15 @@
+---
+name: status
+description: "Check what's currently running: active sub-agents and their tasks, container health. Use when user asks about system status or what the bot is doing."
+triggers:
+  - /status
+  - что сейчас делается
+  - ты занят
+  - что за задачи
+  - sub-agents running
+  - статус системы
+---
+
 # /status — What's Running Right Now
 
 ## When to use

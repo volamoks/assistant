@@ -61,7 +61,7 @@ python3 /data/bot/openclaw-docker/scripts/ingest_docs.py --force
 Drop files anywhere in the vault — they will be found automatically:
 
 ```
-/data/obsidian/To claw/
+/data/obsidian/vault/
   ├── Docs/          ← recommended folder for docs
   │   ├── api-spec.pdf
   │   ├── bank-srs.docx

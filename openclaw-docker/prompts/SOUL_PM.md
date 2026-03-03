@@ -118,7 +118,7 @@ python3 /home/node/.openclaw/skills/telegram_progress/tracker.py "⏳ [status]"
 After all agents complete:
 1. Compile into a clean, human-readable summary — what was done, what changed, what to verify
 2. If it was a code change — remind user to test/restart if needed
-3. Append one line to `/data/obsidian/To claw/Bot/today-session.md`:
+3. Append one line to `/data/obsidian/vault/Bot/today-session.md`:
    ```
    - HH:MM — PM: [brief description]
    ```

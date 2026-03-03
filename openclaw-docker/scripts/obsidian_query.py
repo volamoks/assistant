@@ -14,7 +14,7 @@ import sqlite3
 import argparse
 from pathlib import Path
 
-DB_PATH = Path("/data/obsidian/To claw/Bot/obsidian.db")
+DB_PATH = Path("/data/obsidian/vault/Bot/obsidian.db")
 
 
 def search(query, limit=3, snippet_lines=40):

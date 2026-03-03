@@ -1,102 +1,9 @@
 model_list:
-  - model_name: smart
-    litellm_params:
-      model: gemini/gemini-2.0-pro-exp-02-05
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: smart
-    litellm_params:
-      model: gemini/gemini-2.0-pro-exp-02-05
-      api_key: os.environ/AI_STUDIO_KEY_2
-
-  - model_name: fast
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/AI_STUDIO_KEY_3
-
-  - model_name: fast
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/AI_STUDIO_KEY_4
-
-  # === VERTEX AI DISABLED - Uncomment when needed ===
-  # - model_name: smart-secondary
-  #   litellm_params:
-  #     model: vertex_ai/gemini-2.5-pro-preview-0506
-  #     vertex_project: fresh-tangent-j4g6t
-  #     vertex_location: asia-south1
-  #
-  #     extra_headers:
-  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
-  #
-  # - model_name: fast-secondary
-  #   litellm_params:
-  #     model: vertex_ai/gemini-2.0-flash-001
-  #     vertex_project: fresh-tangent-j4g6t
-  #     vertex_location: asia-south1
-  #
-  #     extra_headers:
-  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
-
   - model_name: thinking
     litellm_params:
       model: deepseek/deepseek-reasoner
       api_key: os.environ/DEEPSEEK_API_KEY
       api_base: https://api.deepseek.com/v1
-
-  # === VERTEX AI DISABLED - Uncomment when needed ===
-  # - model_name: embedding
-  #   litellm_params:
-  #     model: vertex_ai/text-embedding-004
-  #     vertex_project: crucial-river-3zftk
-  #     vertex_location: asia-south1
-  #
-  #     extra_headers:
-  #       User-Agent: "gl-python/3.11 grpc/1.59 gax/2.18 gapic/1.19"
-
-  # === SPECIFIC MODELS (using AI Studio instead of Vertex) ===
-  # Gemini 2.5 Flash & Pro (via AI Studio)
-  - model_name: gemini-2-5-flash
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: gemini-2-5-pro
-    litellm_params:
-      model: gemini/gemini-2.0-pro-exp-02-05
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  # Gemini 2.0 Flash (via AI Studio)
-  - model_name: gemini-2-0-flash
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: gemini-2-0-flash-2-0
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  # Legacy Gemini 3 models (via AI Studio)
-  - model_name: gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: google-antigravity/gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: gemini-3-pro-high
-    litellm_params:
-      model: gemini/gemini-2.0-pro-exp-02-05
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: google-antigravity/gemini-3-pro-high
-    litellm_params:
-      model: gemini/gemini-2.0-pro-exp-02-05
-      api_key: os.environ/AI_STUDIO_KEY_1
 
   # DeepSeek via API
   - model_name: deepseek/deepseek-chat
@@ -151,138 +58,26 @@ model_list:
       api_key: "minimax-oauth"
       api_base: https://api.minimax.io/v1
 
-  # === AI Studio keys (load balanced) ===
-  - model_name: gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_2
-
-  - model_name: gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_3
-
-  - model_name: fast
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: fast
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_2
-
-  - model_name: fast
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_3
-
-  - model_name: google-antigravity/gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: google-antigravity/gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_2
-
-  - model_name: google-antigravity/gemini-3-flash
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/AI_STUDIO_KEY_3
-
-  - model_name: routine
-    litellm_params:
-      model: gemini/gemma-3-27b-it
-      api_key: os.environ/AI_STUDIO_KEY_1
-
-  - model_name: routine
-    litellm_params:
-      model: gemini/gemma-3-27b-it
-      api_key: os.environ/AI_STUDIO_KEY_2
-
-  - model_name: routine
-    litellm_params:
-      model: gemini/gemma-3-27b-it
-      api_key: os.environ/AI_STUDIO_KEY_3
-
-  # === ADD MORE AI STUDIO KEYS HERE (when rate limits hit) ===
-  # To add KEY_4 / KEY_5:
-  #   1. Add AI_STUDIO_KEY_4 and AI_STUDIO_KEY_5 to litellm/.env
-  #   2. Uncomment the env vars in docker-compose.yml (search for AI_STUDIO_KEY_4)
-  #   3. Uncomment the model entries below and restart LiteLLM
-  #
-  # - model_name: gemini-3-flash
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_4
-  #
-  # - model_name: gemini-3-flash
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_5
-  #
-  # - model_name: fast
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_4
-  #
-  # - model_name: fast
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_5
-  #
-  # - model_name: google-antigravity/gemini-3-flash
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_4
-  #
-  # - model_name: google-antigravity/gemini-3-flash
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_5
-  #
-  # - model_name: routine
-  #   litellm_params:
-  #     model: gemini/gemma-3-27b-it
-  #     api_key: os.environ/AI_STUDIO_KEY_4
-  #
-  # - model_name: routine
-  #   litellm_params:
-  #     model: gemini/gemma-3-27b-it
-  #     api_key: os.environ/AI_STUDIO_KEY_5
-  #
-  # - model_name: gemini-3-flash
-  #   litellm_params:
-  #     model: gemini/gemini-3-flash-preview
-  #     api_key: os.environ/AI_STUDIO_KEY_6
-
   # Local Ollama
-  - model_name: ollama/llama3.2:1b
+  - model_name: ollama/qwen3.5:0.8b
     litellm_params:
-      model: ollama_chat/llama3.2:1b
-      api_base: http://ollama:11434
+      model: ollama_chat/qwen3.5:0.8b
+      api_base: os.environ/OLLAMA_HOST
 
   - model_name: ollama/qwen3:8b
     litellm_params:
       model: ollama_chat/qwen3:8b
-      api_base: http://ollama:11434
+      api_base: os.environ/OLLAMA_HOST
 
   - model_name: ollama/qwen2.5:7b
     litellm_params:
       model: ollama_chat/qwen2.5:7b
-      api_base: http://ollama:11434
+      api_base: os.environ/OLLAMA_HOST
 
   - model_name: ollama/deepseek-r1:14b
     litellm_params:
       model: ollama_chat/deepseek-r1:14b
-      api_base: http://ollama:11434
+      api_base: os.environ/OLLAMA_HOST
 
   # === Kimi K2.5 via KiloCode Gateway ===
   # Routed through LiteLLM to normalize delta.reasoning -> delta.content
@@ -292,8 +87,66 @@ model_list:
       model: openai/moonshotai/kimi-k2.5:free
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
-      # LiteLLM will handle the reasoning field properly
       reasoning_effort: high
+
+  # Fast variant — no forced reasoning, for routing/dispatch
+  - model_name: moonshotai/kimi-k2.5-fast
+    litellm_params:
+      model: openai/moonshotai/kimi-k2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # Free models via KiloCode for benchmarking
+  - model_name: kilocode/minimax-m2.5-free
+    litellm_params:
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  - model_name: kilocode/stepfun-flash-free
+    litellm_params:
+      model: openai/stepfun/step-3.5-flash:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  - model_name: kilocode/auto-free
+    litellm_params:
+      model: openai/kilo/auto-free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === Alibaba Cloud Bailian (Coding Plan, ap-southeast-1) ===
+  # Names WITHOUT bailian/ prefix — openclaw strips provider prefix before sending to LiteLLM
+  - model_name: qwen3.5-plus
+    litellm_params:
+      model: openai/qwen3.5-plus
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  - model_name: kimi-k2.5
+    litellm_params:
+      model: openai/kimi-k2.5
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  - model_name: qwen3-max-2026-01-23
+    litellm_params:
+      model: openai/qwen3-max-2026-01-23
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  - model_name: qwen3-coder-plus
+    litellm_params:
+      model: openai/qwen3-coder-plus
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  - model_name: bailian-minimax
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
 
 litellm_settings:
   success_callback: ["langfuse"]
@@ -308,21 +161,12 @@ litellm_settings:
   forward_client_headers_to_llm_api: false
 
 router_settings:
-  # Add generic aliases to fallbacks
-  # fallbacks:
-  #   - smart: ["fast", "gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - fast: ["gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - thinking: ["deepseek/deepseek-chat", "ollama/deepseek-r1:14b"]
-  #   - gemini-3-flash: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
-  #   - google-antigravity/gemini-3-flash: ["gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - gemini-2-5-flash: ["gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - gemini-2-5-pro: ["fast", "gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - gemini-2-0-flash: ["gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - gemini-2-0-flash-2-0: ["gemini-3-flash", "deepseek/deepseek-chat"]
-  #   - minimax/MiniMax-M2.5: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
-  #   - minimax-portal/MiniMax-M2.5: ["deepseek/deepseek-chat", "deepseek/deepseek-reasoner"]
-  #   - openrouter/deepseek/deepseek-chat: ["deepseek/deepseek-reasoner"]
-  #   - routine: ["gemini-3-flash", "deepseek/deepseek-chat"]
+  fallbacks:
+    # Bailian (Alibaba) models → fallback to MiniMax when content moderation blocks output
+    - qwen3.5-plus: ["minimax-portal/MiniMax-M2.5"]
+    - qwen3-max-2026-01-23: ["minimax-portal/MiniMax-M2.5"]
+    - qwen3-coder-plus: ["minimax-portal/MiniMax-M2.5"]
+    - kimi-k2.5: ["minimax-portal/MiniMax-M2.5"]
   retry_policy:
     RateLimitError: 2
     ServiceUnavailableError: 2
@@ -334,10 +178,4 @@ router_settings:
 # LiteLLM master key for authentication
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-cache_responses: true
-cache_config:
-  type: redis
-  host: redis
-  port: 6379
-  # local cache (in-memory) alternative:
-  # type: local
+cache_responses: false

@@ -5,9 +5,9 @@
 
 set -e
 
-OLLAMA_HOST="${OLLAMA_HOST:-http://ollama:11434}"
+OLLAMA_HOST="${OLLAMA_HOST:-http://host.docker.internal:11434}"
 CHROMA_HOST="${CHROMA_HOST:-http://chromadb:8000}"
-VAULT_PATH="${OBSIDIAN_VAULT_PATH:-/data/obsidian/To claw}"
+VAULT_PATH="${OBSIDIAN_VAULT_PATH:-/data/obsidian/vault}"
 INGEST_JS="/home/node/.openclaw/skills/obsidian_search/ingest.js"
 INGEST_DOCS="/data/bot/openclaw-docker/scripts/ingest_docs.py"
 

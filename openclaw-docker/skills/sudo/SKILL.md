@@ -1,3 +1,14 @@
+---
+name: sudo
+description: "Execute commands requiring elevated privileges: install pip/apt packages, restart Docker containers. ALWAYS explain what you're about to run and wait for user confirmation before executing."
+triggers:
+  - sudo
+  - установи пакет
+  - pip install
+  - apt-get install
+  - docker restart
+---
+
 # /sudo — Elevated Command Execution
 
 ## When to use

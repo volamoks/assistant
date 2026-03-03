@@ -16,9 +16,9 @@ This runs automatically at **03:00 Asia/Tashkent** via the `obsidian-reindex` cr
 ## Run manually
 
 ```bash
-OLLAMA_HOST=http://ollama:11434 \
+OLLAMA_HOST=http://host.docker.internal:11434 \
 CHROMA_HOST=http://chromadb:8000 \
-OBSIDIAN_VAULT_PATH="/data/obsidian/To claw" \
+OBSIDIAN_VAULT_PATH="/data/obsidian/vault" \
 node /home/node/.openclaw/skills/obsidian_search/ingest.js
 ```
 

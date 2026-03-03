@@ -51,17 +51,41 @@ async function getSummary(fileId) {
     }
 }
 
-async function downloadFile(fileId) {
+async function downloadFile(fileId, outputPath) {
+    // Step 1: Get download URL from Plaud API
     const response = await fetch(`${DOMAIN}/file/download/${fileId}`, { headers });
     const data = await response.json();
+
+    // Check for API errors
     if (data.code !== 0) {
-        console.error('Error downloading file:', data.msg);
+        console.error('Error getting download URL:', data.msg || 'Unknown error');
         process.exit(1);
     }
 
-    const downloadUrl = data.data.download_url;
-    console.log(`Download URL: ${downloadUrl}`);
-    // In a real scenario, we might want to pipe this to a file
+    const downloadUrl = data.data?.download_url;
+    if (!downloadUrl) {
+        console.error('Error: No download_url in response');
+        process.exit(1);
+    }
+
+    console.log(`Download URL obtained: ${downloadUrl.substring(0, 60)}...`);
+
+    // Step 2: Download actual file from S3 pre-signed URL
+    console.log(`Downloading file to: ${outputPath}`);
+    const fileResponse = await fetch(downloadUrl);
+
+    if (!fileResponse.ok) {
+        console.error(`Error downloading file: HTTP ${fileResponse.status}`);
+        process.exit(1);
+    }
+
+    // Get binary data and save to file
+    const arrayBuffer = await fileResponse.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    fs.writeFileSync(outputPath, buffer);
+
+    const fileSizeMB = (buffer.length / (1024 * 1024)).toFixed(2);
+    console.log(`✅ File downloaded successfully: ${outputPath} (${fileSizeMB} MB)`);
 }
 
 const command = process.argv[2];
@@ -80,11 +104,17 @@ switch (command) {
         break;
     case 'download':
         if (!arg) {
-            console.error('Usage: plaud.mjs download <FILE_ID>');
+            console.error('Usage: plaud.mjs download <FILE_ID> [OUTPUT_PATH]');
             process.exit(1);
         }
-        downloadFile(arg);
+        const outputPath = process.argv[4] || 'audio.mp3';
+        downloadFile(arg, outputPath);
         break;
     default:
-        console.log('Usage: node plaud.mjs [list|summary|download] [ID]');
+        console.log('Usage: node plaud.mjs [list|summary|download] [ID] [OUTPUT_PATH]');
+        console.log('');
+        console.log('Commands:');
+        console.log('  list                           List all recordings');
+        console.log('  summary <FILE_ID>              Get transcript and summary');
+        console.log('  download <FILE_ID> [output]    Download audio file (default: audio.mp3)');
 }

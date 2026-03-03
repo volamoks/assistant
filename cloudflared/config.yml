@@ -6,4 +6,6 @@ ingress:
     service: http://host.docker.internal:3456
   - hostname: budget.volamoks.store
     service: http://host.docker.internal:5006
+  - hostname: chat.volamoks.store
+    service: http://host.docker.internal:3005
   - service: http_status:404

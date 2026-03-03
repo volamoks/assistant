@@ -22,7 +22,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 VAULT_HOST = Path("/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs")
-DB_DEFAULT = VAULT_HOST / "To claw" / "Bot" / "obsidian.db"
+DB_DEFAULT = VAULT_HOST / "vault" / "Bot" / "obsidian.db"
 MAX_CHUNK_LINES = 200
 
 DB_PATH = DB_DEFAULT

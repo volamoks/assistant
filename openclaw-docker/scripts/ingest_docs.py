@@ -22,8 +22,8 @@ import urllib.error
 from pathlib import Path
 
 # ─── Config ──────────────────────────────────────────────────────────────────
-VAULT_PATH     = os.environ.get("OBSIDIAN_VAULT_PATH", "/data/obsidian/To claw")
-OLLAMA_HOST    = os.environ.get("OLLAMA_HOST", "http://ollama:11434")
+VAULT_PATH     = os.environ.get("OBSIDIAN_VAULT_PATH", "/data/obsidian/vault")
+OLLAMA_HOST    = os.environ.get("OLLAMA_HOST", "http://host.docker.internal:11434")
 CHROMA_HOST    = os.environ.get("CHROMA_HOST", "http://chromadb:8000")
 COLLECTION     = "obsidian_vault"  # same collection as ingest.js
 EMBED_MODEL    = "nomic-embed-text"

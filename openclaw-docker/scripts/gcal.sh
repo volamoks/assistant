@@ -59,53 +59,52 @@ gcal_api_post() {
 }
 
 format_events() {
-  python3 - <<'PYEOF'
+  echo "$1" | python3 -c "
 import json, sys
 from datetime import datetime, timezone
 
 data = json.load(sys.stdin)
-items = data.get("items", [])
+items = data.get('items', [])
 if not items:
-    print("  (no events)")
+    print('  (no events)')
     sys.exit(0)
 
 # Sort by start time
 def get_start(ev):
-    s = ev.get("start", {})
-    return s.get("dateTime", s.get("date", ""))
+    s = ev.get('start', {})
+    return s.get('dateTime', s.get('date', ''))
 
 items.sort(key=get_start)
 
 for ev in items:
-    start = ev.get("start", {})
-    end = ev.get("end", {})
-    dt_str = start.get("dateTime", "")
-    date_str = start.get("date", "")
+    start = ev.get('start', {})
+    end = ev.get('end', {})
+    dt_str = start.get('dateTime', '')
+    date_str = start.get('date', '')
     
     if dt_str:
         try:
-            dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+            dt = datetime.fromisoformat(dt_str.replace('Z', '+00:00'))
             dt_local = dt.astimezone()
-            time_str = dt_local.strftime("%H:%M")
-            date_display = dt_local.strftime("%a %d %b")
+            time_str = dt_local.strftime('%H:%M')
+            date_display = dt_local.strftime('%a %d %b')
         except:
             time_str = dt_str[11:16]
             date_display = dt_str[:10]
     else:
-        time_str = "All day"
+        time_str = 'All day'
         date_display = date_str
 
-    title = ev.get("summary", "(no title)")
-    location = ev.get("location", "")
-    cal_name = ev.get("organizer", {}).get("displayName", "")
+    title = ev.get('summary', '(no title)')
+    location = ev.get('location', '')
+    cal_name = ev.get('organizer', {}).get('displayName', '')
     
-    print(f"  📅 {date_display} {time_str}  {title}")
+    print(f'  📅 {date_display} {time_str}  {title}')
     if location:
-        print(f"     📍 {location}")
+        print(f'     📍 {location}')
     if cal_name and cal_name.lower() not in title.lower():
-        print(f"     🗂  {cal_name}")
-
-PYEOF
+        print(f'     🗓  {cal_name}')
+"
 }
 
 # ── Status / List calendars ───────────────────────────────────────────────────
@@ -132,7 +131,7 @@ if [ "$CMD" = "today" ]; then
   TIME_MAX="${TODAY}T23:59:59Z"
   echo "📅 Today — $TODAY:"
   RESULT=$(gcal_api "calendars/primary/events?timeMin=${TIME_MIN}&timeMax=${TIME_MAX}&singleEvents=true&orderBy=startTime&maxResults=20")
-  echo "$RESULT" | format_events
+  format_events "$RESULT"
   exit 0
 fi
 
@@ -146,7 +145,7 @@ if [ "$CMD" = "week" ]; then
   TIME_MAX="${NEXT_WEEK}T23:59:59Z"
   echo "📅 This week ($TODAY → $NEXT_WEEK):"
   RESULT=$(gcal_api "calendars/primary/events?timeMin=${TIME_MIN}&timeMax=${TIME_MAX}&singleEvents=true&orderBy=startTime&maxResults=50")
-  echo "$RESULT" | format_events
+  format_events "$RESULT"
   exit 0
 fi
 
@@ -160,7 +159,7 @@ if [ "$CMD" = "upcoming" ]; then
   TIME_MAX="${END_DATE}T23:59:59Z"
   echo "📅 Next $DAYS days ($TODAY → $END_DATE):"
   RESULT=$(gcal_api "calendars/primary/events?timeMin=${TIME_MIN}&timeMax=${TIME_MAX}&singleEvents=true&orderBy=startTime&maxResults=30")
-  echo "$RESULT" | format_events
+  format_events "$RESULT"
   exit 0
 fi
 

@@ -1,3 +1,19 @@
+---
+name: google-agent
+description: "Access Gmail (read, search, send emails) and Google Calendar (view events, create meetings). Use for any email or calendar tasks."
+triggers:
+  - gmail
+  - проверь почту
+  - непрочитанные письма
+  - inbox
+  - отправь email
+  - calendar
+  - календарь
+  - создай событие
+  - встреча
+  - события сегодня
+---
+
 # Google Agent — Gmail & Google Calendar Skill
 
 **Skill ID:** google-agent  

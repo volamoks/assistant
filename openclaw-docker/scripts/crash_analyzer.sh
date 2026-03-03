@@ -3,10 +3,10 @@
 # Гибридный анализатор: bash-проверка + LLM только при наличии crash-файлов
 # Запускается из OpenClaw cron (агент вызывает bash-инструментом)
 
-CRASH_DIR="/data/obsidian/To claw/Bot/crash-configs"
-LESSONS_FILE="/data/obsidian/To claw/Bot/lessons-learned.md"
+CRASH_DIR="/data/obsidian/vault/Bot/crash-configs"
+LESSONS_FILE="/data/obsidian/vault/Bot/lessons-learned.md"
 AGENT_ERRORS_FILE="/data/bot/openclaw-docker/workspace/.learnings/ERRORS.md"
-OLLAMA_URL="${OLLAMA_URL:-http://ollama:11434/api/generate}"
+OLLAMA_URL="${OLLAMA_URL:-http://host.docker.internal:11434/api/generate}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-deepseek-r1:1.5b}"
 TELEGRAM_TOKEN="${TELEGRAM_BOT_TOKEN}"
 TELEGRAM_CHAT="${TELEGRAM_CHAT_ID:-6053956251}"  # Configurable via env var

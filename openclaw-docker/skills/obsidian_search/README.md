@@ -24,7 +24,7 @@ Relevant markdown excerpts from vault notes with their source file paths.
 ### Notes
 
 - Uses vector embeddings — finds semantically similar content even without exact keyword match
-- Vault: `/data/obsidian/To claw`
+- Vault: `/data/obsidian/vault`
 - Index: ChromaDB `obsidian_vault` collection (106 chunks)
 - Re-indexed nightly at 03:00 Asia/Tashkent
-- Depends on: ChromaDB at `http://chromadb:8000`, Ollama at `http://ollama:11434`
+- Depends on: ChromaDB at `http://chromadb:8000`, Ollama at `http://host.docker.internal:11434`

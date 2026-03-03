@@ -25,7 +25,7 @@ bash /data/bot/openclaw-docker/scripts/web_clip.sh "<URL>" <max_chars> <save>
 
 ### Saved to
 
-`/data/obsidian/To claw/Web Clips/YYYY-MM-DD-<title>.md`
+`/data/obsidian/vault/Web Clips/YYYY-MM-DD-<title>.md`
 
 ### Token-saving tips
 

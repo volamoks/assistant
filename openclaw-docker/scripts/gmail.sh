@@ -78,46 +78,46 @@ if [ "$CMD" = "inbox" ]; then
   check_auth
   MAX="${2:-10}"
   RESULT=$(gmail_api "messages?labelIds=INBOX&q=is:unread&maxResults=${MAX}")
-  echo "$RESULT" | python3 - <<'PYEOF'
-import json, sys, os, subprocess
-
-data = json.load(sys.stdin)
-messages = data.get("messages", [])
-if not messages:
-    print("📭 Inbox is empty (no unread messages)")
-    sys.exit(0)
-
-print(f"📬 {len(messages)} unread email(s):\n")
-token_file = os.environ.get("GOOGLE_TOKEN", "/home/node/.openclaw/shared/google_token.json")
-
+  python3 -c "
+import json, sys, os
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 import urllib.request
+
+result = '''$RESULT'''
+data = json.loads(result)
+messages = data.get('messages', [])
+if not messages:
+    print('📭 Inbox is empty (no unread messages)')
+    sys.exit(0)
+
+print(f'📬 {len(messages)} unread email(s):\n')
+token_file = os.environ.get('GOOGLE_TOKEN', '/home/node/.openclaw/shared/google_token.json')
 
 creds = Credentials.from_authorized_user_file(token_file)
 if creds.expired and creds.refresh_token:
     creds.refresh(Request())
 
 for msg in messages:
-    mid = msg["id"]
+    mid = msg['id']
     req = urllib.request.Request(
-        f"https://gmail.googleapis.com/gmail/v1/users/me/messages/{mid}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date",
-        headers={"Authorization": f"Bearer {creds.token}"}
+        f'https://gmail.googleapis.com/gmail/v1/users/me/messages/{mid}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date',
+        headers={'Authorization': f'Bearer {creds.token}'}
     )
     with urllib.request.urlopen(req) as r:
         m = json.loads(r.read())
-    headers = {h["name"]: h["value"] for h in m.get("payload", {}).get("headers", [])}
-    subject = headers.get("Subject", "(no subject)")[:60]
-    sender = headers.get("From", "unknown")[:40]
-    date = headers.get("Date", "")[:16]
-    snippet = m.get("snippet", "")[:80]
-    print(f"  ID: {mid}")
-    print(f"  From: {sender}")
-    print(f"  Subject: {subject}")
-    print(f"  Date: {date}")
-    print(f"  Preview: {snippet}...")
+    headers = {h['name']: h['value'] for h in m.get('payload', {}).get('headers', [])}
+    subject = headers.get('Subject', '(no subject)')[:60]
+    sender = headers.get('From', 'unknown')[:40]
+    date = headers.get('Date', '')[:16]
+    snippet = m.get('snippet', '')[:80]
+    print(f'  ID: {mid}')
+    print(f'  From: {sender}')
+    print(f'  Subject: {subject}')
+    print(f'  Date: {date}')
+    print(f'  Preview: {snippet}...')
     print()
-PYEOF
+"
   exit 0
 fi
 

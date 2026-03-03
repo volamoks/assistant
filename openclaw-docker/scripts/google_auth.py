@@ -90,12 +90,17 @@ def main():
                 )
             except Exception as e:
                 # Fallback to console mode for headless/container environments
-                print(f"⚠️ Browser not available ({e}), using console mode...")
+                print(f"⚠️ Browser not available ({e}), using manual authorization...")
                 flow = InstalledAppFlow.from_client_secrets_file(
                     CREDENTIALS_FILE, 
                     SCOPES
                 )
-                creds = flow.run_console()
+                # Manual authorization: print URL, user copies code
+                auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
+                print(f"\n🔗 Open this URL in your browser:\n{auth_url}\n")
+                code = input("Enter the authorization code from the redirect URL: ").strip()
+                flow.fetch_token(code=code)
+                creds = flow.credentials
 
         # Save token
         os.makedirs(os.path.dirname(TOKEN_FILE), exist_ok=True)

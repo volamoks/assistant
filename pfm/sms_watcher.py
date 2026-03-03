@@ -38,6 +38,7 @@ ALL_SENDERS = [s for group in SENDERS.values() for s in group]
 
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
+from classifier      import classify_sms  # LLM классификация
 from parsers.kapital import parse_kapital
 from parsers.uzum    import parse_uzum
 from sink            import push_to_actual
@@ -132,27 +133,72 @@ def _pick_parser(sender_id: str):
 
 def process_rows(rows, dry_run: bool, processed: set) -> int:
     saved = 0
+    skipped_promo = 0
+    skipped_info = 0
+    transfers = 0
+    
     for rowid, sender, text, msg_date in rows:
         if rowid in processed:
             continue
 
+        # LLM классификация SMS
+        classification = classify_sms(text)
+        sms_class = classification.get('class', 'unknown')
+        
+        # Фильтрация по классу
+        if sms_class == 'promotional':
+            skipped_promo += 1
+            processed.add(rowid)
+            print(f"  ⏭️  [PROMO] {text[:50]}...")
+            continue
+        
+        if sms_class == 'informational':
+            skipped_info += 1
+            processed.add(rowid)
+            print(f"  ℹ️  [INFO] {text[:50]}...")
+            continue
+        
+        if sms_class == 'transfer':
+            # Трансфер между своими счетами — сохраняем в finance.db
+            from sink import save_to_finance_db
+            save_to_finance_db(classification, sms_text=text)
+            transfers += 1
+            processed.add(rowid)
+            continue
+        
+        if sms_class == 'unknown':
+            processed.add(rowid)
+            print(f"  ❓ [UNKNOWN] {text[:50]}...")
+            continue
+        
+        # transaction — обрабатываем как обычно
+        from sink import save_to_finance_db
         parser = _pick_parser(sender)
         parsed = parser(text)
 
-        processed.add(rowid)  # mark regardless (even if no match)
+        processed.add(rowid)
 
         if parsed is None:
+            # Нет парсера но класс transaction — сохраняем как есть
+            save_to_finance_db(classification, sms_text=text)
             continue
 
         account_name = f"{parsed['source']} *{parsed['card_last4']}" if parsed.get('card_last4') else parsed['source']
         print(f"  {'[DRY] ' if dry_run else ''}✓ {parsed['date']} {parsed['time']} | "
               f"*{parsed.get('card_last4') or '????'} | {parsed['category']} | "
               f"{parsed['amount']:,.0f} {parsed['currency']} | {parsed['merchant']}")
+        
+        # Сохраняем в finance.db
+        save_to_finance_db(classification, parsed, text)
 
         if not dry_run:
             if push_to_actual(parsed, account_name=account_name):
                 saved += 1
 
+    # Статистика
+    if skipped_promo or skipped_info or transfers:
+        print(f"  📊 Пропущено: {skipped_promo} реклама, {skipped_info} информ, {transfers} трансферы")
+    
     return saved
 
 

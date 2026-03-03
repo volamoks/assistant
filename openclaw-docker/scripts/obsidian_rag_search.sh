@@ -5,7 +5,7 @@
 
 QUERY="${1:-}"
 LIMIT="${2:-3}"
-OLLAMA_HOST="${OLLAMA_HOST:-http://ollama:11434}"
+OLLAMA_HOST="${OLLAMA_HOST:-http://host.docker.internal:11434}"
 CHROMA_HOST="${CHROMA_HOST:-http://chromadb:8000}"
 COLLECTION_ID="32bf82ed-e3df-4120-9fd2-75625a05d140"
 

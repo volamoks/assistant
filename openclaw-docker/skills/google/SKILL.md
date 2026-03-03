@@ -48,7 +48,7 @@ bash /data/bot/openclaw-docker/scripts/gmail.sh search "subject:application OR s
 
 After found → save to Obsidian:
 ```bash
-echo "## [Company] - [Date]\n- Status: Reply received\n- Subject: ...\n" >> "/data/obsidian/To claw/Career/applications.md"
+echo "## [Company] - [Date]\n- Status: Reply received\n- Subject: ...\n" >> "/data/obsidian/vault/Career/applications.md"
 ```
 
 ## Google Calendar

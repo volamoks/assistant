@@ -11,7 +11,7 @@ bash /data/bot/openclaw-docker/scripts/ryot.sh <command>
 
 Use `read` to check Obsidian workout programs:
 ```bash
-/data/obsidian/To claw/Training/
+/data/obsidian/vault/Training/
 ```
 
 ## Parsing User Input

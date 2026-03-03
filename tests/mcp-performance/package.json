@@ -1,0 +1,15 @@
+{
+  "name": "mcp-performance",
+  "version": "1.0.0",
+  "description": "This test setup compares the performance of two approaches for using Composio tools:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@composio/core": "^0.6.3"
+  }
+}

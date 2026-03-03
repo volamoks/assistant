@@ -1,7 +1,7 @@
 {
   "meta": {
-    "lastTouchedVersion": "2026.2.25",
-    "lastTouchedAt": "2026-02-27T06:25:57.254Z"
+    "lastTouchedVersion": "2026.3.2",
+    "lastTouchedAt": "2026-03-03T04:26:04.727Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-25T06:26:05.779Z",
@@ -29,14 +29,6 @@
         "api": "openai-completions",
         "models": [
           {
-            "id": "litellm/smart",
-            "name": "Smart (Gemini 2.5 Pro)"
-          },
-          {
-            "id": "litellm/fast",
-            "name": "Fast (Gemini 2.0 Flash)"
-          },
-          {
             "id": "litellm/thinking",
             "name": "Thinking (DeepSeek R1)"
           },
@@ -61,20 +53,32 @@
             "name": "MiniMax 01 (OpenRouter)"
           },
           {
-            "id": "gemini-2-5-flash",
-            "name": "Gemini 2.5 Flash"
-          },
-          {
-            "id": "gemini-2-0-flash",
-            "name": "Gemini 2.0 Flash"
-          },
-          {
             "id": "openrouter/deepseek/deepseek-v3.2",
             "name": "DeepSeek V3 (Custom)"
           },
           {
             "id": "kilocode/moonshotai/kimi-k2.5:free",
-            "name": "MiniMax M2.5 (litellm)"
+            "name": "Kimi K2.5 (KiloCode)"
+          },
+          {
+            "id": "bailian/qwen3.5-plus",
+            "name": "Qwen3.5 Plus (Bailian)"
+          },
+          {
+            "id": "bailian/qwen3-max-2026-01-23",
+            "name": "Qwen3 Max (Bailian)"
+          },
+          {
+            "id": "bailian/qwen3-coder-plus",
+            "name": "Qwen3 Coder Plus (Bailian)"
+          },
+          {
+            "id": "bailian/kimi-k2.5",
+            "name": "Kimi K2.5 (Bailian)"
+          },
+          {
+            "id": "bailian/MiniMax-M2.5",
+            "name": "MiniMax M2.5 (Bailian)"
           }
         ]
       },
@@ -90,17 +94,17 @@
         ]
       },
       "ollama": {
-        "baseUrl": "http://ollama:11434/v1",
+        "baseUrl": "http://host.docker.internal:11434/v1",
         "apiKey": "ollama-local",
         "api": "openai-completions",
         "models": [
           {
-            "id": "llama3.2:1b",
-            "name": "Llama 3.2 1B (local)"
+            "id": "qwen3.5:0.8b",
+            "name": "Qwen3.5 0.8B (local)"
           },
           {
-            "id": "qwen3:8b",
-            "name": "Qwen3 8B (local)"
+            "id": "qwen3.5:9b",
+            "name": "Qwen3.5 9B (local)"
           },
           {
             "id": "qwen2.5:7b",
@@ -122,13 +126,6 @@
             "id": "MiniMax-M2.5",
             "name": "MiniMax M2.5",
             "reasoning": true,
-            "input": [
-              "text",
-              "image",
-              "tools",
-              "audio",
-              "video"
-            ],
             "cost": {
               "input": 0,
               "output": 0,
@@ -151,30 +148,48 @@
             "reasoning": true
           }
         ]
+      },
+      "bailian": {
+        "baseUrl": "http://litellm:4000",
+        "apiKey": "sk-litellm-openclaw-proxy",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "bailian/qwen3.5-plus",
+            "name": "Qwen3.5 Plus (Bailian)"
+          },
+          {
+            "id": "bailian/qwen3-max-2026-01-23",
+            "name": "Qwen3 Max (Bailian)"
+          },
+          {
+            "id": "bailian/qwen3-coder-plus",
+            "name": "Qwen3 Coder Plus (Bailian)"
+          },
+          {
+            "id": "bailian/kimi-k2.5",
+            "name": "Kimi K2.5 (Bailian)"
+          },
+          {
+            "id": "bailian/MiniMax-M2.5",
+            "name": "MiniMax M2.5 (Bailian)"
+          }
+        ]
       }
     }
   },
   "agents": {
     "defaults": {
       "model": {
-        "primary": "minimax-portal/MiniMax-M2.5"
+        "primary": "bailian/qwen3.5-plus"
       },
       "imageModel": {
-        "primary": "litellm/routine"
+        "primary": "bailian/qwen3.5-plus"
       },
       "models": {
-        "litellm/smart": {
-          "streaming": true
-        },
-        "litellm/fast": {
-          "streaming": true
-        },
         "litellm/thinking": {
           "streaming": true
         },
-        "google-antigravity/gemini-3-flash": {},
-        "google-antigravity/gemini-3-pro": {},
-        "google-antigravity/gemini-3-deep-think": {},
         "deepseek/deepseek-chat": {
           "streaming": true
         },
@@ -196,7 +211,10 @@
         "openrouter/minimax/minimax-01": {
           "streaming": true
         },
-        "ollama/llama3.2:1b": {
+        "ollama/qwen3.5:0.8b": {
+          "streaming": true
+        },
+        "ollama/qwen3.5:9b": {
           "streaming": true
         },
         "ollama/qwen3:8b": {
@@ -208,8 +226,30 @@
         "ollama/deepseek-r1:14b": {
           "streaming": true
         },
+        "minimax-portal/MiniMax-M2.5": {
+          "streaming": true
+        },
         "kilocode/moonshotai/kimi-k2.5:free": {
           "alias": "kimi-k2.5",
+          "streaming": true
+        },
+        "kilocode/moonshotai/kimi-k2.5-fast": {
+          "alias": "kimi-fast",
+          "streaming": true
+        },
+        "bailian/qwen3.5-plus": {
+          "streaming": true
+        },
+        "bailian/qwen3-max-2026-01-23": {
+          "streaming": true
+        },
+        "bailian/qwen3-coder-plus": {
+          "streaming": true
+        },
+        "bailian/kimi-k2.5": {
+          "streaming": true
+        },
+        "bailian/MiniMax-M2.5": {
           "streaming": true
         }
       },
@@ -220,10 +260,16 @@
       "compaction": {
         "mode": "safeguard"
       },
+      "blockStreamingDefault": "on",
+      "blockStreamingBreak": "text_end",
+      "blockStreamingChunk": {
+        "minChars": 10,
+        "maxChars": 50
+      },
       "timeoutSeconds": 1800,
       "heartbeat": {
-        "every": "30s",
-        "model": "minimax-portal/MiniMax-M2.5"
+        "every": "15m",
+        "model": "ollama/qwen3.5:0.8b"
       },
       "subagents": {
         "maxConcurrent": 8,
@@ -233,10 +279,9 @@
     "list": [
       {
         "id": "main",
-        "heartbeat": {
-          "every": "5m",
-          "model": "minimax-portal/MiniMax-M2.5",
-          "target": "telegram"
+        "workspace": "/home/node/.openclaw/workspace-main",
+        "model": {
+          "primary": "bailian/qwen3.5-plus"
         },
         "subagents": {
           "allowAgents": [
@@ -255,19 +300,28 @@
         "id": "coder",
         "name": "coder",
         "workspace": "/data/bot/openclaw-docker/workspace",
-        "agentDir": "/home/node/.openclaw/agents/coder/agent"
+        "agentDir": "/home/node/.openclaw/agents/coder/agent",
+        "model": {
+          "primary": "bailian/qwen3-coder-plus"
+        }
       },
       {
         "id": "researcher",
         "name": "researcher",
         "workspace": "/home/node/.openclaw/workspace-researcher",
-        "agentDir": "/home/node/.openclaw/agents/researcher/agent"
+        "agentDir": "/home/node/.openclaw/agents/researcher/agent",
+        "model": {
+          "primary": "bailian/qwen3-max-2026-01-23"
+        }
       },
       {
         "id": "analyst",
         "name": "analyst",
         "workspace": "/home/node/.openclaw/workspace-analyst",
-        "agentDir": "/home/node/.openclaw/agents/analyst/agent"
+        "agentDir": "/home/node/.openclaw/agents/analyst/agent",
+        "model": {
+          "primary": "bailian/qwen3-max-2026-01-23"
+        }
       },
       {
         "id": "career",
@@ -295,7 +349,9 @@
       },
       {
         "id": "investor",
-        "name": "Investor"
+        "name": "Investor",
+        "workspace": "/home/node/.openclaw/workspace-investor",
+        "agentDir": "/home/node/.openclaw/agents/investor/agent"
       }
     ]
   },
@@ -305,15 +361,20 @@
         "enabled": true,
         "models": [
           {
-            "type": "provider",
             "provider": "groq",
-            "model": "whisper-large-v3"
+            "model": "whisper-large-v3",
+            "type": "provider"
           }
         ]
       }
     },
     "sessions": {
       "visibility": "all"
+    },
+    "web": {
+      "search": {
+        "provider": "perplexity"
+      }
     }
   },
   "commands": {
@@ -328,9 +389,7 @@
   "channels": {
     "telegram": {
       "enabled": true,
-      "dmPolicy": "pairing",
-      "webhookHost": "0.0.0.0",
-      "webhookPath": "/webhook",
+      "dmPolicy": "allowlist",
       "groups": {
         "*": {
           "requireMention": false
@@ -339,14 +398,18 @@
           "requireMention": false
         }
       },
-      "groupPolicy": "allowlist",
-      "streaming": "partial",
       "allowFrom": [
         "6053956251"
       ],
+      "groupPolicy": "allowlist",
+      "streaming": "partial",
+      "blockStreaming": false,
       "accounts": {
         "default": {
-          "botToken": "8183387556:AAG7_Gw-XmQkW1G_4Jj-JtnxgrYzcw3bKa8"
+          "dmPolicy": "pairing",
+          "botToken": "8183387556:AAG7_Gw-XmQkW1G_4Jj-JtnxgrYzcw3bKa8",
+          "groupPolicy": "allowlist",
+          "streaming": "partial"
         }
       }
     }
@@ -354,7 +417,7 @@
   "gateway": {
     "port": 18789,
     "mode": "local",
-    "bind": "loopback",
+    "bind": "lan",
     "controlUi": {
       "dangerouslyAllowHostHeaderOriginFallback": true
     },
@@ -365,6 +428,9 @@
     "tailscale": {
       "mode": "off",
       "resetOnExit": false
+    },
+    "remote": {
+      "token": "7d1b19d965d62e7106f69e4317d43584d2150a91a6260c77"
     }
   },
   "plugins": {

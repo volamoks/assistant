@@ -13,7 +13,7 @@ triggers:
 # Obsidian Semantic Search (RAG)
 
 Searches the Obsidian vault semantically via ChromaDB + Ollama embeddings.
-Vault: `/data/obsidian/To claw` | 106 indexed chunks | Re-indexed nightly.
+Vault: `/data/obsidian/vault` | 106 indexed chunks | Re-indexed nightly.
 
 ## Usage
 
@@ -41,4 +41,4 @@ bash /data/bot/openclaw-docker/scripts/obsidian_rag_search.sh "budget finance ex
 - Results are **semantic** — finds related content even without exact keyword match
 - Each result shows the **source file** and a relevant excerpt (up to 800 chars)
 - If results seem irrelevant, the vault may need reindexing: `bash /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh`
-- Depends on: ChromaDB at `http://chromadb:8000`, Ollama `nomic-embed-text` at `http://ollama:11434`
+- Depends on: ChromaDB at `http://chromadb:8000`, Ollama `nomic-embed-text` at `http://host.docker.internal:11434`

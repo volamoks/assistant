@@ -114,7 +114,7 @@ Go straight to Phase 2 if:
 
 **После каждого исследования:**
 
-1. Сохрани результат в `/data/obsidian/To claw/Agents/Research/`
+1. Сохрани результат в `/data/obsidian/vault/Agents/Research/`
    - Формат: `YYYY-MM-DD_<label>.md`
 
 2. Включи полный текст выводов
