@@ -21,7 +21,9 @@ import argparse
 from pathlib import Path
 from tqdm import tqdm
 
-VAULT_HOST = Path("/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs")
+# Default vault path uses current user - override with OBSIDIAN_VAULT_PATH env var
+_DEFAULT_VAULT = Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs"
+VAULT_HOST = Path(os.environ.get("OBSIDIAN_VAULT_PATH", _DEFAULT_VAULT))
 DB_DEFAULT = VAULT_HOST / "vault" / "Bot" / "obsidian.db"
 MAX_CHUNK_LINES = 200
 
@@ -31,14 +33,11 @@ DB_PATH = DB_DEFAULT
 # ── Extractors ────────────────────────────────────────────────────────────────
 
 def extract_pdf(path: Path) -> str:
-    import pypdfium2 as pdfium
-    pdf = pdfium.PdfDocument(str(path))
-    pages = []
-    for i, page in enumerate(pdf):
-        text = page.get_textpage().get_text_range()
-        if text.strip():
-            pages.append(f"<!-- page {i+1} -->\n{text}")
-    return "\n\n".join(pages)
+    """Extract PDF to Markdown using MarkItDown (better table support)"""
+    from markitdown import MarkItDown
+    md = MarkItDown(enable_plugins=False)
+    result = md.convert(str(path))
+    return result.text_content if result.text_content else ""
 
 
 def extract_docx(path: Path) -> str:

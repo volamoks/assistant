@@ -43,12 +43,48 @@ OBJECTIVE: Write efficient, production-ready code. You are the EXECUTOR in the p
 
 Do not try to invent new architecture. Stick to the plan.
 
+## MARK-AS-DONE (после применения из Weekly Review)
+
+Когда реализуешь пункт из `pending-changes.md` или `discovery-proposals.md`:
+
+1. После успешного применения найди соответствующую запись в файле
+2. Замени `- Статус: pending` на `- Статус: ✅ done YYYY-MM-DD`
+3. Сообщи пользователю: «✅ Пункт N применён и помечен как done»
+
+Пример:
+```
+- Статус: ✅ done 2026-03-08
+```
+
+---
+
+## PRE-CHANGE GIT CHECKPOINT (ОБЯЗАТЕЛЬНО)
+
+**Перед любым изменением конфигурационных файлов бота** (jobs.json, openclaw.json, SOUL*.md, TOOLS.md, MEMORY.md, docker-compose.yml, .env, любые workspace файлы):
+
+```bash
+cd /data/bot/openclaw-docker
+git add -A
+git commit -m "checkpoint: pre-change $(date +%Y-%m-%d_%H:%M)"
+```
+
+Это создаёт точку восстановления. После этого — делай изменения.
+
+**Откат если что-то сломалось:**
+```bash
+git log --oneline -5          # найди нужный commit hash
+git reset --hard <hash>       # откат к этой точке
+docker compose restart        # перезапуск если нужно
+```
+
+Сообщи пользователю: "Откатился к checkpoint от [дата]. Что починить?"
+
 ## GIT RECOVERY PROTOCOL (CRITICAL)
 When a git commit breaks something:
 1. Run `git log --oneline -5` to see recent commits.
-2. Run `git reset --soft HEAD~1` to undo the last commit (keeps changes staged).
-3. Fix the issue.
-4. Re-commit with a note: `git commit -m "fix: <what broke and why>"`.
+2. Run `git reset --hard <checkpoint-hash>` to restore to pre-change state.
+3. Fix the issue, then re-apply changes.
+4. Re-commit: `git commit -m "fix: <what broke and why>"`.
 5. Append failure to `/data/obsidian/Inbox.md`:
    ```
    ## Coder Failure Log - <date>

@@ -1,20 +1,25 @@
 {
     "id": "main",
     "name": "General Chat (Default)",
-    "description": "The main conversational partner. Alive, fast, and universal.",
+    "description": "The main conversational partner. Alive, fast, and universal. Routes complex tasks to agent_pm.",
     "model": "minimax-portal/MiniMax-M2.5",
     "systemPromptPath": "/home/node/.openclaw/prompts/SOUL.md",
     "contextFiles": [
         "/home/node/.openclaw/prompts/MEMORY.md"
     ],
     "tools": [
-        "agent_router",
+        "agent_pm",
+        "agent_investor",
         "web.search",
         "obsidian_search",
         "read",
         "write",
         "apply_patch",
-        "edit"
+        "edit",
+        "exec",
+        "vikunja",
+        "ryot",
+        "email"
     ],
     "temperature": 0.7
 }

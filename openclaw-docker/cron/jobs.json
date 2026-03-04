@@ -20,16 +20,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772593200000,
-        "lastRunAtMs": 1772506800039,
-        "lastStatus": "error",
-        "lastDurationMs": 388,
-        "consecutiveErrors": 1,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-requested",
-        "lastError": "FailoverError: Unknown model: bailian/qwen3.5-plus"
+        "nextRunAtMs": 1772679600000,
+        "lastRunAtMs": 1772593200150,
+        "lastStatus": "ok",
+        "lastDurationMs": 8745,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772506800427
+      "updatedAtMs": 1772593208895
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -44,23 +44,23 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "NIGHTLY EVOLUTION — 3 tasks, do all 3 in order:\n\n## TASK 1: Memory Consolidation\nRead `/home/node/.openclaw/prompts/MEMORY.md` and today's session log at `/data/obsidian/vault/Bot/today-session.md`.\nUpdate MEMORY.md with distilled learnings from today. Remove outdated info.\n\n## TASK 2: Self-Improvement Research (web search)\nSearch the web for:\n1. web_search: \"OpenClaw AI agent new features 2025 OR 2026\"\n2. web_search: \"best AI automation tools self-hosted 2026\"\n3. web_search: \"LLM agent productivity tools new\"\n\nFor each interesting finding (max 3 total):\n- If it could improve our bot setup → append to `/data/obsidian/vault/possible_improvements/new_ideas.md`\n  Format: `## [Date] [Tool/Feature name]\\n- What: one line\\n- Why useful: one line\\n- Source: [url]`\n- Skip anything we already have (ChromaDB, Ollama, LiteLLM, SearxNG, Crawl4AI, Ryot, n8n)\n\n## TASK 3: Output Summary\nOutput a brief summary of what was done (memory updated, ideas found). Do NOT send any Telegram messages.",
+        "message": "NIGHTLY EVOLUTION — 3 задачи, выполни все по порядку.\n\n## ЗАДАЧА 1: Консолидация памяти\nПрочитай `/home/node/.openclaw/prompts/MEMORY.md`.\nНайди самый свежий дневник сессии: проверь `/data/obsidian/Inbox/` на файлы с паттерном `Дневник_*.md`, возьми самый новый по дате. Если нет — проверь `/data/obsidian/vault/Bot/today-session.md`.\nОбнови MEMORY.md: добавь ключевые инсайты дня, удали устаревшее. Файл должен оставаться кратким.\n\n## ЗАДАЧА 2: Анализ pending улучшений\nПрочитай `/data/obsidian/vault/Bot/improvement-ideas.md` — последние 3 записи.\nЕсли есть ошибки/рекомендации с повторяемостью ≥2 — сформулируй конкретное исправление и запиши в `/data/obsidian/vault/Bot/pending-changes.md` (создай если нет):\n```\n## YYYY-MM-DD\n### [Что изменить]\n- Файл: [path]\n- Изменение: [что именно]\n- Причина: [паттерн]\n- Статус: pending\n```\n\n## ЗАДАЧА 3: Итог\nВыведи краткое резюме: что обновлено в памяти, какие pending-changes добавлены. Не отправляй Telegram.",
         "thinking": "medium"
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772646000000,
+        "nextRunAtMs": 1772732400000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772559600040,
-        "lastDurationMs": 31750,
+        "lastRunAtMs": 1772646000049,
+        "lastDurationMs": 39914,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772559631790
+      "updatedAtMs": 1772646039963
     },
     {
       "id": "crash-analysis",
@@ -78,17 +78,16 @@
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim."
       },
       "state": {
-        "nextRunAtMs": 1772575200000,
+        "nextRunAtMs": 1772653800000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772574600038,
+        "lastRunAtMs": 1772653200052,
         "lastStatus": "ok",
-        "lastDurationMs": 8974,
+        "lastDurationMs": 6441,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1772575200007
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772574609012,
+      "updatedAtMs": 1772653206493,
       "delivery": {
         "mode": "none"
       }
@@ -113,16 +112,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772593200000,
-        "lastRunAtMs": 1772506800427,
-        "lastStatus": "error",
-        "lastDurationMs": 264,
-        "consecutiveErrors": 6,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-requested",
-        "lastError": "FailoverError: Unknown model: bailian/qwen3.5-plus"
+        "nextRunAtMs": 1772679600000,
+        "lastRunAtMs": 1772593218723,
+        "lastStatus": "ok",
+        "lastDurationMs": 66066,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772506800691
+      "updatedAtMs": 1772593284789
     },
     {
       "id": "telegram-dashboard",
@@ -144,16 +143,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772595000000,
-        "lastRunAtMs": 1772508600028,
-        "lastStatus": "error",
-        "lastDurationMs": 356,
-        "consecutiveErrors": 4,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-requested",
-        "lastError": "FailoverError: Unknown model: bailian/qwen3.5-plus"
+        "nextRunAtMs": 1772681400000,
+        "lastRunAtMs": 1772595008644,
+        "lastStatus": "ok",
+        "lastDurationMs": 18679,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772508600384
+      "updatedAtMs": 1772595027323
     },
     {
       "id": "vault-gardening",
@@ -175,16 +174,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772649000000,
-        "lastRunAtMs": 1772562608808,
+        "nextRunAtMs": 1772735400000,
+        "lastRunAtMs": 1772649008207,
         "lastStatus": "ok",
-        "lastDurationMs": 37681,
+        "lastDurationMs": 25116,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1772562646489
+      "updatedAtMs": 1772649033323
     },
     {
       "id": "actual-sync",
@@ -205,17 +204,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772575200000,
+        "nextRunAtMs": 1772654400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772573407389,
+        "lastRunAtMs": 1772652625905,
         "lastStatus": "ok",
-        "lastDurationMs": 7019,
+        "lastDurationMs": 10213,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1772575200007
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772573414408
+      "updatedAtMs": 1772652636118
     },
     {
       "id": "finance-enrichment",
@@ -270,16 +268,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772647200000,
+        "nextRunAtMs": 1772733600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772560831493,
+        "lastRunAtMs": 1772647224356,
         "lastStatus": "ok",
-        "lastDurationMs": 33541,
+        "lastDurationMs": 34041,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1772560865034
+      "updatedAtMs": 1772647258397
     },
     {
       "id": "obsidian-reindex",
@@ -300,16 +298,16 @@
         "mode": "none"
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1772575200000,
-        "lastRunAtMs": 1772488800299,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 364,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1772575200007
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1772661600000,
+        "lastRunAtMs": 1772575217888,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 28588,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772488800663
+      "updatedAtMs": 1772575246476
     },
     {
       "id": "context-logger",
@@ -324,8 +322,9 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Execute the context-logger skill: get today sessions from last 24h using sessions_list tool (activeMinutes: 1440), fetch each session history, extract key insights (tasks done, decisions made, errors, learnings), write daily diary to /data/obsidian/Inbox/Дневник_YYYY-MM-DD.md (use actual date). Send brief confirmation to Telegram when done.",
-        "thinking": "low"
+        "message": "DAILY CONTEXT LOGGER — SILENT TASK.\n\n## ШАГ 1: Получи сессии\nCall sessions_list: activeMinutes=1440, limit=15 (не больше 15 сессий).\n\n## ШАГ 2: Извлеки инсайты\nДля каждой сессии (пропускай если >15, бери последние):\n- Call sessions_history: sessionKey, limit=50, includeTools=false\n- Извлеки: задачи выполненные, ключевые решения, ошибки, важные факты\n- Пропускай сессии короче 3 сообщений\n\n## ШАГ 3: Запиши дневник\nЗапиши в /data/obsidian/Inbox/Дневник_YYYY-MM-DD.md (реальная дата):\n```\n# Дневник YYYY-MM-DD\n\n## Сессии (N)\n\n### [Session label или время]\n- Задача: ...\n- Результат: ...\n- Ошибки: ... (если были)\n\n## Ключевые инсайты дня\n- ...\n```\n\n## ШАГ 4: Финальный вывод (СТРОГО одна строка)\nВыведи ТОЛЬКО: «✅ Дневник YYYY-MM-DD: N сессий, M инсайтов»\nБольше ничего — этот вывод идёт в Telegram и должен быть коротким.",
+        "thinking": "low",
+        "timeoutSeconds": 180
       },
       "delivery": {
         "mode": "announce",
@@ -333,17 +332,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772647200000,
+        "nextRunAtMs": 1772733600000,
         "lastStatus": "error",
-        "consecutiveErrors": 1,
-        "lastRunAtMs": 1772560865034,
+        "consecutiveErrors": 2,
+        "lastRunAtMs": 1772647258397,
         "lastRunStatus": "error",
-        "lastDurationMs": 346942,
-        "lastDeliveryStatus": "delivered",
-        "lastError": "⚠️ ✉️ Message failed",
-        "lastDelivered": true
+        "lastDurationMs": 180085,
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1772561211976
+      "updatedAtMs": 1772647438482
     },
     {
       "id": "telegram-monitor",
@@ -358,7 +356,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Execute the telegram-monitor skill: read channel list from /data/obsidian/vault/Telegram/Channels/README.md, fetch recent posts from each channel via Telegram API, create digest at /data/obsidian/vault/Telegram/Digest_YYYY-MM-DD.md (use actual date). Output a brief summary of the digest created.",
+        "message": "SILENT TASK.\n\nRun Telegram channel monitor inside Docker container:\nbash: cd /data/bot/openclaw-docker && docker compose exec -T openclaw bash /data/bot/openclaw-docker/scripts/jobs/telegram_monitor.sh\n\nIf script succeeds — read the output and send brief summary to Telegram:\n\"📱 Telegram Digest\nПроверено N каналов, M интересных постов\n📄 Полный дайджест: Digest_YYYY-MM-DD.md\"\n\nIf script fails — output error message.",
         "thinking": "low"
       },
       "delivery": {
@@ -367,16 +365,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772596800000,
+        "nextRunAtMs": 1772683200000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772510400059,
+        "lastRunAtMs": 1772596822364,
         "lastRunStatus": "ok",
-        "lastDurationMs": 28369,
+        "lastDurationMs": 30872,
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1772510428428
+      "updatedAtMs": 1772597537458
     },
     {
       "id": "watchdog",
@@ -399,15 +397,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772574900030,
+        "lastRunAtMs": 1772653500030,
         "lastRunStatus": "ok",
-        "lastDurationMs": 6456,
+        "lastDurationMs": 6407,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1772575200000,
-        "lastDelivered": false,
-        "runningAtMs": 1772575200007
+        "nextRunAtMs": 1772653800000,
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772574906486
+      "updatedAtMs": 1772653506437
     },
     {
       "id": "git-backup",
@@ -428,16 +425,50 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772575200000,
-        "lastStatus": "error",
-        "consecutiveErrors": 1,
-        "lastRunAtMs": 1772488800663,
-        "lastRunStatus": "error",
-        "lastDurationMs": 333,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1772575200007
+        "nextRunAtMs": 1772661600000,
+        "lastStatus": "ok",
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772575254444,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 140689,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1772488800996
+      "updatedAtMs": 1772575395133
+    },
+    {
+      "id": "docker-arch-analyzer",
+      "name": "Docker Architecture Analyzer",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 1 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run the Docker architecture analyzer:\nbash: /data/bot/openclaw-docker/scripts/jobs/docker-arch-analyzer.sh\n\nRead /tmp/docker-arch-summary.txt - this contains the brief summary. Send this exact text to Telegram Abror.",
+        "thinking": "low",
+        "timeoutSeconds": 180
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1772654400000,
+        "lastStatus": "ok",
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772603709600,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 28316,
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
+      },
+      "updatedAtMs": 1772603737916
     },
     {
       "id": "31eb68a9-4695-4749-996d-52f1e2e0a87b",
@@ -445,7 +476,7 @@
       "name": "nightly-analysis",
       "enabled": true,
       "createdAtMs": 1772531832671,
-      "updatedAtMs": 1772571651885,
+      "updatedAtMs": 1772596341520,
       "schedule": {
         "kind": "cron",
         "expr": "0 21 * * *",
@@ -455,7 +486,9 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Проанализируй session history за день, найди ошибки, таймауты, повторы, долгие ответы, паттерны и запиши отчёт в /data/obsidian/vault/Bot/improvement-ideas.md в формате: # Nightly Analysis — YYYY-MM-DD ## 🔴 Ошибки - [список ошибок] ## 🟡 Неоптимальности - [список] ## 💡 Рекомендации - [список]"
+        "message": "NIGHTLY ANALYSIS — анализ сессий за последние 24ч.\n\n## ШАГ 1: Получи сессии\nCall sessions_list: activeMinutes=1440, limit=20\n\n## ШАГ 2: Анализируй каждую сессию\nДля каждой (не более 20, бери последние):\n- Call sessions_history: sessionKey, limit=100, includeTools=true\n- Ищи:\n  🔴 ОШИБКИ: \"error\", \"failed\", \"timeout\", \"❌\", \"EACCES\", \"SIGTERM\", \"consecutiveErrors\"\n  🟡 МЕДЛЕННО: tool calls >30s, ответы >60s\n  🟡 ПОВТОРЫ: одна и та же ошибка несколько раз\n  💡 УЛУЧШЕНИЯ: жалобы юзера, \"почему так медленно\", \"fix this\"\n\n## ШАГ 3: Запиши отчёт\nДозапиши в /data/obsidian/vault/Bot/improvement-ideas.md:\n```markdown\n## YYYY-MM-DD\n\n### 🔴 Ошибки\n- [описание ошибки: что, в какой сессии, сколько раз]\n\n### 🟡 Неоптимальности\n- [медленно/повтор]\n\n### 💡 Рекомендации\n- [конкретный fix]\n```\n\n## ШАГ 4: Проверь повторяющиеся ошибки\nПрочитай improvement-ideas.md — последние 7 дней.\nЕсли одна и та же ошибка встречается ≥2 раз за последние 7 дней:\n- Это КРИТИЧНО — немедленно отправь Telegram Abror:\n  «⚠️ Повторяющаяся ошибка (N раз за 7 дней):\n  [описание ошибки]\n  Нужно исправить. Отвечай: \"разберись с [проблема]\"»\n\n## ШАГ 5: Вывод\nПечатай только: «Analyzed N sessions, X errors, Y critical (sent alert / no alert)»\nTelegram НЕ отправляй кроме случая из Шага 4.",
+        "thinking": "medium",
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "none",
@@ -463,13 +496,41 @@
       },
       "state": {
         "nextRunAtMs": 1772658000000,
-        "lastRunAtMs": 1772571626553,
+        "lastRunAtMs": 1772596240085,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 25332,
+        "lastDurationMs": 101435,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "weekly-apply",
+      "agentId": "research",
+      "name": "Weekly Review — предложения на согласование",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 12 * * 6",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "WEEKLY REVIEW — собери всё накопленное за неделю и отправь Abror на согласование. НЕ РЕАЛИЗУЙ НИЧЕГО САМ — только читай и составляй отчёт.\n\n## ШАГ 1: Читай файлы\nПрочитай:\n- `/data/obsidian/vault/Bot/pending-changes.md` — предлагаемые изменения в конфигах\n- `/data/obsidian/vault/Bot/improvement-ideas.md` — ошибки и идеи из nightly-analysis\n- `/data/obsidian/vault/Bot/discovery-proposals.md` — новинки из weekly discovery\n\n## ШАГ 2: Отфильтруй\nВыбери только:\n- pending-changes со статусом `pending`\n- Идеи из improvement-ideas с ≥2 упоминаниями за последние 7 дней\n- Discovery proposals со сложностью Low или Med\n\n## ШАГ 3: Отправь в Telegram\nОтправь Abror:\n\n```\n🔧 Еженедельный ревью — {DD MMM}\nНакопилось {N} предложений:\n\n📌 ФИКСЫ (ошибки/конфиги):\n1. [Что изменить] → [файл]\n   Причина: [паттерн]\n\n🔍 НОВЫЕ ИДЕИ (из поиска):\n2. [Идея] — Low\n   [Одна строка зачем]\n3. [Идея] — Med\n   [Одна строка зачем]\n\n⚠️ Перед реализацией — автоматически создам git checkpoint.\n\nОтветь: \"применяй 1,3\" / \"пропускай всё\" / \"расскажи про 2\"\n```\n\n**ВАЖНО: сам ничего не меняй и не реализуй. Только отчёт в Telegram. Реализация — только после явного \"применяй N\" от Abror.**\n\n## ШАГ 4: Если нечего\nЕсли всё пусто — отправь: \"✅ Еженедельный ревью: нет накопленных предложений, всё актуально.\"",
+        "thinking": "low",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1772888400000
       }
     },
     {
@@ -479,7 +540,7 @@
       "name": "morning-briefing",
       "enabled": true,
       "createdAtMs": 1772532782154,
-      "updatedAtMs": 1772532782154,
+      "updatedAtMs": 1772593310329,
       "schedule": {
         "expr": "0 3 * * *",
         "kind": "cron",
@@ -499,7 +560,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1772593200000
+        "nextRunAtMs": 1772679600000,
+        "lastRunAtMs": 1772593300987,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 9342,
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered",
+        "consecutiveErrors": 0
       }
     },
     {
@@ -523,16 +591,139 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772593200000,
-        "lastRunAtMs": 1772550034775,
+        "nextRunAtMs": 1772679600000,
+        "lastRunAtMs": 1772636444880,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 145605,
+        "lastDurationMs": 46557,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0
       },
-      "updatedAtMs": 1772550180380
+      "updatedAtMs": 1772636491437
+    },
+    {
+      "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:group:-1003706226741:topic:2",
+      "name": "Crypto Daily Report",
+      "enabled": true,
+      "createdAtMs": 1772607679973,
+      "updatedAtMs": 1772607679973,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "main",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "systemEvent",
+        "text": "🕐 09:00 Tashkent — Crypto Daily Report\n\nЗапуск:\n1. python3 ~/.openclaw/skills/crypto_assistant/bybit_read.py --json\n2. python3 ~/.openclaw/skills/crypto_assistant/reddit_scan.py --signals --json\n3. Отправить отчёт в Telegram (@abror_komalov)\n\nФормат:\n- Портфель (total, top holdings)\n- Reddit sentiment\n- BTC/ETH/SOL цены\n- Алерты если sentiment > 0.3 или < -0.3"
+      },
+      "state": {
+        "nextRunAtMs": 1772683200000
+      }
+    },
+    {
+      "id": "weekly-discovery",
+      "agentId": "research",
+      "name": "Weekly Discovery — поиск новых идей",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 23 * * 5",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "WEEKLY DISCOVERY — SILENT. Найди новые идеи через SearXNG, сохрани в файл. Telegram НЕ отправляй — это сделает Weekly Review в субботу в 12:00.\n\n## ЧТО УЖЕ ЕСТЬ (пропускай)\nSearXNG, ChromaDB, Ollama, LiteLLM, Crawl4AI, n8n, Vikunja, Ryot, Plaud, Bybit/crypto monitor, Gmail/Calendar, Obsidian RAG, Actual Budget, Telegram бот, vault gardening, inbox router, crash analyzer, watchdog, docker arch analyzer\n\n## ШАГ 1: ПОИСК через SearXNG (выполни все 8 запросов через exec bash)\n\nНЕ используй web_search tool — он платный. Используй ТОЛЬКО SearXNG curl.\n\nШаблон команды:\n```bash\ncurl -s 'http://searxng:8080/search?q=QUERY&format=json&categories=general&language=en' | python3 -c \"import json,sys; results=json.load(sys.stdin).get('results',[]); [print(r['title']+'\\n'+r['url']+'\\n'+r.get('content','')[:250]+'\\n---') for r in results[:4]]\"\n```\n\nЗапросы (подставляй в QUERY, пробелы = +):\n1. self-hosted+automation+tools+2026\n2. AI+agent+productivity+local+LLM+2026\n3. openclaw+clawhub+skills+new\n4. obsidian+plugin+automation+workflow+2026\n5. telegram+bot+self-hosted+2026\n6. crypto+portfolio+open+source+2026\n7. hacker+news+AI+productivity+tools+2026\n8. personal+finance+automation+open+source+2026\n\n## ШАГ 2: ФИЛЬТРАЦИЯ\nИз результатов берём только:\n- Self-hosted / open source / бесплатное\n- Касается: продуктивность PM, FinTech, крипто, Obsidian, AI агенты, home server\n- Реализуемо как: скил / cron / агент / интеграция\n- НЕ берём SaaS с подпиской, НЕ берём то что уже есть\n\n## ШАГ 3: ЗАПИСЬ\nСоздай или дозапиши в /data/obsidian/vault/Bot/discovery-proposals.md:\n\n```\n## YYYY-MM-DD\n\n### 1. [Название]\n- **Что**: одна строка\n- **Откуда**: [url]\n- **Зачем**: конкретная польза для Abror\n- **Реализация**: [новый скил | новый cron | новый агент | улучшение существующего] — что именно\n- **Сложность**: Low/Med/High\n\n### 2. ...\n```\n\nВывод: только «Discovery готов: N идей записано». Больше ничего.",
+        "thinking": "medium",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1772820000000,
+        "lastRunAtMs": 1772631179381,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 118338,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
+      },
+      "updatedAtMs": 1772631297719
+    },
+    {
+      "id": "d48b7eb9-24f0-46aa-802e-2e2873705854",
+      "agentId": "investor",
+      "name": "Crypto Radar",
+      "enabled": true,
+      "createdAtMs": 1772621202862,
+      "updatedAtMs": 1772629390280,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8,13,18 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "CRYPTO RADAR — плановый скан. Выполни по очереди:\n\n1. python3 ~/.openclaw/skills/crypto_assistant/bybit_read.py --portfolio --json\n2. python3 ~/.openclaw/skills/crypto_assistant/bybit_read.py --market --json\n3. python3 ~/.openclaw/skills/crypto_monitor/btc_alert.py\n4. python3 ~/.openclaw/skills/crypto_assistant/reddit_scan.py --signals --json\n\nПосле сбора данных сформируй краткий отчёт строго в формате:\n\n📊 Crypto Radar — {текущее время HH:MM}\n💼 Портфель: ${total_equity} | Свободно: ${available}\n\n📈 Рынок (24h):\n• BTC: ${цена} ({изменение}%)\n• ETH: ${цена} ({изменение}%)\n• SOL: ${цена} ({изменение}%)\n\n🎯 Сигнал: {ПОКУПАТЬ / ДЕРЖАТЬ / ФИКСИРОВАТЬ / ЖДАТЬ}\n{если есть конкретная идея — 2-3 строки: что, почему, на сколько}\n\n🐦 Sentiment: {BULLISH/NEUTRAL/BEARISH} ({score})\n{топ-1 трендовый токен если есть}\n\n⚠️ Не финансовый совет\n\nПравила сигналов:\n- ПОКУПАТЬ: актив упал >5% за 24ч И в портфеле есть свободный USDT\n- ФИКСИРОВАТЬ: актив в портфеле вырос >8% за 24ч\n- ДЕРЖАТЬ: рынок спокойный, портфель сбалансирован\n- ЖДАТЬ: высокая волатильность или sentiment резко негативный без ясной причины",
+        "thinking": "medium",
+        "timeoutSeconds": 180
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "telegram:6053956251"
+      },
+      "state": {
+        "nextRunAtMs": 1772679600000,
+        "lastRunAtMs": 1772629336493,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 53787,
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true,
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "94a945ae-a22f-4696-8df4-aee3fa5055e1",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "Parfum Bar Monitor",
+      "enabled": true,
+      "createdAtMs": 1772648456756,
+      "updatedAtMs": 1772648456756,
+      "schedule": {
+        "everyMs": 432000000,
+        "kind": "every",
+        "anchorMs": 1772648456756
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Проверь Telegram-канал @parfbarr (https://t.me/s/parfbarr) на новые распивы ароматов. \n\nФИЛЬТР для Abror (профиль Bang + Encre Noire + J'ose + Bois Impérial):\n✅ ИСКАТЬ: сухие, пряные, древесные, табачные, ветиверные, ладанные, смолистые, перцовые, кожаные, мускусные, молекулярные\n❌ ИГНОРИРОВАТЬ: сладкие гурманские, фруктово-цветочные, женские, ванильно-карамельные, «компоты»\n\nЕсли найдешь 1-3 релевантных аромата:\n1. Кратко опиши (название, бренд, объем, цена, почему подходит)\n2. Отправь в Telegram пользователю 6053956251\n\nЕсли ничего подходящего нет — НЕ отправляй ничего (просто заверши задачу).\n\nКонтекст: пользователь любит Marc Jacobs Bang, Lalique Encre Noire, Eisenberg J'ose, Bois Impérial, Montale Red Vetiver. Ищет сухость, текстуру, глубину без сладости.",
+        "model": "bailian/qwen3.5-plus",
+        "thinking": "off",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "6053956251",
+        "channel": "telegram"
+      },
+      "state": {
+        "nextRunAtMs": 1773080456756
+      }
     }
   ]
 }

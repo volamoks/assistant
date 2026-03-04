@@ -1,6 +1,7 @@
 # Secrets
 .env
 *.env
+openclaw-docker/core/shared/
 
 # OAuth tokens and auth (contain live credentials)
 openclaw-docker/core/agents/main/agent/auth-profiles.json
@@ -103,3 +104,12 @@ openclaw-docker/open-webui/
 deployment/
 openclaw-docker/actual-data/
 *.md.resolved
+
+# Skill runtime data (auto-generated)
+**/price_log.csv
+**/state.json
+openclaw-docker/core/delivery-queue/
+openclaw-docker/core/delivery-queue/failed/
+
+# PFM runtime logs
+pfm/logs/

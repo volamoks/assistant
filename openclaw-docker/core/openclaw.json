@@ -1,7 +1,7 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.3.2",
-    "lastTouchedAt": "2026-03-03T04:26:04.727Z"
+    "lastTouchedAt": "2026-03-04T12:43:22.583Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-25T06:26:05.779Z",
@@ -11,7 +11,7 @@
   },
   "browser": {
     "enabled": true,
-    "cdpUrl": "http://browserless:3000"
+    "cdpUrl": "http://host.docker.internal:3001/chromium"
   },
   "auth": {
     "profiles": {
@@ -79,6 +79,10 @@
           {
             "id": "bailian/MiniMax-M2.5",
             "name": "MiniMax M2.5 (Bailian)"
+          },
+          {
+            "id": "bailian/qwen3-vl-plus",
+            "name": "Qwen3 VL Plus (Bailian Vision)"
           }
         ]
       },
@@ -107,13 +111,8 @@
             "name": "Qwen3.5 9B (local)"
           },
           {
-            "id": "qwen2.5:7b",
-            "name": "Qwen2.5 7B (local)"
-          },
-          {
-            "id": "deepseek-r1:14b",
-            "name": "DeepSeek R1 14B (local)",
-            "reasoning": true
+            "id": "nomic-embed-text",
+            "name": "Nomic Embed Text (local)"
           }
         ]
       },
@@ -184,7 +183,7 @@
         "primary": "bailian/qwen3.5-plus"
       },
       "imageModel": {
-        "primary": "bailian/qwen3.5-plus"
+        "primary": "bailian/qwen3-vl-plus"
       },
       "models": {
         "litellm/thinking": {
@@ -217,15 +216,6 @@
         "ollama/qwen3.5:9b": {
           "streaming": true
         },
-        "ollama/qwen3:8b": {
-          "streaming": true
-        },
-        "ollama/qwen2.5:7b": {
-          "streaming": true
-        },
-        "ollama/deepseek-r1:14b": {
-          "streaming": true
-        },
         "minimax-portal/MiniMax-M2.5": {
           "streaming": true
         },
@@ -251,6 +241,9 @@
         },
         "bailian/MiniMax-M2.5": {
           "streaming": true
+        },
+        "bailian/qwen3-vl-plus": {
+          "streaming": true
         }
       },
       "workspace": "/home/node/.openclaw/workspace",
@@ -269,7 +262,7 @@
       "timeoutSeconds": 1800,
       "heartbeat": {
         "every": "15m",
-        "model": "ollama/qwen3.5:0.8b"
+        "model": "bailian/qwen3.5-plus"
       },
       "subagents": {
         "maxConcurrent": 8,
@@ -299,7 +292,7 @@
       {
         "id": "coder",
         "name": "coder",
-        "workspace": "/data/bot/openclaw-docker/workspace",
+        "workspace": "/home/node/.openclaw/workspace-coder",
         "agentDir": "/home/node/.openclaw/agents/coder/agent",
         "model": {
           "primary": "bailian/qwen3-coder-plus"
@@ -356,6 +349,11 @@
     ]
   },
   "tools": {
+    "web": {
+      "search": {
+        "provider": "perplexity"
+      }
+    },
     "media": {
       "audio": {
         "enabled": true,
@@ -371,10 +369,8 @@
     "sessions": {
       "visibility": "all"
     },
-    "web": {
-      "search": {
-        "provider": "perplexity"
-      }
+    "agentToAgent": {
+      "enabled": true
     }
   },
   "commands": {

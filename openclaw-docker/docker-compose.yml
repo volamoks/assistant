@@ -16,6 +16,17 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
@@ -26,6 +37,7 @@ services:
     volumes:
       - ./litellm/config.yaml:/app/config.yaml
       - ./litellm/.env:/app/.env
+      - litellm_data:/app/data
     env_file:
       - ./litellm/.env
     environment:
@@ -39,12 +51,11 @@ services:
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
       - DASHSCOPE_API_BASE=${DASHSCOPE_API_BASE}
       - OLLAMA_HOST=http://host.docker.internal:11434
-      - DATABASE_URL=postgresql://postgres:postgres@langfuse-db:5432/langfuse
-      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
-      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
-      - LANGFUSE_HOST=http://langfuse-server:3000
+      - DATABASE_URL=postgresql://litellm:${LITELLM_DB_PASSWORD:-litellm}@litellm-db:5432/litellm
+
     depends_on:
       - redis
+      - litellm-db
     command: --config /app/config.yaml --port 4000 --num_workers 1
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -56,6 +67,38 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:4000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # PostgreSQL for LiteLLM (required for UI/history features)
+  litellm-db:
+    image: postgres:15-alpine
+    container_name: litellm-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=litellm
+      - POSTGRES_PASSWORD=${LITELLM_DB_PASSWORD:-litellm}
+      - POSTGRES_DB=litellm
+    volumes:
+      - litellm_data:/var/lib/postgresql/data
+    networks:
+      - default
+      - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U litellm" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   chromadb:
     image: chromadb/chroma:0.5.5
     container_name: chromadb
@@ -72,6 +115,17 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8000/api/v1/heartbeat || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   openclaw:
     build:
@@ -133,8 +187,20 @@ services:
       - VIKUNJA_TOKEN=${VIKUNJA_TOKEN}
       - PLAUD_TOKEN=${PLAUD_TOKEN}
       - PLAUD_API_DOMAIN=${PLAUD_API_DOMAIN}
+      - BYBIT_API=${BYBIT_API}
+      - BYBIT_API_SECRET=${BYBIT_API_SECRET}
       - RYOT_URL=http://ryot:8000/backend/graphql
-      - RYOT_TOKEN=XHMBDNX63Y3JSDNZDAHJ645PJHP7ZOLQUI2WMRWFUOKRWXV63JZQ====
+      - RYOT_TOKEN=${RYOT_TOKEN}
+      - EMAIL_PASS_GMAIL_PERSONAL=${EMAIL_PASS_GMAIL_PERSONAL}
+      - EMAIL_PASS_GMAIL_VERTEX=${EMAIL_PASS_GMAIL_VERTEX}
+      - EMAIL_PASS_GMAIL_BASE=${EMAIL_PASS_GMAIL_BASE}
+      - EMAIL_PASS_OUTLOOK=${EMAIL_PASS_OUTLOOK}
+      - EMAIL_PASS_HOTMAIL=${EMAIL_PASS_HOTMAIL}
+      - EMAIL_PASS_ICLOUD=${EMAIL_PASS_ICLOUD}
+      - EMAIL_PASS_MECOM=${EMAIL_PASS_MECOM}
+      - EMAIL_PASS_MAILRU=${EMAIL_PASS_MAILRU}
+      - EMAIL_PASS_YANDEX=${EMAIL_PASS_YANDEX}
+      - EMAIL_PASS_YAHOO=${EMAIL_PASS_YAHOO}
       - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
     networks:
       - default
@@ -147,7 +213,6 @@ services:
     container_name: gemini-cli
     restart: unless-stopped
     environment:
-      - COMPOSIO_API_KEY=${COMPOSIO_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - NODE_ENV=production
     volumes:
@@ -168,6 +233,11 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   searxng:
     image: searxng/searxng:latest
@@ -185,6 +255,43 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - "8096:8090"
+    volumes:
+      - beszel_data:/beszel_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PORT=8090
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    networks:
+      - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8090 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -201,6 +308,17 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   actual-budget:
     image: actualbudget/actual-server:latest
@@ -218,6 +336,17 @@ services:
     networks:
       - default
       - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5006 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   crawl4ai:
     image: unclecode/crawl4ai:latest
@@ -242,54 +371,6 @@ services:
       timeout: 10s
       retries: 3
 
-  langfuse-db:
-    image: postgres:15
-    container_name: langfuse-db
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=langfuse
-    volumes:
-      - ./langfuse-data:/var/lib/postgresql/data
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-          cpus: '1.0'
-    networks:
-      - default
-      - jarvis_net
-
-  # === OBSERVABILITY ===
-  # Langfuse requires NEXTAUTH_SECRET and NEXTAUTH_SALT environment variables.
-  # Add to .env file:
-  # NEXTAUTH_SECRET=your-secret-key-min-32-chars
-  # NEXTAUTH_SALT=your-salt-min-32-chars
-
-  langfuse-server:
-    image: langfuse/langfuse:2
-    container_name: langfuse-server
-    restart: unless-stopped
-    depends_on:
-      - langfuse-db
-    ports:
-      - "3030:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@langfuse-db:5432/langfuse
-      - NEXTAUTH_URL=http://localhost:3030
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - SALT=${NEXTAUTH_SALT}
-      - TELEMETRY_ENABLED=false
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-          cpus: '1.0'
-    networks:
-      - default
-      - jarvis_net
-
   slidev:
     image: ghcr.io/slidevjs/slidev:latest
     container_name: slidev
@@ -302,6 +383,11 @@ services:
     command: --port 3030
     networks:
       - jarvis_net
+
+volumes:
+  litellm_data:
+  beszel_data:
+
 
 networks:
   default:

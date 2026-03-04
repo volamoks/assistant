@@ -13,9 +13,11 @@
     "agent_research",
     "agent_architect",
     "agent_coder",
+    "agent_investor",
     "agent_career",
     "agent_interviewer",
-    "agent_trainer"
+    "agent_trainer",
+    "telegram_progress"
   ],
   "temperature": 0.2
 }

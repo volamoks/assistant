@@ -10,6 +10,7 @@
     ],
     "tools": [
         "read",
+        "exec",
         "web.search",
         "obsidian_search"
     ],

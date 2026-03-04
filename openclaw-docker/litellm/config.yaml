@@ -64,19 +64,9 @@ model_list:
       model: ollama_chat/qwen3.5:0.8b
       api_base: os.environ/OLLAMA_HOST
 
-  - model_name: ollama/qwen3:8b
+  - model_name: ollama/qwen3.5:9b
     litellm_params:
-      model: ollama_chat/qwen3:8b
-      api_base: os.environ/OLLAMA_HOST
-
-  - model_name: ollama/qwen2.5:7b
-    litellm_params:
-      model: ollama_chat/qwen2.5:7b
-      api_base: os.environ/OLLAMA_HOST
-
-  - model_name: ollama/deepseek-r1:14b
-    litellm_params:
-      model: ollama_chat/deepseek-r1:14b
+      model: ollama_chat/qwen3.5:9b
       api_base: os.environ/OLLAMA_HOST
 
   # === Kimi K2.5 via KiloCode Gateway ===
@@ -147,9 +137,29 @@ model_list:
       api_base: os.environ/DASHSCOPE_API_BASE
       api_key: os.environ/DASHSCOPE_API_KEY
 
+  # === Qwen Vision-Language (VL) models ===
+  - model_name: qwen3-vl-plus
+    litellm_params:
+      model: openai/qwen3-vl-plus
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  # Vision alias for OpenClaw image processing
+  - model_name: vision
+    litellm_params:
+      model: openai/qwen3-vl-plus
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
+  # Qwen3-Max with vision support
+  - model_name: qwen3-max
+    litellm_params:
+      model: openai/qwen3-max
+      api_base: os.environ/DASHSCOPE_API_BASE
+      api_key: os.environ/DASHSCOPE_API_KEY
+
 
 litellm_settings:
-  success_callback: ["langfuse"]
   drop_params: true
   request_timeout: 600
   num_retries: 2
@@ -165,8 +175,12 @@ router_settings:
     # Bailian (Alibaba) models → fallback to MiniMax when content moderation blocks output
     - qwen3.5-plus: ["minimax-portal/MiniMax-M2.5"]
     - qwen3-max-2026-01-23: ["minimax-portal/MiniMax-M2.5"]
+    - qwen3-max: ["minimax-portal/MiniMax-M2.5"]
     - qwen3-coder-plus: ["minimax-portal/MiniMax-M2.5"]
     - kimi-k2.5: ["minimax-portal/MiniMax-M2.5"]
+    # Vision models fallback to standard models (without vision)
+    - vision: ["qwen3.5-plus"]
+    - qwen3-vl-plus: ["qwen3.5-plus"]
   retry_policy:
     RateLimitError: 2
     ServiceUnavailableError: 2

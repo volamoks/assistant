@@ -17,8 +17,6 @@ volumes:
   n8n_data:
   uptime_kuma_data:
   beszel_data:
-  torrserver_data:
-  adguard_data:
 
 
 services:
@@ -77,17 +75,17 @@ services:
     depends_on:
       apps-postgres:
         condition: service_healthy
-
-  stirling-pdf:
-    image: frooodle/s-pdf:latest
-    container_name: stirling-pdf
-    restart: unless-stopped
-    ports:
-      - "3013:8080"
-    environment:
-      - DOCKER_ENABLE_SECURITY=false
-    networks:
-      - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # --- 🧠 AI FOUNDATION (JARVIS EXTENSIONS) ---
   browserless:
@@ -172,61 +170,6 @@ services:
   # Config: ~/.config/beszel/beszel-agent.env  |  Logs: ~/.cache/beszel/beszel-agent.log
   # Beszel hub подключается к агенту по: host.docker.internal:45876
 
-  # --- 📺 TORRENT SERVER ---
-  torrserver:
-    image: ghcr.io/yourok/torrserver:latest
-    container_name: torrserver
-    restart: always # restart even after manual stop / Mac reboot
-    network_mode: host # bypass Docker NAT → full 250 MB/s bandwidth
-    volumes:
-      - torrserver_data:/data
-    environment:
-      - TS_PORT=8090
-      - TS_CACHE_SIZE=2048 # disk cache in MB (increase if you have space)
-      - TS_PRELOAD_BUFFER=true # pre-buffer pieces for smoother playback
-    healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- http://localhost:8090/echo > /dev/null || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
-
-  # --- 🛡️ ADGUARD HOME ---
-  adguard:
-    image: adguard/adguardhome:latest
-    container_name: adguard
-    restart: unless-stopped
-    ports:
-      - "80:80/tcp"
-      - "853:853/tcp"
-      - "3000:3000/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
-    volumes:
-      - adguard_data:/opt/adguardhome/work
-    environment:
-      - TZ=Asia/Tashkent
-    networks:
-      - jarvis_net
-
-  # --- 🏠 HOMEPAGE DASHBOARD ---
-  homepage:
-    image: gethomepage/homepage:latest
-    container_name: homepage
-    restart: unless-stopped
-    ports:
-      - "3012:3000"
-    volumes:
-      - ./homepage:/app/config
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Tashkent
-      - HOMEPAGE_ALLOWED_HOSTS=localhost:3012,host.docker.internal:3012
-    networks:
-      - jarvis_net
-
   # --- 🌐 CLOUDFLARE TUNNEL ---
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -257,3 +200,14 @@ services:
       - jarvis_net
     ports:
       - "3456:3456"
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:3456/api/v1/info || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
