@@ -115,16 +115,16 @@
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim."
       },
       "state": {
-        "nextRunAtMs": 1772784000000,
+        "nextRunAtMs": 1772793600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772783400063,
+        "lastRunAtMs": 1772793000022,
         "lastStatus": "ok",
-        "lastDurationMs": 8060,
+        "lastDurationMs": 11333,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772783408123,
+      "updatedAtMs": 1772793011355,
       "delivery": {
         "mode": "none"
       }
@@ -245,16 +245,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772784000000,
+        "nextRunAtMs": 1772794800000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772782210017,
+        "lastRunAtMs": 1772793011355,
         "lastStatus": "ok",
-        "lastDurationMs": 6179,
+        "lastDurationMs": 8353,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1772782216196
+      "updatedAtMs": 1772793019708
     },
     {
       "id": "finance-enrichment",
@@ -443,14 +443,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1772783700046,
+        "lastRunAtMs": 1772793019708,
         "lastRunStatus": "ok",
-        "lastDurationMs": 7504,
+        "lastDurationMs": 2576,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1772784000000,
+        "nextRunAtMs": 1772793300000,
         "lastDelivered": false
       },
-      "updatedAtMs": 1772783707550
+      "updatedAtMs": 1772793022284
     },
     {
       "id": "git-backup",
@@ -641,16 +641,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772787600000,
-        "lastRunAtMs": 1772766201576,
+        "nextRunAtMs": 1772809200000,
+        "lastRunAtMs": 1772787614753,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 81668,
+        "lastDurationMs": 36479,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0
       },
-      "updatedAtMs": 1772766283244
+      "updatedAtMs": 1772787651232
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
@@ -723,7 +723,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1772766342513,
+      "updatedAtMs": 1772786752851,
       "schedule": {
         "kind": "cron",
         "expr": "45 7,13,18 * * *",
@@ -741,13 +741,13 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1772784000000,
-        "lastRunAtMs": 1772766283244,
+        "nextRunAtMs": 1772804700000,
+        "lastRunAtMs": 1772786703576,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 59269,
-        "lastDeliveryStatus": "delivered",
-        "lastDelivered": true,
+        "lastDurationMs": 49275,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false,
         "consecutiveErrors": 0
       }
     },
@@ -806,6 +806,38 @@
       "state": {
         "nextRunAtMs": 1772917200000
       }
+    },
+    {
+      "id": "plaud-monitor",
+      "agentId": "coder",
+      "name": "Plaud Auto-Monitor",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9-20/3 * * *",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT TASK. Run the Plaud monitor script:\nbash: python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py\n\nIf the script successfully processes new recordings, send the brief summary result to Telegram. If the output is empty or says 'No files found', output nothing.",
+        "thinking": "low"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1772802000000,
+        "lastRunAtMs": 1772791369775,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 55343,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1772791425118
     }
   ]
 }

@@ -50,7 +50,10 @@
 
 Добавьте в `.env`:
 ```bash
+# Для запуска из Docker контейнера:
 VIKUNJA_URL=http://vikunja:3456/api/v1
+# Для запуска с хоста (локально):
+# VIKUNJA_URL=http://localhost:3456/api/v1
 VIKUNJA_TOKEN=your-api-token
 ```
 
@@ -277,8 +280,17 @@ VIKUNJA_TOKEN=your-token
 # Проверьте URL
 echo $VIKUNJA_URL
 
-# Должно быть: http://vikunja:3456/api/v1
-# Для локального теста: http://localhost:3456/api/v1
+# Для запуска внутри Docker: http://vikunja:3456/api/v1
+# Для запуска с хоста: http://localhost:3456/api/v1
+```
+
+### CLI не создаёт задачи (пустой PROJECT_ID)
+```bash
+# Проверьте что Vikunja доступен
+curl -H "Authorization: Bearer $VIKUNJA_TOKEN" "$VIKUNJA_URL/projects"
+
+# Если пусто — проверьте что Vikunja запущен
+docker ps | grep vikunja
 ```
 
 ### Задачи не создаются

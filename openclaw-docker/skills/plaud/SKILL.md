@@ -75,6 +75,11 @@ Required environment variables (set in `.env`):
 - `PLAUD_API_DOMAIN` — API endpoint (e.g. `https://api-euc1.plaud.ai`)
 - `GROQ_API_KEY` — for Whisper transcription
 
+## Auto-Monitoring (Cron)
+
+A python script (`skills/plaud/scripts/plaud_monitor.py`) runs periodically via `jobs.json` (every 3 hours from 9:00 to 20:00).
+It automatically checks for new recordings, processes them through Groq Whisper and Llama 3 for translation/summarization tasks, and saves notes to your Obsidian `Inbox`. It'll also capture native Plaud links if they become available.
+
 ## Usage examples
 
 - "List my Plaud recordings"

@@ -15,7 +15,8 @@ from datetime import datetime
 import subprocess
 
 # Add workspace to path to import STT
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "workspace"))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "workspace"))
 try:
     from audio.stt import WhisperSTT
 except ImportError:
@@ -26,9 +27,9 @@ PLAUD_TOKEN = os.getenv("PLAUD_TOKEN")
 PLAUD_API_DOMAIN = os.getenv("PLAUD_API_DOMAIN", "https://api-euc1.plaud.ai")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-DATA_DIR = Path("/data/bot/openclaw-docker/data")
+DATA_DIR = PROJECT_ROOT / "data"
 STATE_FILE = DATA_DIR / "plaud_state.json"
-INBOX_DIR = Path(os.getenv("USER_VAULT_PATH", "/data/obsidian/vault")) / "Inbox"
+INBOX_DIR = Path(os.getenv("USER_VAULT_PATH", str(PROJECT_ROOT.parent / "obsidian/vault"))) / "Inbox"
 AUDIO_TMP_DIR = Path("/tmp/plaud_audio")
 
 if not PLAUD_TOKEN:

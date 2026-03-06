@@ -7,7 +7,9 @@
 set -e
 
 # Configuration
-VIKUNJA_URL="${VIKUNJA_URL:-http://vikunja:3456/api/v1}"
+# Use VIKUNJA_URL=http://localhost:3456/api/v1 when running from host
+# Use VIKUNJA_URL=http://vikunja:3456/api/v1 when running inside docker
+VIKUNJA_URL="${VIKUNJA_URL:-http://localhost:3456/api/v1}"
 VIKUNJA_TOKEN="${VIKUNJA_TOKEN:-}"
 
 if [ -z "$VIKUNJA_TOKEN" ]; then
@@ -124,7 +126,7 @@ case "$1" in
         DUE_DATE="${4:-}"
         PRIORITY="${5:-2}"
         
-        # Discover first project if not specified (default to 1)
+        # Get first project if not specified (default to 1)
         PROJECT_ID=$(curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[0].id // 1')
         
         # Build JSON payload
@@ -137,7 +139,7 @@ case "$1" in
         fi
         JSON="$JSON, \"priority\": $PRIORITY}"
         
-        # Latest Vikunja uses PUT to project/id/tasks for creation
+        # Vikunja uses PUT to /projects/{id}/tasks for creation
         RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
         echo "$RESULT" | jq '.'
         ;;
@@ -252,6 +254,7 @@ case "$1" in
         fi
         JSON="$JSON, \"priority\": $PRIORITY}"
         
+        # Vikunja uses PUT to /projects/{id}/tasks for creation
         RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
         echo "$RESULT" | jq '.'
         # Clear projects cache
@@ -309,6 +312,7 @@ case "$1" in
         fi
         JSON="$JSON, \"priority\": 3}"
         
+        # Vikunja uses PUT to /projects/{id}/tasks for creation
         RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
         echo "$RESULT" | jq '.'
         ;;
@@ -336,6 +340,7 @@ case "$1" in
         fi
         JSON="$JSON, \"priority\": 2}"
         
+        # Vikunja uses PUT to /projects/{id}/tasks for creation
         RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
         echo "$RESULT" | jq '.'
         ;;
@@ -363,6 +368,7 @@ case "$1" in
         fi
         JSON="$JSON, \"priority\": 1}"
         
+        # Vikunja uses PUT to /projects/{id}/tasks for creation
         RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
         echo "$RESULT" | jq '.'
         ;;
