@@ -12,9 +12,10 @@ Usage:
 import sys
 import sqlite3
 import argparse
+import os
 from pathlib import Path
 
-DB_PATH = Path("/data/obsidian/vault/Bot/obsidian.db")
+DB_PATH = Path(os.environ.get("SYSTEM_VAULT_PATH", "/data/obsidian/vault")) / "Bot" / "obsidian.db"
 
 
 def search(query, limit=3, snippet_lines=40):

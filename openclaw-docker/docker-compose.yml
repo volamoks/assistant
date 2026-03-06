@@ -158,8 +158,10 @@ services:
       - ./canvas:/home/node/.openclaw/canvas
       - ./cron:/home/node/.openclaw/cron
       - ./telegram:/home/node/.openclaw/telegram
-      # Obsidian vault — full My Docs vault (bot files in Claw/ subfolder, accessed via vault/ symlink)
-      - "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs:/data/obsidian"
+      # Technical System Vault (My Docs - configs, logs, metadata)
+      - "${SYSTEM_VAULT_PATH:-/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs}:/data/obsidian"
+      # User Working Vault (abror - daily notes, reports, ideas)
+      - "${USER_VAULT_PATH:-/Users/abror_mac_mini/Documents/abror}:/data/abror_vault"
       # Bot project for coder agent (git + configs)
       - /Users/abror_mac_mini/Projects/bot:/data/bot
       # Docker socket so coder can restart containers
@@ -180,7 +182,8 @@ services:
       - OLLAMA_HOST=${OLLAMA_HOST}
       - LITELLM_HOST=http://litellm:4000
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - OBSIDIAN_VAULT_PATH=/data/obsidian/vault
+      - SYSTEM_VAULT_PATH=/data/obsidian/vault
+      - USER_VAULT_PATH=/data/abror_vault
       - BOT_PROJECT_PATH=/data/bot
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}

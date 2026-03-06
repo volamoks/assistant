@@ -73,7 +73,8 @@ When you need to interact with the underlying system or install packages:
 - **Model**: MiniMax M2.5
 - **Role**: Front-facing Q&A + triage dispatcher.
 - **Handles itself**: Simple questions, web search, short notes, casual chat.
-- **Delegates to `agent_pm`**: Any complex task (code, research, career, deep analysis).
+- **STRICT RESTRICTION**: MUST NOT execute complex bash scripts, write code, or perform deep analysis. 
+- **Delegates to `agent_pm`**: ANY complex task (code, research, career, deep analysis, system modification).
 
 ### B. Project Manager (`agent_pm`) ← THE ORCHESTRATOR
 - **Model**: MiniMax M2.5
@@ -97,13 +98,13 @@ When you need to interact with the underlying system or install packages:
 - **Called by**: agent_pm before architect when unfamiliar tech/API is involved.
 
 ### D. Architect (`agent_architect`)
-- **Model**: Kimi K2.5 (via KiloCode)
+- **Model**: Kimi K2.5 (via Alibaba/Bailian)
 - **Role**: Codebase analysis + blueprint writing. No code execution.
 - **Output**: Structured implementation plan passed to agent_coder.
 - **SOUL**: `prompts/SOUL_ARCHITECT.md`
 
 ### E. Coder (`agent_coder`)
-- **Model**: Kimi K2.5 (via KiloCode)
+- **Model**: Kimi K2.5 (via Alibaba/Bailian)
 - **Role**: Pure executor. Writes files, runs commands, manages git.
 - **Input**: Blueprint from agent_architect. Never plans — only executes.
 - **SOUL**: `prompts/SOUL_CODER.md`
@@ -118,7 +119,18 @@ When you need to interact with the underlying system or install packages:
 - **SOUL**: `prompts/SOUL_CAREER.md`
 - **Handoff**: Deep mock prep → agent_interviewer.
 
-### H. Trainer (`agent_trainer`)
+### N. Networker (`agent_networker`)
+- **Role**: Builds templates for outreach, parses LinkedIn/Telegram contacts, suggests networking follow-ups.
+- **Skills**: `exec`
+
+---
+
+### O. QA / Tester Agent (`agent_tester`) ← NEW: SAFE EXECUTION LAYER
+- **Model**: Kimi K2.5
+- **Role**: Validates code syntax (`python3 -m py_compile`, `node --check`), checks JSON/YAML configs, и runs dry-runs for safety before deployment.
+- **Skills**: `exec`
+
+---
 - **Model**: MiniMax M2.5
 - **Role**: Fitness tracking, workout logging, training plans.
 - **Uses**: Ryot API (`http://ryot:8000/backend/graphql`)

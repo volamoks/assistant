@@ -1,5 +1,5 @@
 #!/bin/bash
-VAULT_PATH="${OBSIDIAN_VAULT_PATH:-/data/obsidian/vault}"
+VAULT_PATH="${USER_VAULT_PATH:-/data/abror_vault}"
 
 echo "=== Empty Files ==="
 find "$VAULT_PATH" -name '*.md' -empty 2>/dev/null

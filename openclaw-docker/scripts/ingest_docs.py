@@ -22,7 +22,8 @@ import urllib.error
 from pathlib import Path
 
 # ─── Config ──────────────────────────────────────────────────────────────────
-VAULT_PATH     = os.environ.get("OBSIDIAN_VAULT_PATH", "/data/obsidian/vault")
+SYS_VAULT_ENV  = os.environ.get("SYSTEM_VAULT_PATH", "/data/obsidian/vault")
+USER_VAULT_ENV = os.environ.get("USER_VAULT_PATH", "/data/abror_vault")
 OLLAMA_HOST    = os.environ.get("OLLAMA_HOST", "http://host.docker.internal:11434")
 CHROMA_HOST    = os.environ.get("CHROMA_HOST", "http://chromadb:8000")
 COLLECTION     = "obsidian_vault"  # same collection as ingest.js
@@ -181,18 +182,21 @@ def main():
     parser.add_argument("--force", action="store_true", help="Re-index all files")
     args = parser.parse_args()
 
-    log(f"Vault: {VAULT_PATH}")
+    log(f"Vaults: {SYS_VAULT_ENV}, {USER_VAULT_ENV}")
     log(f"ChromaDB: {CHROMA_HOST} | Ollama: {OLLAMA_HOST}")
 
-    # Find docs
-    vault = Path(VAULT_PATH)
-    if not vault.exists():
-        log(f"❌ Vault path not found: {VAULT_PATH}")
-        sys.exit(1)
+    vault_paths = [Path(SYS_VAULT_ENV)]
+    if Path(USER_VAULT_ENV).exists() and USER_VAULT_ENV != SYS_VAULT_ENV:
+        vault_paths.append(Path(USER_VAULT_ENV))
 
-    docs = [p for p in vault.rglob("*")
-            if p.suffix.lower() in SUPPORTED_EXT
-            and not any(part.startswith(".") for part in p.parts)]
+    docs = []
+    for vault in vault_paths:
+        if not vault.exists():
+            log(f"⚠️ Vault path not found: {vault}")
+            continue
+        docs.extend([p for p in vault.rglob("*")
+                if p.suffix.lower() in SUPPORTED_EXT
+                and not any(part.startswith(".") for part in p.parts)])
 
     log(f"Found {len(docs)} documents: {', '.join(ext for ext in SUPPORTED_EXT)}")
 
@@ -202,7 +206,7 @@ def main():
 
     if args.dry_run:
         for d in docs:
-            print(f"  {d.relative_to(vault)}")
+            print(f"  {d}")
         return
 
     # Setup
@@ -223,7 +227,7 @@ def main():
     skipped = 0
 
     for doc_path in docs:
-        rel = str(doc_path.relative_to(vault))
+        rel = str(doc_path)
         fhash = file_hash(doc_path)
         hash_id = f"{rel}::hash::{fhash}"
 

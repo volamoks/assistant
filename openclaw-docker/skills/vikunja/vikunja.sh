@@ -1,6 +1,8 @@
 #!/bin/bash
 # Vikunja API CLI
 # Usage: bash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh <command> [args...]
+#
+# Patterns: Based on ryot.sh and gcal.sh API wrappers
 
 set -e
 
@@ -16,7 +18,77 @@ fi
 # Headers
 HEADERS=(-H "Authorization: Bearer $VIKUNJA_TOKEN" -H "Content-Type: application/json")
 
-# Commands
+# ── Caching (pattern from gcal.sh/ryot.sh) ─────────────────────────────────────
+CACHE_DIR="/tmp/vikunja_cache"
+CACHE_TTL=300  # 5 minutes
+
+mkdir -p "$CACHE_DIR" 2>/dev/null || true
+
+get_cache() {
+    local key="$1"
+    local cache_file="$CACHE_DIR/$key.json"
+    if [ -f "$cache_file" ]; then
+        local age=$(($(date +%s) - $(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null || echo 0)))
+        if [ "$age" -lt "$CACHE_TTL" ]; then
+            cat "$cache_file"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+set_cache() {
+    local key="$1"
+    local data="$2"
+    echo "$data" > "$CACHE_DIR/$key.json"
+}
+
+clear_cache() {
+    rm -f "$CACHE_DIR"/*.json 2>/dev/null || true
+}
+
+# ── Unified API call (pattern from gcal.sh) ─────────────────────────────────────
+vikunja_api() {
+    local method="${1:-GET}"
+    local endpoint="$2"
+    local data="$3"
+    
+    local curl_cmd="curl -s -X $method ${HEADERS[@]}"
+    if [ -n "$data" ]; then
+        curl_cmd="$curl_cmd -d '$data'"
+    fi
+    
+    eval "$curl_cmd" "$VIKUNJA_URL/$endpoint"
+}
+
+vikunja_api_cached() {
+    local key="$1"
+    local method="${2:-GET}"
+    local endpoint="$3"
+    local data="$4"
+    
+    # Try cache first (only for GET)
+    if [ "$method" = "GET" ]; then
+        local cached
+        if cached=$(get_cache "$key"); then
+            echo "$cached"
+            return 0
+        fi
+    fi
+    
+    # API call
+    local result
+    result=$(vikunja_api "$method" "$endpoint" "$data")
+    
+    # Cache result (only for GET)
+    if [ "$method" = "GET" ]; then
+        set_cache "$key" "$result"
+    fi
+    
+    echo "$result"
+}
+
+# ── Commands ─────────────────────────────────────────────────────────────────────
 case "$1" in
     list)
         # List all tasks
@@ -155,6 +227,168 @@ case "$1" in
         echo "User info:"
         echo "$USER_INFO" | jq '.' 2>/dev/null || echo "$USER_INFO"
         ;;
+    
+    # ── NEW: Create task for specific project ─────────────────────────────────────
+    create-for-project)
+        # Create task for specific project: create-for-project <project_id> "title" "description" "due_date" priority
+        PROJECT_ID="$2"
+        TITLE="$3"
+        DESCRIPTION="${4:-}"
+        DUE_DATE="${5:-}"
+        PRIORITY="${6:-2}"
+        
+        if [ -z "$PROJECT_ID" ] || [ -z "$TITLE" ]; then
+            echo "Usage: vikunja.sh create-for-project <project_id> \"title\" [\"description\"] [\"due_date\"] [priority]"
+            exit 1
+        fi
+        
+        # Build JSON payload
+        JSON="{\"title\": \"$TITLE\""
+        if [ -n "$DESCRIPTION" ]; then
+            JSON="$JSON, \"description\": \"$DESCRIPTION\""
+        fi
+        if [ -n "$DUE_DATE" ]; then
+            JSON="$JSON, \"due_date\": \"$DUE_DATE\""
+        fi
+        JSON="$JSON, \"priority\": $PRIORITY}"
+        
+        RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
+        echo "$RESULT" | jq '.'
+        # Clear projects cache
+        clear_cache
+        ;;
+    
+    # ── NEW: List tasks by status (done/undone) ─────────────────────────────────────
+    list-by-status)
+        # List tasks by status: list-by-status <done|undone>
+        STATUS="$2"
+        if [ -z "$STATUS" ]; then
+            echo "Usage: vikunja.sh list-by-status <done|undone>"
+            exit 1
+        fi
+        
+        if [ "$STATUS" = "done" ]; then
+            DONE_FILTER="true"
+        else
+            DONE_FILTER="false"
+        fi
+        
+        # Vikunja API supports filtering via query params
+        curl -s "${HEADERS[@]}" "$VIKUNJA_URL/tasks?done=$DONE_FILTER" | jq '.[] | {id, title, description, done, due_date, priority, project_id}'
+        ;;
+    
+    # ── NEW: List overdue tasks ─────────────────────────────────────
+    list-overdue)
+        # List tasks that are past due date and not done
+        TODAY=$(date +%Y-%m-%d)
+        curl -s "${HEADERS[@]}" "$VIKUNJA_URL/tasks?done=false" | jq --arg today "$TODAY" '
+            .[] | select(.due_date != null and .due_date < $today) | {id, title, description, due_date, priority, project_id}'
+        ;;
+    
+    # ── NEW: Quick create bug task ─────────────────────────────────────
+    create-bug)
+        # Create bug task: create-bug "title" "description" "due_date"
+        TITLE="$2"
+        DESCRIPTION="${3:-}"
+        DUE_DATE="${4:-}"
+        
+        if [ -z "$TITLE" ]; then
+            echo "Usage: vikunja.sh create-bug \"title\" [\"description\"] [\"due_date\"]"
+            exit 1
+        fi
+        
+        # Default to first project, priority 3 (high)
+        PROJECT_ID=$(curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[0].id // 1')
+        
+        JSON="{\"title\": \"[BUG] $TITLE\""
+        if [ -n "$DESCRIPTION" ]; then
+            JSON="$JSON, \"description\": \"$DESCRIPTION\""
+        fi
+        if [ -n "$DUE_DATE" ]; then
+            JSON="$JSON, \"due_date\": \"$DUE_DATE\""
+        fi
+        JSON="$JSON, \"priority\": 3}"
+        
+        RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
+        echo "$RESULT" | jq '.'
+        ;;
+    
+    # ── NEW: Quick create improvement task ─────────────────────────────────────
+    create-improvement)
+        # Create improvement task: create-improvement "title" "description" "due_date"
+        TITLE="$2"
+        DESCRIPTION="${3:-}"
+        DUE_DATE="${4:-}"
+        
+        if [ -z "$TITLE" ]; then
+            echo "Usage: vikunja.sh create-improvement \"title\" [\"description\"] [\"due_date\"]"
+            exit 1
+        fi
+        
+        PROJECT_ID=$(curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[0].id // 1')
+        
+        JSON="{\"title\": \"[IMPROVE] $TITLE\""
+        if [ -n "$DESCRIPTION" ]; then
+            JSON="$JSON, \"description\": \"$DESCRIPTION\""
+        fi
+        if [ -n "$DUE_DATE" ]; then
+            JSON="$JSON, \"due_date\": \"$DUE_DATE\""
+        fi
+        JSON="$JSON, \"priority\": 2}"
+        
+        RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
+        echo "$RESULT" | jq '.'
+        ;;
+    
+    # ── NEW: Quick create discovery task ─────────────────────────────────────
+    create-discovery)
+        # Create discovery task: create-discovery "title" "description" "due_date"
+        TITLE="$2"
+        DESCRIPTION="${3:-}"
+        DUE_DATE="${4:-}"
+        
+        if [ -z "$TITLE" ]; then
+            echo "Usage: vikunja.sh create-discovery \"title\" [\"description\"] [\"due_date\"]"
+            exit 1
+        fi
+        
+        PROJECT_ID=$(curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[0].id // 1')
+        
+        JSON="{\"title\": \"[IDEA] $TITLE\""
+        if [ -n "$DESCRIPTION" ]; then
+            JSON="$JSON, \"description\": \"$DESCRIPTION\""
+        fi
+        if [ -n "$DUE_DATE" ]; then
+            JSON="$JSON, \"due_date\": \"$DUE_DATE\""
+        fi
+        JSON="$JSON, \"priority\": 1}"
+        
+        RESULT=$(curl -s -X PUT "${HEADERS[@]}" -d "$JSON" "$VIKUNJA_URL/projects/$PROJECT_ID/tasks")
+        echo "$RESULT" | jq '.'
+        ;;
+    
+    # ── NEW: Weekly report helper ─────────────────────────────────────
+    weekly-report)
+        # Generate weekly report from all projects
+        echo "=== OPENCLAW BOT PROJECT ==="
+        curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[] | select(.title | contains("OpenClaw")) | .id' | while read -r proj_id; do
+            echo "Project ID: $proj_id"
+            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, priority, due_date}'
+        done
+        echo ""
+        echo "=== PERSONAL PROJECT ==="
+        curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[] | select(.title | contains("Personal")) | .id' | while read -r proj_id; do
+            echo "Project ID: $proj_id"
+            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, priority, due_date}'
+        done
+        ;;
+    
+    # ── NEW: Clear cache ─────────────────────────────────────
+    clear-cache)
+        clear_cache
+        echo "Cache cleared"
+        ;;
+    
     *)
         echo "Vikunja CLI - Task Management"
         echo ""
@@ -165,15 +399,25 @@ case "$1" in
         echo "  list-by-project <id>         List tasks in a project"
         echo "  get <task_id>                 Get task details"
         echo "  create \"title\" [desc] [date] [pri]  Create new task"
+        echo "  create-for-project <id> \"title\" [desc] [date] [pri]  Create for project"
+        echo "  create-bug \"title\" [desc] [date]     Create bug task (priority=3)"
+        echo "  create-improvement \"title\" [desc] [date]  Create improvement (priority=2)"
+        echo "  create-discovery \"title\" [desc] [date]    Create idea (priority=1)"
         echo "  update <id> [title] [desc]   Update a task"
         echo "  done <task_id>               Mark task as done"
         echo "  delete <task_id>             Delete a task"
+        echo "  list-by-status <done|undone> List tasks by status"
+        echo "  list-overdue                 List overdue tasks"
+        echo "  weekly-report                Generate weekly report"
         echo "  projects                      List all projects"
         echo "  create-project \"title\" [desc] Create new project"
         echo "  status                        Check API status"
+        echo "  clear-cache                   Clear API cache"
         echo ""
         echo "Priority: 1=low, 2=medium, 3=high"
         echo "Date format: YYYY-MM-DD"
+        echo ""
+        echo "Cache: /tmp/vikunja_cache (TTL: 5 min)"
         exit 1
         ;;
 esac

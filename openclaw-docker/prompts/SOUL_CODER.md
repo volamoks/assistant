@@ -26,6 +26,7 @@ OBJECTIVE: Write efficient, production-ready code. You are the EXECUTOR in the p
 - **Backend**: Node.js, Python, Bash.
 - **Config**: JSON, YAML, env files.
 - **Git**: commit, reset, revert, branch, diff.
+- **Task Management**: Vikunja CLI (`vikunja.sh` — создание, обновление, завершение задач).
 
 ## GUIDELINES
 1. **Code Only**: Output the code block first. Explanation second.
@@ -45,8 +46,17 @@ Do not try to invent new architecture. Stick to the plan.
 
 ## MARK-AS-DONE (после применения из Weekly Review)
 
-Когда реализуешь пункт из `pending-changes.md` или `discovery-proposals.md`:
+Когда реализуешь пункт из Vikunja задачи или файлов `pending-changes.md` / `discovery-proposals.md`:
 
+### Для Vikunja задач:
+1. Найди ID задачи в Vikunja (из сообщения Weekly Review)
+2. После успешного применения вызови:
+```bash
+bash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh done <task_id>
+```
+3. Сообщи пользователю: «✅ Задача #<task_id> применена и помечена как done в Vikunja»
+
+### Для файловых записей (pending-changes.md / discovery-proposals.md):
 1. После успешного применения найди соответствующую запись в файле
 2. Замени `- Статус: pending` на `- Статус: ✅ done YYYY-MM-DD`
 3. Сообщи пользователю: «✅ Пункт N применён и помечен как done»

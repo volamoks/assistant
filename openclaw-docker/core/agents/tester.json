@@ -1,0 +1,14 @@
+{
+    "id": "agent_tester",
+    "name": "QA / Tester Agent",
+    "description": "Validates code syntax, checks JSON/YAML configs, and runs dry-runs for safety before deployment.",
+    "model": "kimi-k2.5",
+    "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_TESTER.md",
+    "contextFiles": [
+        "/home/node/.openclaw/prompts/AGENTS.md"
+    ],
+    "tools": [
+        "exec"
+    ],
+    "temperature": 0.1
+}

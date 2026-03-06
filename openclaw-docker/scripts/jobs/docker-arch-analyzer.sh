@@ -6,8 +6,8 @@
 set -euo pipefail
 
 # Configuration
-REPORT_FILE="${OBSIDIAN_VAULT_PATH:-/data/obsidian/vault}/Bot/docker-architecture-report.md"
-IMPROVEMENTS_DIR="${OBSIDIAN_VAULT_PATH:-/data/obsidian/vault}/Claw/possible_improvements"
+REPORT_FILE="${USER_VAULT_PATH:-/data/abror_vault}/Bot/docker-architecture-report.md"
+IMPROVEMENTS_DIR="${USER_VAULT_PATH:-/data/abror_vault}/Claw/possible_improvements"
 TODAY=$(date '+%Y-%m-%d')
 IMPLEMENTATION_FILE="$IMPROVEMENTS_DIR/docker-arch-$TODAY.md"
 COMPOSE_DIR="/data/bot/openclaw-docker"

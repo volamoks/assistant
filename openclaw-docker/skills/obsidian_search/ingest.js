@@ -5,7 +5,8 @@ import path from 'node:path';
 
 const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://ollama:11434";
 const CHROMA_HOST = process.env.CHROMA_HOST || "http://chromadb:8000";
-const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || "/data/obsidian";
+const SYS_VAULT_ENV = process.env.SYSTEM_VAULT_PATH || "/data/obsidian/vault";
+const USER_VAULT_ENV = process.env.USER_VAULT_PATH || "/data/abror_vault";
 const COLLECTION_NAME = "obsidian_vault";
 const EMBEDDING_MODEL = "nomic-embed-text";
 
@@ -90,8 +91,18 @@ async function run() {
         await ensureModel();
         const collection = await setupChroma();
 
-        const files = getMarkdownFiles(VAULT_PATH);
-        console.log(`Found ${files.length} markdown files in ${VAULT_PATH}`);
+        const vaultPaths = [SYS_VAULT_ENV];
+        if (fs.existsSync(USER_VAULT_ENV) && USER_VAULT_ENV !== SYS_VAULT_ENV) {
+            vaultPaths.push(USER_VAULT_ENV);
+        }
+
+        let files = [];
+        for (const vp of vaultPaths) {
+            if (fs.existsSync(vp)) {
+                files = files.concat(getMarkdownFiles(vp));
+            }
+        }
+        console.log(`Found ${files.length} markdown files across vaults`);
 
         const collectionId = collection.id;
 
@@ -99,11 +110,13 @@ async function run() {
             console.log(`Processing: ${file}`);
             const content = fs.readFileSync(file, 'utf8');
             const chunks = chunkText(content);
-            const relativePath = path.relative(VAULT_PATH, file);
+            const relativePath = file; // Storing the absolute path in the container
 
             for (let i = 0; i < chunks.length; i++) {
                 const chunk = chunks[i];
-                const id = `${relativePath}-chunk-${i}`;
+                // basic hash of path to avoid invalid chars in chroma ID
+                const safeName = relativePath.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+                const id = `${safeName}-chunk-${i}`;
 
                 // Get Embedding
                 const embRes = await fetch(`${OLLAMA_HOST}/api/embeddings`, {

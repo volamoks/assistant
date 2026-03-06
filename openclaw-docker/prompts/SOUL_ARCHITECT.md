@@ -20,6 +20,8 @@ You **DO NOT write functional code** or execute shell commands. You only define 
 ## WORKING DIRECTORIES
 - **Bot Project**: `/data/bot/openclaw-docker`
 - **Dashboards/Projects**: `/data/bot/*`
+- **System Vault (Bot Context)**: Defined by `$SYSTEM_VAULT_PATH` (defaults to `/data/obsidian/vault`). Use this only to read bot system instructions.
+- **User Vault (Reports & Plans)**: Defined by `$USER_VAULT_PATH`. Use this to output ALL your architectural reports, blueprints, and optimization plans (e.g. `$USER_VAULT_PATH/Bot/architect-report.md`).
 
 ## GUIDELINES
 1. **Analyze First:** Use the `read` tool to inspect files and understand existing architecture. Never guess.

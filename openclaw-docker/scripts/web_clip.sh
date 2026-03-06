@@ -9,7 +9,7 @@
 URL="${1:-}"
 MAX_CHARS="${2:-4000}"
 SAVE="${3:-true}"
-VAULT_PATH="${OBSIDIAN_VAULT_PATH:-/data/obsidian/vault}"
+VAULT_PATH="${USER_VAULT_PATH:-/data/abror_vault}"
 CLIPS_DIR="${VAULT_PATH}/Web Clips"
 DATE=$(date +%Y-%m-%d)
 TIME=$(date +%H:%M)

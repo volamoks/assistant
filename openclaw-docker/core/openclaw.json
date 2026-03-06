@@ -57,8 +57,8 @@
             "name": "DeepSeek V3 (Custom)"
           },
           {
-            "id": "kilocode/moonshotai/kimi-k2.5:free",
-            "name": "Kimi K2.5 (KiloCode)"
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5 (Alibaba)"
           },
           {
             "id": "bailian/qwen3.5-plus",
@@ -136,15 +136,14 @@
           }
         ]
       },
-      "kilocode": {
-        "baseUrl": "http://litellm:4000",
-        "apiKey": "sk-litellm-openclaw-proxy",
-        "api": "openai-completions",
+      "alibaba": {
+        "title": "Alibaba",
+        "description": "Alibaba Cloud Bailian Models",
+        "order": 1,
         "models": [
           {
-            "id": "kilocode/moonshotai/kimi-k2.5:free",
-            "name": "Kimi K2.5 (Free)",
-            "reasoning": true
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5"
           }
         ]
       },
@@ -285,7 +284,9 @@
             "interviewer",
             "trainer",
             "investor",
-            "work"
+            "work",
+            "architect",
+            "tester"
           ]
         }
       },
@@ -345,13 +346,31 @@
         "name": "Investor",
         "workspace": "/home/node/.openclaw/workspace-investor",
         "agentDir": "/home/node/.openclaw/agents/investor/agent"
+      },
+      {
+        "id": "architect",
+        "name": "architect",
+        "workspace": "/home/node/.openclaw/workspace-architect",
+        "agentDir": "/home/node/.openclaw/agents/architect/agent",
+        "model": {
+          "primary": "kimi-k2.5"
+        }
+      },
+      {
+        "id": "tester",
+        "name": "tester",
+        "workspace": "/home/node/.openclaw/workspace",
+        "agentDir": "/home/node/.openclaw/agents/tester/agent",
+        "model": {
+          "primary": "kimi-k2.5"
+        }
       }
     ]
   },
   "tools": {
     "web": {
       "search": {
-        "provider": "perplexity"
+        "provider": "searxng"
       }
     },
     "media": {

@@ -2,7 +2,7 @@
   "id": "agent_pm",
   "name": "Project Manager (PM)",
   "description": "Full-cycle orchestrator. Clarifies requirements, decomposes complex tasks, presents solution options, and coordinates specialist agents. Always asks clarifying questions before acting.",
-  "model": "minimax-portal/MiniMax-M2.5",
+  "model": "kimi-k2.5",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_PM.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",
@@ -17,6 +17,7 @@
     "agent_career",
     "agent_interviewer",
     "agent_trainer",
+    "agent_tester",
     "telegram_progress"
   ],
   "temperature": 0.2

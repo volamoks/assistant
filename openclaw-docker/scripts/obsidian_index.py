@@ -21,10 +21,16 @@ import argparse
 from pathlib import Path
 from tqdm import tqdm
 
-# Default vault path uses current user - override with OBSIDIAN_VAULT_PATH env var
-_DEFAULT_VAULT = Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs"
-VAULT_HOST = Path(os.environ.get("OBSIDIAN_VAULT_PATH", _DEFAULT_VAULT))
-DB_DEFAULT = VAULT_HOST / "vault" / "Bot" / "obsidian.db"
+# System and User Vault Paths
+sys_vault_env = os.environ.get("SYSTEM_VAULT_PATH", "/data/obsidian/vault")
+user_vault_env = os.environ.get("USER_VAULT_PATH", "/data/abror_vault")
+
+VAULT_PATHS = [Path(sys_vault_env)]
+# Only add user vault if it exists, to avoid errors if not mapped
+if Path(user_vault_env).exists() and user_vault_env != sys_vault_env:
+    VAULT_PATHS.append(Path(user_vault_env))
+
+DB_DEFAULT = Path(sys_vault_env) / "Bot" / "obsidian.db"
 MAX_CHUNK_LINES = 200
 
 DB_PATH = DB_DEFAULT
@@ -144,8 +150,8 @@ def chunk_markdown(text, file_path):
 # ── Index ─────────────────────────────────────────────────────────────────────
 
 def index(vault_path=None, force=False):
-    vault = Path(vault_path) if vault_path else VAULT_HOST
-    print(f"\n📂 Vault: {vault}")
+    vaults = [Path(vault_path)] if vault_path else VAULT_PATHS
+    print(f"\n📂 Vaults: {[str(v) for v in vaults]}")
 
     conn = get_db()
     cur = conn.cursor()
@@ -158,15 +164,13 @@ def index(vault_path=None, force=False):
 
     extensions = list(EXTRACTORS.keys()) + ["*.md"]
     all_files = []
-    for ext in extensions:
-        all_files.extend(vault.rglob(f"*{ext}" if not ext.startswith("*") else ext))
+    for vault in vaults:
+        for ext in extensions:
+            all_files.extend(vault.rglob(f"*{ext}" if not ext.startswith("*") else ext))
 
     to_index, to_skip = [], 0
     for f in all_files:
-        try:
-            rel = str(f.relative_to(vault))
-        except ValueError:
-            rel = str(f)
+        rel = str(f)  # store absolute paths inside container
         mtime = f.stat().st_mtime
         row = cur.execute("SELECT mtime FROM files WHERE path=?", (rel,)).fetchone()
         if not force and row and abs(row[0] - mtime) < 1:
