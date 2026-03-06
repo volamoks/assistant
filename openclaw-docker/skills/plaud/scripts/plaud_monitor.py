@@ -156,6 +156,45 @@ def extract_summary_and_tasks(text):
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"]
 
+def push_tasks_to_vikunja(analysis_text, filename, dry_run=False):
+    """Parses '- [ ] task name' strings from the text and pushes them to Vikunja using the bash script."""
+    import re
+    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*(.+)$", analysis_text, re.MULTILINE)
+    
+    if not tasks:
+        return 0
+    
+    vikunja_script = PROJECT_ROOT / "skills" / "vikunja" / "vikunja.sh"
+    added_count = 0
+    
+    for task_name in tasks:
+        # Clean task name of extra formatting if any (like bolding)
+        clean_name = task_name.replace("**", "").strip()
+        title = f"[Plaud] {clean_name}"
+        description = f"Source recording: {filename}"
+        
+        if dry_run:
+            print(f"  -> (DRY RUN) Would create Vikunja task: {title}")
+            added_count += 1
+            continue
+            
+        try:
+            # Using the Vikunja wrapper script to create tasks
+            result = subprocess.run(
+                ["bash", str(vikunja_script), "create", title, description],
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                added_count += 1
+            else:
+                print(f"  -> Vikunja push failed for: {title}\n     Error: {result.stderr}")
+        except Exception as e:
+            print(f"  -> Error pushing task '{task_name}' to Vikunja: {e}")
+            
+    return added_count
+
 def format_obsidian_note(file_id, filename, created_at, transcript, summary, native_links=None):
     dt = datetime.fromtimestamp(created_at).strftime("%Y-%m-%d %H:%M")
     
@@ -230,6 +269,10 @@ def main(dry_run=False):
                 print(f"  -> Generating summary & tasks...")
                 try:
                     analysis = extract_summary_and_tasks(transcript)
+                    print(f"  -> Pushing extracted tasks to Vikunja...")
+                    tasks_added = push_tasks_to_vikunja(analysis, filename, dry_run=False)
+                    if tasks_added > 0:
+                        print(f"  -> Successfully pushed {tasks_added} tasks to Vikunja.")
                 except Exception as e:
                     print(f"  -> Analysis error: {e}")
                     analysis = "Error generating summary."

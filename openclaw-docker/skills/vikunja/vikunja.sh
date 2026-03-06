@@ -375,17 +375,27 @@ case "$1" in
     
     # ── NEW: Weekly report helper ─────────────────────────────────────
     weekly-report)
-        # Generate weekly report from all projects
+        # Generate weekly report from all projects with descriptions (recommendations)
         echo "=== OPENCLAW BOT PROJECT ==="
         curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[] | select(.title | contains("OpenClaw")) | .id' | while read -r proj_id; do
             echo "Project ID: $proj_id"
-            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, priority, due_date}'
+            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, description, priority, due_date}'
         done
         echo ""
         echo "=== PERSONAL PROJECT ==="
         curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[] | select(.title | contains("Personal")) | .id' | while read -r proj_id; do
             echo "Project ID: $proj_id"
-            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, priority, due_date}'
+            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq '.[] | select(.done == false) | {id, title, description, priority, due_date}'
+        done
+        ;;
+    
+    # ── NEW: List tasks with recommendations ─────────────────────────────────────
+    list-recommendations)
+        # List tasks that have recommendations in description (contain "РЕКОМЕНДАЦИЯ" or "План")
+        echo "=== TASKS WITH RECOMMENDATIONS ==="
+        curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects" | jq '.[] | select(.title | contains("OpenClaw")) | .id' | while read -r proj_id; do
+            curl -s "${HEADERS[@]}" "$VIKUNJA_URL/projects/$proj_id/tasks" | jq --arg proj "$proj_id" '
+                .[] | select(.done == false) | select(.description | test("РЕКОМЕНДАЦИЯ|План|Recommendation"; "i")) | {id, title, description, priority}'
         done
         ;;
     
@@ -414,6 +424,7 @@ case "$1" in
         echo "  delete <task_id>             Delete a task"
         echo "  list-by-status <done|undone> List tasks by status"
         echo "  list-overdue                 List overdue tasks"
+        echo "  list-recommendations         List tasks with recommendations"
         echo "  weekly-report                Generate weekly report"
         echo "  projects                      List all projects"
         echo "  create-project \"title\" [desc] Create new project"
