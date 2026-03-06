@@ -127,7 +127,7 @@ def extract_summary_and_tasks(text):
         payload = {
             "model": "llama-3.1-70b-versatile",
             "messages": [
-                {"role": "system", "content": "You are a highly efficient assistant. Respond in the same language as the transcript (Russian, Uzbek, or English). Give a concise summary and a bulleted list of tasks formatted as '- [ ] task name'."},
+                {"role": "system", "content": "You are a highly efficient assistant. Respond in the same language as the transcript (Russian, Uzbek, or English). Give a concise summary and a bulleted list of tasks formatted exactly as '- [ ] Task Title: Detailed description of the task'."},
                 {"role": "user", "content": prompt}
             ],
             "temperature": 0.3
@@ -147,7 +147,7 @@ def extract_summary_and_tasks(text):
     payload = {
         "model": "llama-3.1-70b-versatile",
         "messages": [
-            {"role": "system", "content": "You are an assistant. Format the final output cleanly. Group all tasks at the bottom as '- [ ] task'."},
+            {"role": "system", "content": "You are an assistant. Format the final output cleanly. Group all tasks at the bottom, strictly formatted as '- [ ] Task Title: Detailed description of the task'."},
             {"role": "user", "content": final_prompt}
         ],
         "temperature": 0.3
@@ -157,24 +157,43 @@ def extract_summary_and_tasks(text):
     return resp.json()["choices"][0]["message"]["content"]
 
 def push_tasks_to_vikunja(analysis_text, filename, dry_run=False):
-    """Parses '- [ ] task name' strings from the text and pushes them to Vikunja using the bash script."""
+    """Parses '- [ ] task name: description' strings from the text and pushes them to Vikunja."""
     import re
-    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*(.+)$", analysis_text, re.MULTILINE)
+    # Match both format with description (separated by colon or dash) and without
+    # Group 1: Title, Group 2: Description (optional)
+    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*([^:\-]+)(?:[:\-]\s*(.+))?$", analysis_text, re.MULTILINE)
     
     if not tasks:
-        return 0
+        # Fallback if LLM used a different format
+        tasks = re.findall(r"^\s*-\s*\[\s*\]\s*(.+)$", analysis_text, re.MULTILINE)
+        if not tasks:
+            return 0
+        
+        # Normalize to tuple (title, empty description)
+        normalized_tasks = [(t, "") for t in tasks if not isinstance(t, tuple)]
+    else:
+        normalized_tasks = tasks
     
     vikunja_script = PROJECT_ROOT / "skills" / "vikunja" / "vikunja.sh"
     added_count = 0
     
-    for task_name in tasks:
+    for task_entry in normalized_tasks:
+        if isinstance(task_entry, tuple):
+            task_title, task_desc = task_entry
+        else:
+            task_title, task_desc = task_entry, ""
+            
         # Clean task name of extra formatting if any (like bolding)
-        clean_name = task_name.replace("**", "").strip()
+        clean_name = task_title.replace("**", "").strip()
         title = f"[Plaud] {clean_name}"
+        
         description = f"Source recording: {filename}"
+        if task_desc:
+            clean_desc = task_desc.replace("**", "").strip()
+            description = f"{clean_desc}\n\n{description}"
         
         if dry_run:
-            print(f"  -> (DRY RUN) Would create Vikunja task: {title}")
+            print(f"  -> (DRY RUN) Would create Vikunja task: {title}\n      Desc: {description.splitlines()[0][:50]}...")
             added_count += 1
             continue
             
