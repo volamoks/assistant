@@ -77,8 +77,56 @@ Required environment variables (set in `.env`):
 
 ## Auto-Monitoring (Cron)
 
-A python script (`skills/plaud/scripts/plaud_monitor.py`) runs periodically via `jobs.json` (every 3 hours from 9:00 to 20:00).
-It automatically checks for new recordings, processes them through Groq Whisper and Llama 3 for translation/summarization tasks, and saves notes to your Obsidian `Inbox`. It'll also capture native Plaud links if they become available.
+A python script (`skills/plaud/scripts/plaud_monitor.py`) runs periodically via `jobs.json` (every 3 hours from 9:00 to 20:00 Tashkent time).
+
+### Features
+
+- **Working Hours Check**: Only runs between 9:00-20:00 Asia/Tashkent timezone
+- **Audio Format Conversion**: Automatically converts opus to mp3 via pydub for better compatibility
+- **Audio Chunking**: Splits long recordings (>25MB or >20min) into chunks for Groq free tier limits
+- **Groq Whisper Transcription**: Multi-language support (ru/uz/en auto-detect)
+- **Llama 3 Analysis**: Extracts summary and action items from transcripts
+- **Vikunja Integration**: Automatically creates tasks from action items
+- **Obsidian Notes**: Saves formatted notes with summary, tasks, and collapsible transcript
+- **Native Plaud Links**: Captures and appends Plaud app links when available
+- **Plaud Transcription Check**: Detects and adds Plaud's native transcription for comparison
+
+### Cron Schedule
+
+```json
+{
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 9-20/3 * * *",
+    "tz": "Asia/Tashkent"
+  }
+}
+```
+
+Runs at: 9:00, 12:00, 15:00, 18:00 (Tashkent time)
+
+### Groq Free Tier Limits
+
+The monitor automatically handles Groq's free tier limits:
+- Max file size: 25MB
+- Max duration: ~20 minutes (1200 seconds)
+
+If audio exceeds these limits, it's automatically split into chunks and transcribed sequentially.
+
+### Important: Device Sync Required
+
+**The Plaud API returns encrypted audio for recordings that haven't been synced to the cloud.**
+
+Before a recording can be processed:
+1. Open the Plaud mobile app
+2. Sync/pull the recording from your Plaud device
+3. Once synced, the API will return the actual audio file
+
+The script will detect encrypted files and skip them with a warning message:
+```
+-> Warning: Audio may be encrypted (wait_pull=0). Device sync required.
+-> Tip: Open Plaud app and sync the recording first.
+```
 
 ## Usage examples
 

@@ -137,9 +137,9 @@
         ]
       },
       "alibaba": {
-        "title": "Alibaba",
-        "description": "Alibaba Cloud Bailian Models",
-        "order": 1,
+        "baseUrl": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+        "apiKey": "sk-sp-40a4d02919d541019ad999cc3fa532c7",
+        "api": "openai-completions",
         "models": [
           {
             "id": "kimi-k2.5",
@@ -179,7 +179,7 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian/qwen3.5-plus"
+        "primary": "bailian/kimi-k2.5"
       },
       "imageModel": {
         "primary": "bailian/qwen3-vl-plus"
@@ -255,13 +255,13 @@
       "blockStreamingDefault": "on",
       "blockStreamingBreak": "text_end",
       "blockStreamingChunk": {
-        "minChars": 10,
-        "maxChars": 50
+        "minChars": 100,
+        "maxChars": 500
       },
       "timeoutSeconds": 1800,
       "heartbeat": {
         "every": "15m",
-        "model": "bailian/qwen3.5-plus"
+        "model": "bailian/kimi-k2.5"
       },
       "subagents": {
         "maxConcurrent": 8,
@@ -273,7 +273,7 @@
         "id": "main",
         "workspace": "/home/node/.openclaw/workspace-main",
         "model": {
-          "primary": "bailian/qwen3.5-plus"
+          "primary": "bailian/kimi-k2.5"
         },
         "subagents": {
           "allowAgents": [
@@ -296,7 +296,7 @@
         "workspace": "/home/node/.openclaw/workspace-coder",
         "agentDir": "/home/node/.openclaw/agents/coder/agent",
         "model": {
-          "primary": "bailian/qwen3-coder-plus"
+          "primary": "bailian/kimi-k2.5"
         }
       },
       {
@@ -368,11 +368,6 @@
     ]
   },
   "tools": {
-    "web": {
-      "search": {
-        "provider": "searxng"
-      }
-    },
     "media": {
       "audio": {
         "enabled": true,

@@ -1,349 +1,253 @@
 #!/usr/bin/env python3
 """
-Plaud Monitor Script
-Checks for new Plaud recordings, transcribes them via Groq Whisper,
-summarizes using Groq Llama3, and saves the output to Obsidian.
+Plaud Monitor — processes new recordings using Plaud's native transcripts.
+
+Strategy:
+  1. List all recordings via Plaud API
+  2. For recordings with is_trans=True (Plaud already transcribed them):
+     → fetch trans_result.segments directly — no audio download needed
+  3. For recordings without a native transcript yet:
+     → skip with a note (will pick up next run when transcript is ready)
+  4. Analyze transcript with LLM, extract tasks → Vikunja + Obsidian note
+
+Working hours: 9:00–20:00 Tashkent time
 """
 
 import os
 import sys
 import json
 import time
-import requests
 from pathlib import Path
-from datetime import datetime
-import subprocess
+from datetime import datetime, time as dt_time
 
-# Add workspace to path to import STT
+# ── Paths ────────────────────────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "workspace"))
-try:
-    from audio.stt import WhisperSTT
-except ImportError:
-    print("Error importing WhisperSTT. Ensure audio/stt.py exists.")
-    sys.exit(1)
+SKILLS_DIR = Path(__file__).resolve().parent
+
+sys.path.insert(0, str(SKILLS_DIR))
 
 PLAUD_TOKEN = os.getenv("PLAUD_TOKEN")
-PLAUD_API_DOMAIN = os.getenv("PLAUD_API_DOMAIN", "https://api-euc1.plaud.ai")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-DATA_DIR = PROJECT_ROOT / "data"
-STATE_FILE = DATA_DIR / "plaud_state.json"
-INBOX_DIR = Path(os.getenv("USER_VAULT_PATH", str(PROJECT_ROOT.parent / "obsidian/vault"))) / "Inbox"
-AUDIO_TMP_DIR = Path("/tmp/plaud_audio")
-
 if not PLAUD_TOKEN:
     print("Error: PLAUD_TOKEN not set")
     sys.exit(1)
 
-if not GROQ_API_KEY:
-    print("Error: GROQ_API_KEY not set")
-    sys.exit(1)
+DATA_DIR = PROJECT_ROOT / "data"
+STATE_FILE = DATA_DIR / "plaud_state.json"
+INBOX_DIR = Path(os.getenv(
+    "USER_VAULT_PATH",
+    str(PROJECT_ROOT.parent / "obsidian/vault")
+)) / "Inbox"
 
-# Ensure directories exist
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 INBOX_DIR.mkdir(parents=True, exist_ok=True)
-AUDIO_TMP_DIR.mkdir(parents=True, exist_ok=True)
 
-HEADERS = {
-    "Authorization": f"Bearer {PLAUD_TOKEN}",
-    "Content-Type": "application/json"
-}
+# ── Imports ───────────────────────────────────────────────────────────────────
+from plaud_client import PlaudClient
+from plaud_analyze import extract_summary_and_tasks
+from plaud_vikunja import push_tasks_to_vikunja
+from plaud_obsidian import format_obsidian_note
 
-def load_state():
+
+# ── State helpers ─────────────────────────────────────────────────────────────
+
+def load_state() -> dict:
     if STATE_FILE.exists():
         try:
-            with open(STATE_FILE, "r") as f:
-                return json.load(f)
+            return json.loads(STATE_FILE.read_text())
         except json.JSONDecodeError:
             return {}
     return {}
 
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=2)
 
-def fetch_files_list():
-    resp = requests.get(f"{PLAUD_API_DOMAIN}/file/simple/web", headers=HEADERS)
-    resp.raise_for_status()
-    data = resp.json()
-    if data.get("code") != 0 and not data.get("data_file_list"):
-        print(f"Error fetching files: {data.get('msg')}")
-        return []
-    return data.get("data_file_list", [])
+def save_state(state: dict):
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(json.dumps(state, indent=2))
 
-def fetch_file_detail(file_id):
-    resp = requests.get(f"{PLAUD_API_DOMAIN}/file/detail/{file_id}", headers=HEADERS)
-    resp.raise_for_status()
-    data = resp.json()
-    if data.get("code") != 0 and not data.get("data"):
-        return None
-    return data.get("data")
 
-def download_audio(file_id, output_path):
-    resp = requests.get(f"{PLAUD_API_DOMAIN}/file/download/{file_id}", headers=HEADERS)
-    resp.raise_for_status()
-    data = resp.json()
-    if data.get("code") != 0 or not data.get("data", {}).get("download_url"):
-        return False
-    
-    download_url = data["data"]["download_url"]
-    audio_resp = requests.get(download_url, stream=True)
-    audio_resp.raise_for_status()
-    
-    with open(output_path, "wb") as f:
-        for chunk in audio_resp.iter_content(chunk_size=8192):
-            f.write(chunk)
-    return True
+# ── Working hours ─────────────────────────────────────────────────────────────
 
-def chunk_text(text, max_chars=20000):
-    """Split text into chunks if it's too long for LLM context."""
-    chunks = []
-    current_chunk = ""
-    for sentence in text.replace("\n", " ").split(". "):
-        if len(current_chunk) + len(sentence) < max_chars:
-            current_chunk += sentence + ". "
-        else:
-            chunks.append(current_chunk.strip())
-            current_chunk = sentence + ". "
-    if current_chunk:
-        chunks.append(current_chunk.strip())
-    return chunks
+def is_within_working_hours() -> bool:
+    try:
+        import zoneinfo
+        tz = zoneinfo.ZoneInfo("Asia/Tashkent")
+        now = datetime.now(tz).time()
+        return dt_time(9, 0) <= now <= dt_time(20, 0)
+    except Exception:
+        return True  # fail open
 
-def extract_summary_and_tasks(text):
-    """Use Groq Llama 3 API to summarize and extract tasks."""
-    url = "https://api.groq.com/openai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    chunks = chunk_text(text)
-    summaries = []
-    
-    for idx, chunk in enumerate(chunks):
-        prompt = f"Analyze the following transcript chunk. Extract the main points and actionable tasks. If there are no tasks, just summarize.\n\nTranscript:\n{chunk}"
-        
-        payload = {
-            "model": "llama-3.1-70b-versatile",
-            "messages": [
-                {"role": "system", "content": "You are a highly efficient assistant. Respond in the same language as the transcript (Russian, Uzbek, or English). Give a concise summary and a bulleted list of tasks formatted exactly as '- [ ] Task Title: Detailed description of the task'."},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.3
-        }
-        
-        resp = requests.post(url, headers=headers, json=payload)
-        resp.raise_for_status()
-        result = resp.json()
-        summaries.append(result["choices"][0]["message"]["content"])
-    
-    if len(summaries) == 1:
-        return summaries[0]
-    
-    # Final pass to combine chunks if there were multiple
-    combined = "\n\n".join(summaries)
-    final_prompt = f"Combine these summaries into a single cohesive summary and a single consolidated task list.\n\nSummaries:\n{combined}"
-    payload = {
-        "model": "llama-3.1-70b-versatile",
-        "messages": [
-            {"role": "system", "content": "You are an assistant. Format the final output cleanly. Group all tasks at the bottom, strictly formatted as '- [ ] Task Title: Detailed description of the task'."},
-            {"role": "user", "content": final_prompt}
-        ],
-        "temperature": 0.3
-    }
-    resp = requests.post(url, headers=headers, json=payload)
-    resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
 
-def push_tasks_to_vikunja(analysis_text, filename, dry_run=False):
-    """Parses '- [ ] task name: description' strings from the text and pushes them to Vikunja."""
-    import re
-    # Match both format with description (separated by colon or dash) and without
-    # Group 1: Title, Group 2: Description (optional)
-    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*([^:\-]+)(?:[:\-]\s*(.+))?$", analysis_text, re.MULTILINE)
-    
-    if not tasks:
-        # Fallback if LLM used a different format
-        tasks = re.findall(r"^\s*-\s*\[\s*\]\s*(.+)$", analysis_text, re.MULTILINE)
-        if not tasks:
-            return 0
-        
-        # Normalize to tuple (title, empty description)
-        normalized_tasks = [(t, "") for t in tasks if not isinstance(t, tuple)]
-    else:
-        normalized_tasks = tasks
-    
-    vikunja_script = PROJECT_ROOT / "skills" / "vikunja" / "vikunja.sh"
-    added_count = 0
-    
-    for task_entry in normalized_tasks:
-        if isinstance(task_entry, tuple):
-            task_title, task_desc = task_entry
-        else:
-            task_title, task_desc = task_entry, ""
-            
-        # Clean task name of extra formatting if any (like bolding)
-        clean_name = task_title.replace("**", "").strip()
-        title = f"[Plaud] {clean_name}"
-        
-        description = f"Source recording: {filename}"
-        if task_desc:
-            clean_desc = task_desc.replace("**", "").strip()
-            description = f"{clean_desc}\n\n{description}"
-        
-        if dry_run:
-            print(f"  -> (DRY RUN) Would create Vikunja task: {title}\n      Desc: {description.splitlines()[0][:50]}...")
-            added_count += 1
-            continue
-            
-        try:
-            # Using the Vikunja wrapper script to create tasks
-            result = subprocess.run(
-                ["bash", str(vikunja_script), "create", title, description],
-                capture_output=True,
-                text=True
-            )
-            
-            if result.returncode == 0:
-                added_count += 1
-            else:
-                print(f"  -> Vikunja push failed for: {title}\n     Error: {result.stderr}")
-        except Exception as e:
-            print(f"  -> Error pushing task '{task_name}' to Vikunja: {e}")
-            
-    return added_count
+# ── Main ──────────────────────────────────────────────────────────────────────
 
-def format_obsidian_note(file_id, filename, created_at, transcript, summary, native_links=None):
-    dt = datetime.fromtimestamp(created_at).strftime("%Y-%m-%d %H:%M")
-    
-    note_content = f"""# Plaud: {filename}
-
-## Metadata
-- **Date**: {dt}
-- **ID**: {file_id}
-- **Source**: Plaud Note
-
-## Summary & Tasks
-{summary}
-
-"""
-    if native_links:
-        note_content += "## Plaud App Links\n"
-        for link in native_links:
-            note_content += f"- [{link['data_title']}]({link['data_link']})\n"
-        note_content += "\n"
-
-    note_content += f"""## Full Transcript
-<details>
-<summary>Click to expand transcript</summary>
-
-{transcript}
-
-</details>
-"""
-    return note_content
-
-def main(dry_run=False):
-    print(f"[{datetime.now()}] Starting Plaud Monitor check...")
-    state = load_state()
-    files = fetch_files_list()
-    
-    if not files:
-        print("No files found or error fetching.")
+def main(dry_run: bool = False, limit: int = None):
+    if not is_within_working_hours():
+        print(f"[{datetime.now()}] Outside working hours (9:00-20:00), skipping...")
         return
 
-    stt = WhisperSTT()
-    processed_count = 0
-    updated_count = 0
+    print(f"[{datetime.now()}] Starting Plaud Monitor check...")
 
-    for f in list(files): # reversed to process oldest first? default order is newest first usually.
+    client = PlaudClient()  # reads PLAUD_TOKEN + PLAUD_API_DOMAIN from env
+
+    # ── Fetch file list ───────────────────────────────────────────────────────
+    try:
+        files = client.list_files()
+    except Exception as e:
+        print(f"Error fetching file list: {e}")
+        return
+
+    if not files:
+        print("No files found.")
+        return
+
+    if limit is not None:
+        files = files[:limit]
+
+    state = load_state()
+    processed_count = 0
+    skipped_no_transcript = 0
+
+    for f in files:
         file_id = f["id"]
         filename = f.get("filename", "Unknown")
-        edit_time = f.get("edit_time", time.time())
-        created_at_dt = datetime.fromtimestamp(edit_time)
-        note_filename = f"Plaud_{created_at_dt.strftime('%Y-%m-%d_%H%M')}_{file_id[:8]}.md"
+        is_trans  = bool(f.get("is_trans"))
+        is_summary = bool(f.get("is_summary"))
+        edit_time = int(f.get("edit_time", time.time()))
+
+        # Already processed → check if AI summary appeared since last run
+        if file_id in state:
+            if is_summary and not state[file_id].get("has_ai_summary"):
+                _try_append_ai_summary(client, file_id, state, dry_run)
+            continue
+
+        # Not yet processed
+        print(f"[{file_id[:8]}] New recording: {filename}")
+
+        if not is_trans:
+            print(f"  → No Plaud transcript yet (is_trans=False). Will retry later.")
+            skipped_no_transcript += 1
+            continue
+
+        if dry_run:
+            print(f"  → (DRY RUN) Would process with native transcript.")
+            continue
+
+        # ── Fetch native transcript ──────────────────────────────────────────
+        print(f"  → Fetching native Plaud transcript...")
+        try:
+            detail_body = client.get_file_details(file_id)
+        except Exception as e:
+            print(f"  → Failed to fetch detail: {e}")
+            continue
+
+        data = detail_body.get("data") or {}
+        tr = data.get("trans_result") or {}
+        segments = tr.get("segments", []) if isinstance(tr, dict) else []
+
+        if not segments:
+            print(f"  → trans_result empty for {file_id[:8]} despite is_trans=True. Skipping.")
+            skipped_no_transcript += 1
+            continue
+
+        transcript = " ".join(s.get("text", "") for s in segments if s.get("text"))
+        print(f"  → Got transcript: {len(transcript)} chars, {len(segments)} segments")
+
+        # ── AI summary from Plaud (if available) ────────────────────────────
+        ai_content = data.get("ai_content") or {}
+        ai_summary_text = ""
+        if ai_content and isinstance(ai_content, dict):
+            # ai_content may have keys like "summary", "action_items", etc.
+            for key in ("summary", "full_summary", "content", "overview"):
+                if ai_content.get(key):
+                    ai_summary_text = str(ai_content[key])
+                    break
+            if not ai_summary_text:
+                ai_summary_text = json.dumps(ai_content, ensure_ascii=False, indent=2)
+            print(f"  → Found Plaud AI summary ({len(ai_summary_text)} chars)")
+
+        # ── LLM analysis + task extraction ───────────────────────────────────
+        print(f"  → Analysing transcript with LLM...")
+        try:
+            analysis = extract_summary_and_tasks(transcript)
+        except Exception as e:
+            print(f"  → Analysis error: {e}")
+            analysis = "Error generating summary."
+
+        # ── Push tasks to Vikunja ──────────────────────────────────────────
+        try:
+            tasks_added = push_tasks_to_vikunja(analysis, filename, dry_run=False)
+            if tasks_added > 0:
+                print(f"  → Pushed {tasks_added} tasks to Vikunja")
+        except Exception as e:
+            print(f"  → Vikunja error: {e}")
+
+        # ── Save Obsidian note ─────────────────────────────────────────────
+        created_dt = datetime.fromtimestamp(edit_time)
+        note_filename = f"Plaud_{created_dt.strftime('%Y-%m-%d_%H%M')}_{file_id[:8]}.md"
         note_path = INBOX_DIR / note_filename
 
-        if file_id not in state:
-            print(f"[{file_id}] New recording found: {filename}")
-            
-            audio_path = AUDIO_TMP_DIR / f"{file_id}.mp3"
-            if not dry_run:
-                print(f"  -> Downloading audio...")
-                if not download_audio(file_id, audio_path):
-                    print("  -> Download failed. Skipping.")
-                    continue
-                
-                print(f"  -> Transcribing with Groq Whisper...")
-                try:
-                    transcript = stt.transcribe(str(audio_path))
-                except Exception as e:
-                    print(f"  -> Transcription error: {e}")
-                    continue
-                finally:
-                    if audio_path.exists():
-                        os.remove(audio_path)
-                
-                print(f"  -> Generating summary & tasks...")
-                try:
-                    analysis = extract_summary_and_tasks(transcript)
-                    print(f"  -> Pushing extracted tasks to Vikunja...")
-                    tasks_added = push_tasks_to_vikunja(analysis, filename, dry_run=False)
-                    if tasks_added > 0:
-                        print(f"  -> Successfully pushed {tasks_added} tasks to Vikunja.")
-                except Exception as e:
-                    print(f"  -> Analysis error: {e}")
-                    analysis = "Error generating summary."
-                
-                # Check for native links right away
-                native_links = []
-                detail = fetch_file_detail(file_id)
-                if detail and detail.get("content_list"):
-                    native_links = detail["content_list"]
-                
-                print(f"  -> Saving to Obsidian: {note_filename}")
-                note_content = format_obsidian_note(file_id, filename, edit_time, transcript, analysis, native_links)
-                with open(note_path, "w") as nf:
-                    nf.write(note_content)
-                
-                state[file_id] = {
-                    "processed_at": time.time(),
-                    "obsidian_file": str(note_path),
-                    "has_native_links": bool(native_links)
-                }
-                save_state(state)
-                processed_count += 1
-                
-            else:
-                print("  -> (DRY RUN) Would download, transcribe, and save.")
-        
-        else:
-            # File already processed. Check if native links became available later.
-            if not state[file_id].get("has_native_links", False):
-                detail = fetch_file_detail(file_id)
-                if detail and detail.get("content_list"):
-                    print(f"[{file_id}] Found new native Plaud links for {filename}")
-                    if not dry_run:
-                        note_path_str = state[file_id].get("obsidian_file")
-                        if note_path_str and os.path.exists(note_path_str):
-                            with open(note_path_str, "a") as nf:
-                                nf.write("\n\n## New Plaud App Links\n")
-                                for link in detail["content_list"]:
-                                    nf.write(f"- [{link['data_title']}]({link['data_link']})\n")
-                            state[file_id]["has_native_links"] = True
-                            save_state(state)
-                            updated_count += 1
-                        else:
-                            print(f"  -> Note file not found at {note_path_str}")
-                    else:
-                        print("  -> (DRY RUN) Would append native links to Obsidian note.")
+        content_list = data.get("content_list") or []
+        note_content = format_obsidian_note(
+            file_id, filename, edit_time, transcript, analysis, content_list
+        )
 
-    if processed_count > 0 or updated_count > 0:
-        print(f"✅ Processed {processed_count} new recordings, updated {updated_count} existing.")
-    else:
-        pass # print("No new recordings.") # Avoid noisy output on cron success with nothing to do
+        # Append Plaud's own AI summary if available
+        if ai_summary_text:
+            note_content += f"\n\n## Plaud AI Summary\n\n{ai_summary_text}\n"
+
+        print(f"  → Saving note: {note_filename}")
+        note_path.write_text(note_content)
+
+        state[file_id] = {
+            "processed_at": time.time(),
+            "obsidian_file": str(note_path),
+            "has_native_transcript": True,
+            "has_ai_summary": bool(ai_summary_text),
+            "transcript_length": len(transcript),
+        }
+        save_state(state)
+        processed_count += 1
+
+    # ── Summary ────────────────────────────────────────────────────────────
+    if processed_count > 0:
+        print(f"✅ Processed {processed_count} new recording(s).")
+    if skipped_no_transcript > 0:
+        print(f"⏳ Skipped {skipped_no_transcript} recording(s) waiting for Plaud transcript.")
+
+
+def _try_append_ai_summary(client: PlaudClient, file_id: str, state: dict, dry_run: bool):
+    """Append newly available Plaud AI summary to existing Obsidian note."""
+    note_path_str = state[file_id].get("obsidian_file")
+    if not note_path_str or not Path(note_path_str).exists():
+        return
+    try:
+        detail_body = client.get_file_details(file_id)
+        ai = (detail_body.get("data") or {}).get("ai_content")
+        if not ai:
+            return
+        ai_text = ""
+        for key in ("summary", "full_summary", "content", "overview"):
+            if isinstance(ai, dict) and ai.get(key):
+                ai_text = str(ai[key])
+                break
+        if not ai_text and isinstance(ai, dict):
+            ai_text = json.dumps(ai, ensure_ascii=False, indent=2)
+        if not ai_text:
+            return
+        if dry_run:
+            print(f"  → (DRY RUN) Would append AI summary to {note_path_str}")
+            return
+        with open(note_path_str, "a") as nf:
+            nf.write(f"\n\n## Plaud AI Summary\n\n{ai_text}\n")
+        state[file_id]["has_ai_summary"] = True
+        save_state(state)
+        print(f"  → Appended Plaud AI summary to existing note.")
+    except Exception as e:
+        print(f"  → Could not fetch AI summary: {e}")
+
 
 if __name__ == "__main__":
-    dry = "--dry-run" in sys.argv
-    main(dry_run=dry)
+    import argparse
+    p = argparse.ArgumentParser(description="Plaud Monitor")
+    p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--limit", type=int, default=None)
+    args = p.parse_args()
+    main(dry_run=args.dry_run, limit=args.limit)

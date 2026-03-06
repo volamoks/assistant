@@ -10,10 +10,11 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     jq \
     bsdmainutils \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Install actualpy and other dependencies globally
-RUN pip3 install --break-system-packages actualpy python-dotenv telethon pandas
+RUN pip3 install --break-system-packages actualpy python-dotenv telethon pandas pydub
 
 # Add a mock host user mapping for the volume bounds and add to dialout
 RUN groupadd -g 20 dialout_host 2>/dev/null || true; \

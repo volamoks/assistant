@@ -19,7 +19,8 @@
         "exec",
         "vikunja",
         "ryot",
-        "email"
+        "email",
+        "telegram"
     ],
     "temperature": 0.7
 }

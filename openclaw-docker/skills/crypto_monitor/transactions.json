@@ -1,0 +1,15 @@
+{
+  "transactions": [
+    {
+      "symbol": "BTC",
+      "type": "buy",
+      "amount": 0.5,
+      "price": 65000.0,
+      "total": 32510.0,
+      "fee": 10.0,
+      "timestamp": "2026-03-06T15:26:12.921197",
+      "notes": "Test DCA buy"
+    }
+  ],
+  "last_updated": "2026-03-06T15:26:12.921263"
+}

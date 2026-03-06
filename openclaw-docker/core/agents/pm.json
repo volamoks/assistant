@@ -18,7 +18,8 @@
     "agent_interviewer",
     "agent_trainer",
     "agent_tester",
-    "telegram_progress"
+    "telegram_progress",
+    "telegram"
   ],
   "temperature": 0.2
 }

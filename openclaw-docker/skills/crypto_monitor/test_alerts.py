@@ -22,6 +22,7 @@ from adaptive_alerts import (
     AdaptiveAlertSystem, Alert, PriceHistory, send_telegram_alert,
     format_alert_for_telegram
 )
+from telegram.notify import TelegramNotifier
 from event_watcher import EventWatcher, WatcherState
 
 

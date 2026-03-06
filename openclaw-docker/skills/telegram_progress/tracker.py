@@ -1,34 +1,19 @@
 import os
 import sys
-import json
-import urllib.request
-import urllib.parse
-from urllib.error import URLError, HTTPError
 
-# Telegram credentials
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+# Import the unified Telegram notifier
+from telegram.notify import TelegramNotifier
+
 WORKSPACE_DIR = "/home/node/.openclaw/workspace"
 STATE_FILE = os.path.join(WORKSPACE_DIR, "telegram_status_msg_id.txt")
 
-def send_request(method, payload):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/{method}"
-    data = json.dumps(payload).encode('utf-8')
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req) as response:
-            return json.loads(response.read().decode('utf-8'))
-    except HTTPError as e:
-        print(f"HTTPError: {e.code} - {e.reason}")
-        print(e.read().decode('utf-8'))
-        return None
-    except URLError as e:
-        print(f"URLError: {e.reason}")
-        return None
 
 def main():
-    if not BOT_TOKEN or not CHAT_ID:
-        print("Error: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set.")
+    # Initialize notifier (reads TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID from env)
+    try:
+        notifier = TelegramNotifier()
+    except ValueError as e:
+        print(f"Error: {e}")
         sys.exit(1)
 
     if len(sys.argv) < 2:
@@ -53,13 +38,11 @@ def main():
 
     if msg_id:
         # Edit existing message
-        payload = {
-            "chat_id": CHAT_ID,
-            "message_id": msg_id,
-            "text": formatted_text,
-            "parse_mode": "Markdown"
-        }
-        resp = send_request("editMessageText", payload)
+        resp = notifier.edit(
+            chat_id=notifier.chat_id,
+            message_id=msg_id,
+            text=formatted_text
+        )
         if resp and resp.get("ok"):
             print(f"Status updated (edited msg {msg_id})")
         else:
@@ -69,12 +52,7 @@ def main():
 
     if not msg_id:
         # Send new message
-        payload = {
-            "chat_id": CHAT_ID,
-            "text": formatted_text,
-            "parse_mode": "Markdown"
-        }
-        resp = send_request("sendMessage", payload)
+        resp = notifier.send(formatted_text)
         if resp and resp.get("ok"):
             new_msg_id = resp["result"]["message_id"]
             with open(STATE_FILE, "w") as f:

@@ -39,6 +39,14 @@
 - **Worker**: ALWAYS cite sources. Output raw Markdown.
 - **All**: If unsure, ASK. Do not hallucinate data.
 
+## 5. Recent Insights (2026-03-06)
+- **Cron Logging**: Паттерн повторяется 2 дня подряд — задача #19 [CONFIG] создана для централизованного логирования
+- **Vikunja**: 11 активных задач (3 [IMPROVE], 8 [IDEA] Post-BNPL, 1 [CONFIG])
+- **Post-BNPL**: 8 задач из Plaud-записей требуют приоритизации на weekly review
+- **Inbox**: Стабильная обработка файлов кроном (8:00, 14:00, 20:00 Ташкент)
+- **Nightly Evolution**: Автоматический анализ задач работает, рекомендации добавлены
+
+---
 # Session Log — 2026-03-04
 _Agent will append actions here throughout the day._
 

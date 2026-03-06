@@ -24,6 +24,7 @@ sys.path.insert(0, '/home/node/.openclaw/skills')
 
 from agent_memory.memory import Memory
 from signal_tracker import SignalTracker
+from telegram.notify import TelegramNotifier
 
 
 @dataclass
@@ -723,7 +724,7 @@ def format_alert_for_telegram(alert: Alert) -> str:
 def send_telegram_alert(alert: Alert, bot_token: Optional[str] = None,
                        chat_id: Optional[str] = None) -> bool:
     """
-    Send alert via Telegram.
+    Send alert via Telegram using TelegramNotifier.
     
     Args:
         alert: Alert to send
@@ -742,24 +743,30 @@ def send_telegram_alert(alert: Alert, bot_token: Optional[str] = None,
     
     message = format_alert_for_telegram(alert)
     
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    payload = {
-        'chat_id': chat_id,
-        'text': message,
-        'parse_mode': 'Markdown',
-        'disable_notification': alert.severity == 'low'
-    }
-    
     try:
-        resp = requests.post(url, json=payload, timeout=10)
-        result = resp.json()
+        notifier = TelegramNotifier(
+            bot_token=bot_token,
+            chat_id=chat_id,
+            parse_mode="Markdown"
+        )
         
-        if result.get('ok'):
+        # Use silent mode for low severity alerts
+        silent = alert.severity == 'low'
+        
+        result = notifier.send(
+            text=message,
+            silent=silent
+        )
+        
+        if result and result.get('ok'):
             print(f"[AdaptiveAlerts] Telegram alert sent for {alert.symbol}")
             return True
         else:
-            print(f"[AdaptiveAlerts] Telegram error: {result.get('description')}")
+            print(f"[AdaptiveAlerts] Telegram error: {result}")
             return False
+    except ValueError as e:
+        print(f"[AdaptiveAlerts] Telegram configuration error: {e}")
+        return False
     except Exception as e:
         print(f"[AdaptiveAlerts] Failed to send Telegram: {e}")
         return False

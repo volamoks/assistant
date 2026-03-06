@@ -20,7 +20,7 @@ HEADERS=(-H "Authorization: Bearer $PLAUD_TOKEN" -H "Content-Type: application/j
 case "$1" in
     list)
         # List all recordings
-        curl -s "${HEADERS[@]}" "$PLAUD_API_DOMAIN/file/simple/web" | jq -r '(.data_file_list // []) | ["ID", "Title", "Created At"], ["---", "---", "---"], (.[] | [.id, .filename, (.edit_time | strftime("%Y-%m-%d %H:%M:%S"))]) | @tsv' | column -t -s $'\t'
+        curl -s "${PLAUD_API_DOMAIN}/file/simple/web" "${HEADERS[@]}" | jq -r '(.data_file_list // []) | ["ID", "Title", "Created At"], ["---", "---", "---"], (.[] | [.id, .filename, (.edit_time | strftime("%Y-%m-%d %H:%M:%S"))]) | @tsv' | column -t -s $'\t'
         ;;
     summary)
         # Get recording details (transcript + summary)
@@ -29,7 +29,7 @@ case "$1" in
             echo "Usage: plaud.sh summary <file_id>"
             exit 1
         fi
-        RESULT=$(curl -s "${HEADERS[@]}" "$PLAUD_API_DOMAIN/file/detail/$FILE_ID")
+        RESULT=$(curl -s "${PLAUD_API_DOMAIN}/file/detail/$FILE_ID" "${HEADERS[@]}")
         echo "$RESULT" | jq -r '.data | if . == null then "Error: File not found" else "# \(.file_name)\n\n**Created At:** \((.start_time / 1000) | strftime("%Y-%m-%d %H:%M:%S"))\n\n## Content Links\n\n\(.content_list[] | "- [\(.data_title)](\(.data_link))")" end'
         ;;
     download)
@@ -41,16 +41,27 @@ case "$1" in
             exit 1
         fi
 
-        echo "Getting download URL for file: $FILE_ID"
-        DOWNLOAD_URL=$(curl -s "${HEADERS[@]}" "$PLAUD_API_DOMAIN/file/download/$FILE_ID" | jq -r '.data.download_url')
-
-        if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-            echo "Error: Failed to get download URL"
-            exit 1
+        echo "Requesting download for file: $FILE_ID"
+        TMP_RESP="/tmp/plaud_resp_$FILE_ID"
+        curl -s -D /tmp/plaud_head_$FILE_ID "${PLAUD_API_DOMAIN}/file/download/$FILE_ID" "${HEADERS[@]}" -o "$TMP_RESP"
+        
+        CTYPE=$(grep -i "content-type" /tmp/plaud_head_$FILE_ID | awk '{print $2}' | tr -d '\r')
+        
+        if [[ "$CTYPE" == *"application/json"* ]]; then
+            DOWNLOAD_URL=$(cat "$TMP_RESP" | jq -r '.data.download_url // empty')
+            if [ -n "$DOWNLOAD_URL" ]; then
+                echo "Downloading from external URL: $DOWNLOAD_URL"
+                curl -L -o "$OUTPUT" "$DOWNLOAD_URL"
+            else
+                MSG=$(cat "$TMP_RESP" | jq -r '.msg // "Unknown error"')
+                echo "Error from API: $MSG"
+                exit 1
+            fi
+        else
+            echo "Direct binary download detected."
+            mv "$TMP_RESP" "$OUTPUT"
         fi
 
-        echo "Downloading to: $OUTPUT"
-        curl -L -o "$OUTPUT" "$DOWNLOAD_URL"
 
         if [ $? -eq 0 ]; then
             FILE_SIZE=$(du -h "$OUTPUT" | cut -f1)

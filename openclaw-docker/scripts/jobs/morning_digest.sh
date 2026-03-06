@@ -11,6 +11,9 @@ cd "$SCRIPT_DIR"
 DATA_DIR="/data/bot/openclaw-docker/data"
 mkdir -p "$DATA_DIR"
 
+# Portfolio tracker path
+PORTFOLIO_TRACKER="/home/node/.openclaw/skills/crypto_monitor/portfolio_tracker.py"
+
 # Create default JSON files if they don't exist
 if [ ! -f "$DATA_DIR/crypto_radar.json" ]; then
     echo '{"status": "no_data", "message": "Crypto radar has not run yet", "timestamp": null}' > "$DATA_DIR/crypto_radar.json"
@@ -21,6 +24,19 @@ if [ ! -f "$DATA_DIR/telegram_monitor.json" ]; then
 fi
 
 echo "=== 🌅 Morning Digest — $(date '+%Y-%m-%d %H:%M') ==="
+echo ""
+
+# ============================================
+# SECTION 0: Crypto Portfolio (Live from Bybit)
+# ============================================
+echo "## 💰 Crypto Portfolio (Bybit)"
+if command -v python3 &> /dev/null; then
+    # Sync and get portfolio summary from Bybit
+    portfolio_summary=$(python3 "$PORTFOLIO_TRACKER" sync 2>/dev/null && python3 "$PORTFOLIO_TRACKER" show 2>/dev/null || echo "  ⚠️ Failed to sync portfolio from Bybit")
+    echo "$portfolio_summary"
+else
+    echo "  (Python3 not available)"
+fi
 echo ""
 
 # ============================================

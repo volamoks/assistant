@@ -1,0 +1,1 @@
+/Users/abror_mac_mini/Projects/bot/plaud-downloader/download.py
