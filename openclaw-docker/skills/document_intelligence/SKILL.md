@@ -1,14 +1,16 @@
 ---
 name: document_intelligence
-description: "Extract and search content from PDF, DOCX, RTF, XLSX, PPTX files stored in Obsidian vault via RAG. Files are auto-indexed nightly. Use obsidian_rag_search for retrieval."
+description: "Extract and search content from PDF, DOC, DOCX, RTF, XLSX, PPTX files stored in Obsidian vault via RAG. Files are auto-indexed nightly. Use obsidian_rag_search for retrieval."
 triggers:
   - read pdf
   - read document
   - extract from docx
+  - extract from doc
   - search in pdf
   - parse document
   - what does the document say
   - find in pdf
+  - read doc file
 ---
 
 # Document Intelligence via RAG

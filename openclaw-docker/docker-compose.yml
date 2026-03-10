@@ -158,6 +158,8 @@ services:
       - ./canvas:/home/node/.openclaw/canvas
       - ./cron:/home/node/.openclaw/cron
       - ./telegram:/home/node/.openclaw/telegram
+      # Gemini CLI credentials — persisted across container rebuilds
+      - ./core/gemini-config:/home/node/.gemini
       # Technical System Vault (My Docs - configs, logs, metadata)
       - "${SYSTEM_VAULT_PATH:-/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs}:/data/obsidian"
       # User Working Vault (abror - daily notes, reports, ideas)
@@ -206,6 +208,9 @@ services:
       - EMAIL_PASS_YANDEX=${EMAIL_PASS_YANDEX}
       - EMAIL_PASS_YAHOO=${EMAIL_PASS_YAHOO}
       - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_GENAI_USE_GCA=true
+      - GEMINI_CONFIG_DIR=/home/node/.gemini
     networks:
       - default
       - jarvis_net
@@ -346,6 +351,33 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  pinchtab:
+    image: pinchtab/pinchtab
+    container_name: pinchtab
+    restart: unless-stopped
+    ports:
+      - "9867:9867"
+    shm_size: '2gb'
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: '1.0'
+    networks:
+      - default
+      - jarvis_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf http://localhost:9867/instances || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     logging:
       driver: "json-file"
       options:

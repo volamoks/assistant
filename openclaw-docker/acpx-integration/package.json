@@ -1,0 +1,11 @@
+{
+  "name": "@openclaw/acpx-provenance",
+  "version": "1.0.0",
+  "description": "Provenance tracking module for ACP server integration",
+  "main": "provenance.js",
+  "scripts": {
+    "test": "node -e \"const { ProvenanceManager, parseProvenanceMode } = require('./provenance'); const m = new ProvenanceManager(parseProvenanceMode('meta+receipt')); m.captureIngress({sessionKey: 'test'}); console.log(m.injectIngress('test')); console.log(m.injectToolCall('read_file')); console.log(m.injectCompletion(100)); console.log(JSON.stringify(m.buildEnvelope(), null, 2));\""
+  },
+  "keywords": ["openclaw", "acp", "provenance", "trace"],
+  "license": "MIT"
+}

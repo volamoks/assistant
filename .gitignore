@@ -77,6 +77,7 @@ router_benchmark_extended.json
 
 # Dev tooling
 .kilocode/
+**/node_modules/
 openclaw-docker/scripts/backup.log
 
 # macOS

@@ -120,7 +120,41 @@ fi
 echo ""
 
 # ============================================
-# SECTION 5: Calendar & Today's Plan
+# SECTION 5: Skill Researcher (last night's run)
+# ============================================
+echo "## 🔬 Skill Researcher"
+RESEARCHER_STATE="/data/bot/openclaw-docker/scripts/skill_researcher_state.json"
+if [ -f "$RESEARCHER_STATE" ]; then
+    python3 - <<'PYEOF'
+import json, os, datetime
+path = "/data/bot/openclaw-docker/scripts/skill_researcher_state.json"
+try:
+    data = json.load(open(path))
+    last_run = data.get("last_run")
+    processed = data.get("processed", {})
+    if last_run:
+        ts = datetime.datetime.fromisoformat(last_run)
+        print(f"  Last run: {ts.strftime('%Y-%m-%d %H:%M')}")
+    # count improved (files processed in last 24h)
+    cutoff = datetime.datetime.now().timestamp() - 86400
+    recent = [(k, v) for k, v in processed.items() if v > cutoff]
+    if recent:
+        print(f"  Processed last 24h: {len(recent)} scripts")
+        for path_str, ts_val in sorted(recent, key=lambda x: x[1], reverse=True)[:5]:
+            rel = path_str.split("skills/")[-1] if "skills/" in path_str else path_str
+            print(f"    • {rel}")
+    else:
+        print("  No scripts processed in last 24h")
+except Exception as e:
+    print(f"  (Could not read state: {e})")
+PYEOF
+else
+    echo "  (Skill researcher has not run yet)"
+fi
+echo ""
+
+# ============================================
+# SECTION 6: Calendar & Today's Plan
 # ============================================
 echo "## 📅 Today's Calendar"
 if [ -f "/home/node/.openclaw/shared/google_token.json" ]; then

@@ -1,0 +1,19 @@
+{
+  "sessionId": "2961cf4f-9cec-41da-89e7-f36a58272b8c",
+  "projectHash": "f53b52ad6d21cceb72dfa78fb67614fe14f110c58e68412b01508d6a485501c3",
+  "startTime": "2026-03-10T17:16:42.231Z",
+  "lastUpdated": "2026-03-10T17:16:42.231Z",
+  "messages": [
+    {
+      "id": "25c7f99d-609a-47e0-9cb7-6a68438800fb",
+      "timestamp": "2026-03-10T17:16:42.231Z",
+      "type": "user",
+      "content": [
+        {
+          "text": "Say exactly: ACP works"
+        }
+      ]
+    }
+  ],
+  "kind": "main"
+}

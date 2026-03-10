@@ -53,6 +53,15 @@ fi
 # Step 2: Query ChromaDB for similar skills
 echo "🔎 Querying ChromaDB..."
 
+# Resolve collection UUID (ChromaDB v0.5+ requires UUID for query endpoint)
+COLLECTION_UUID=$(curl -s "${CHROMA_HOST}/api/v1/collections/${COLLECTION_NAME}" 2>/dev/null | jq -r '.id // empty')
+
+if [ -z "$COLLECTION_UUID" ] || [ "$COLLECTION_UUID" = "null" ]; then
+  echo "Error: Could not find ChromaDB collection '${COLLECTION_NAME}'"
+  echo "Make sure ChromaDB is running and skills are indexed (run skills_index.py)."
+  exit 1
+fi
+
 # Build the query payload
 QUERY_PAYLOAD=$(cat <<EOF
 {
@@ -63,7 +72,7 @@ QUERY_PAYLOAD=$(cat <<EOF
 EOF
 )
 
-SEARCH_RESPONSE=$(curl -s -X POST "${CHROMA_HOST}/api/v1/collections/${COLLECTION_NAME}/query" \
+SEARCH_RESPONSE=$(curl -s -X POST "${CHROMA_HOST}/api/v1/collections/${COLLECTION_UUID}/query" \
   -H "Content-Type: application/json" \
   -d "$QUERY_PAYLOAD" 2>/dev/null) || {
   echo "Error: Failed to query ChromaDB at ${CHROMA_HOST}"

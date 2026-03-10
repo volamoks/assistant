@@ -754,6 +754,7 @@ complete -c openclaw -n "__fish_seen_subcommand_from acp" -l session-label -d 'D
 complete -c openclaw -n "__fish_seen_subcommand_from acp" -l require-existing -d 'Fail if the session key/label does not exist'
 complete -c openclaw -n "__fish_seen_subcommand_from acp" -l reset-session -d 'Reset the session key before first use'
 complete -c openclaw -n "__fish_seen_subcommand_from acp" -l no-prefix-cwd -d 'Do not prefix prompts with the working directory'
+complete -c openclaw -n "__fish_seen_subcommand_from acp" -l provenance -d 'Provenance mode: off|meta|meta+receipt'
 complete -c openclaw -n "__fish_seen_subcommand_from acp" -s v -l verbose -d 'Verbose logging to stderr'
 complete -c openclaw -n "__fish_seen_subcommand_from client" -l cwd -d 'Working directory for the ACP session'
 complete -c openclaw -n "__fish_seen_subcommand_from client" -l server -d 'ACP server command (default: openclaw)'

@@ -69,7 +69,26 @@ def ensure_markitdown():
         return False
 
 def convert_to_text(file_path: Path) -> str | None:
-    """Convert doc to markdown text using markitdown."""
+    """Convert doc to markdown text using markitdown (.docx) or catdoc (.doc)."""
+    ext = file_path.suffix.lower()
+    
+    # .doc (old Word format) → catdoc
+    if ext == ".doc":
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["catdoc", str(file_path)],
+                capture_output=True, text=True, timeout=60
+            )
+            if result.returncode == 0 and len(result.stdout.strip()) > 50:
+                return result.stdout.strip()
+            log(f"  ⚠️  catdoc empty/failed for {file_path.name}")
+            return None
+        except Exception as e:
+            log(f"  ❌ catdoc failed for {file_path.name}: {e}")
+            return None
+    
+    # .docx and others → markitdown
     try:
         from markitdown import MarkItDown
         md = MarkItDown(enable_plugins=False)

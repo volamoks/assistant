@@ -1,0 +1,118 @@
+# Karpathy Autoresearch Configuration
+# Autonomous self-improvement cycle for OpenClaw agents
+
+# ── Analysis Settings ──────────────────────────────────────────────────────────
+analysis:
+  days_back: 7                    # How many days of logs to analyze
+  min_sessions: 3                 # Minimum sessions to analyze
+  max_sessions: 100               # Maximum sessions to analyze
+  error_patterns:
+    - "error"
+    - "failed"
+    - "timeout"
+    - "❌"
+    - "exception"
+    - "traceback"
+    - "crash"
+    - "broken"
+  success_patterns:
+    - "✅"
+    - "success"
+    - "completed"
+    - "done"
+    - "finished"
+  tool_patterns:
+    - "tool_calls"
+    - "sessions_spawn"
+    - "subagents"
+    - "exec"
+    - "read"
+    - "write"
+
+# ── Hypothesis Generation ─────────────────────────────────────────────────────
+hypothesis:
+  max_hypotheses: 5               # Max hypotheses to generate per run
+  min_confidence: 0.6             # Minimum confidence threshold (0-1)
+  categories:
+    - prompt_improvement           # Improve system prompts
+    - tool_optimization            # Optimize tool usage
+    - workflow_enhancement         # Improve workflows
+    - error_handling               # Better error handling
+    - performance_tuning           # Speed/memory optimizations
+  llm_model: "ollama/qwen3.5:9b"  # Model for hypothesis generation (local)
+
+# ── A/B Testing ────────────────────────────────────────────────────────────────
+testing:
+  iterations: 50                  # Test iterations per hypothesis (5 → 50 for night mode)
+  success_threshold: 0.8          # Success rate to auto-apply (0-1)
+  test_timeout: 60                # Seconds per test iteration
+  parallel_tests: 5               # Parallel test workers (2 → 5 for night mode)
+  validation_model: "ollama/qwen3.5:9b"  # 2-stage validation (local)
+  cheap_validation_model: "ollama/qwen3.5:9b"  # Cheap model for initial validation (local)
+  use_real_harness: true          # Use real A/B test harness (not simulation)
+  min_samples: 10                 # Minimum sessions per group for real tests
+  metrics:
+    - success_rate
+    - response_time
+    - token_usage
+    - error_rate
+
+# ── Application ─────────────────────────────────────────────────────────────────
+application:
+  backup_before_apply: true
+  auto_apply: false               # Require manual approval
+  max_changes_per_run: 3          # Prevent cascade failures
+  rollback_on_failure: true       # Auto-rollback if issues detected
+  approval_timeout_hours: 24      # Hours to wait for approval
+
+# ── Reporting ───────────────────────────────────────────────────────────────────
+reporting:
+  telegram: true
+  chat_id: ""                     # Set via TELEGRAM_CHAT_ID env var
+  include_raw_logs: false
+  include_full_context: false
+  report_template: "compact"      # compact, detailed, verbose
+
+# ── Paths ──────────────────────────────────────────────────────────────────────
+paths:
+  memory_dir: "/data/obsidian/vault/Bot"
+  skills_dir: "/home/node/.openclaw/skills"
+  prompts_dir: "/home/node/.openclaw/prompts"
+  temp_dir: "/tmp"
+  output_dir: "/home/node/.openclaw/skills/karpathy-autoresearch/output"
+
+# ── LLM Configuration ──────────────────────────────────────────────────────────
+llm:
+  base_url: "http://litellm-proxy:4000"
+  api_key: ""                     # Set via LITELLM_MASTER_KEY env var
+  default_model: "ollama/qwen3.5:9b"
+  analysis_model: "ollama/qwen3.5:9b"
+  testing_model: "ollama/qwen3.5:9b"        # Local model for testing (cheaper)
+  temperature: 0.3
+  max_tokens: 2000
+
+# ── Feature Discovery ──────────────────────────────────────────────────────────
+feature_discovery:
+  enabled: true
+  analyze_patterns:
+    - repeated_user_requests       # "сделай X" в логах
+    - manual_workarounds           # ручная работа → автоматизировать
+    - missing_integrations         # "нет API для Y"
+  llm_model: "ollama/qwen3.5:9b"
+  max_features_per_run: 2
+  require_approval: true
+
+# ── Night Mode ─────────────────────────────────────────────────────────────────
+night_mode:
+  enabled: true
+  start_hour: 2                   # 02:00 UTC (07:00 Tashkent)
+  end_hour: 6                     # 06:00 UTC
+  extended_iterations: true       # Use 50 iterations instead of 5
+  parallel_workers: 5             # Use 5 workers instead of 2
+
+# ── Advanced ───────────────────────────────────────────────────────────────────
+advanced:
+  debug: false
+  dry_run: false                  # Run without making changes
+  verbose: false
+  log_level: "INFO"               # DEBUG, INFO, WARNING, ERROR

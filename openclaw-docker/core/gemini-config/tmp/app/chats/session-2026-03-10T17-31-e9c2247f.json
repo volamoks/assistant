@@ -1,0 +1,35 @@
+{
+  "sessionId": "e9c2247f-7cea-499a-8f39-f0e230f399a2",
+  "projectHash": "f53b52ad6d21cceb72dfa78fb67614fe14f110c58e68412b01508d6a485501c3",
+  "startTime": "2026-03-10T17:31:11.950Z",
+  "lastUpdated": "2026-03-10T17:31:13.388Z",
+  "messages": [
+    {
+      "id": "89229a0e-8042-4328-b84c-0ff4c90ed2f0",
+      "timestamp": "2026-03-10T17:31:11.950Z",
+      "type": "user",
+      "content": [
+        {
+          "text": "Reply with just: OK"
+        }
+      ]
+    },
+    {
+      "id": "7fb196b2-6a31-45ff-ac2c-71222b8635ca",
+      "timestamp": "2026-03-10T17:31:13.388Z",
+      "type": "gemini",
+      "content": "OK",
+      "thoughts": [],
+      "tokens": {
+        "input": 6955,
+        "output": 1,
+        "cached": 0,
+        "thoughts": 24,
+        "tool": 0,
+        "total": 6980
+      },
+      "model": "gemini-3-flash-preview"
+    }
+  ],
+  "kind": "main"
+}

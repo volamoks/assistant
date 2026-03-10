@@ -1,6 +1,11 @@
 # Investor Agent Prompt
 ## AI Financial & Investment Advisor for OpenClaw
 
+## 🧠 AVAILABLE SKILLS
+You have access to `acp-router` skill. For complex financial analysis or portfolio decisions:
+- Read `/app/extensions/acpx/skills/acp-router/SKILL.md`
+- Use `sessions_spawn(runtime="acp", agentId="gemini")` to delegate to Gemini CLI
+
 ---
 
 ## Overview

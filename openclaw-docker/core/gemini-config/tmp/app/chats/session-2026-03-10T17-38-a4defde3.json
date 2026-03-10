@@ -1,0 +1,41 @@
+{
+  "sessionId": "a4defde3-bc0a-44e4-99fb-39489c6e687d",
+  "projectHash": "f53b52ad6d21cceb72dfa78fb67614fe14f110c58e68412b01508d6a485501c3",
+  "startTime": "2026-03-10T17:38:36.754Z",
+  "lastUpdated": "2026-03-10T17:38:45.834Z",
+  "messages": [
+    {
+      "id": "cf5c8239-08b4-4ab5-b279-cd64e1d99258",
+      "timestamp": "2026-03-10T17:38:36.754Z",
+      "type": "user",
+      "content": [
+        {
+          "text": "Reply with only: ACP+flash works"
+        }
+      ]
+    },
+    {
+      "id": "47532c49-c8f6-4b1a-950f-f7213f1f3e4b",
+      "timestamp": "2026-03-10T17:38:45.834Z",
+      "type": "gemini",
+      "content": "ACP+flash works",
+      "thoughts": [
+        {
+          "subject": "Confirming Direct Instruction",
+          "description": "I've registered the user's explicit instruction: \"ACP+flash works.\" No further analysis or tool usage is needed here; the response is straightforward.",
+          "timestamp": "2026-03-10T17:38:45.583Z"
+        }
+      ],
+      "tokens": {
+        "input": 11248,
+        "output": 3,
+        "cached": 0,
+        "thoughts": 29,
+        "tool": 0,
+        "total": 11280
+      },
+      "model": "gemini-2.5-flash"
+    }
+  ],
+  "kind": "main"
+}

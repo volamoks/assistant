@@ -451,3 +451,6 @@ echo "📋 План реализации: Claw/possible_improvements/docker-arch
 # Output the summary
 echo ""
 cat "$SUMMARY_FILE"
+
+# Send to Telegram directly
+python3 /data/bot/openclaw-docker/skills/telegram/notify.py "$(cat $SUMMARY_FILE)" 2>/dev/null || true

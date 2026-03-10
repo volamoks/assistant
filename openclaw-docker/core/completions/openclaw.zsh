@@ -1645,6 +1645,7 @@ _openclaw_acp() {
     "--require-existing[Fail if the session key/label does not exist]" \
     "--reset-session[Reset the session key before first use]" \
     "--no-prefix-cwd[Do not prefix prompts with the working directory]" \
+    "--provenance[Provenance mode: off|meta|meta+receipt]" \
     "(--verbose -v)"{--verbose,-v}"[Verbose logging to stderr]" \
     "1: :_values 'command' 'client[Run an interactive ACP client against the local ACP bridge]'" \
     "*::arg:->args"

@@ -1,0 +1,7 @@
+{
+  "daily_limit": 1000000,
+  "monthly_limit": 10000000,
+  "tokens": 1000000,
+  "requests": 100,
+  "last_updated": "2026-03-10T16:40:40.910219"
+}

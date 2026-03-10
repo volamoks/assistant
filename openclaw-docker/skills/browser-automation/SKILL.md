@@ -1,43 +1,71 @@
 ---
 name: browser-automation
-description: Автоматизация браузера: скриншоты, клики, формы, скрейпинг. Use when: нужно зайти на сайт, сделать скриншот, заполнить форму, скачать данные, спарсить контент.
+description: Автоматизация браузера через accessibility tree (дёшево и быстро) или скриншоты (для визуальных задач). Primary tool: PinchTab. Fallback: browserless.
+triggers:
+  - зайди на сайт
+  - открой страницу
+  - спарси
+  - скриншот
+  - заполни форму
+  - кликни
+  - browser
+  - navigate
 ---
 
 # Browser Automation
 
-## Что делает
-- Открывает страницы в браузере
-- Делает скриншоты
-- Заполняет формы
-- Кликает элементы
-- Скачивает файлы
-- Парсит контент
+## Инструменты
 
-## Команды
+| Инструмент | Адрес | Когда использовать |
+|---|---|---|
+| **PinchTab** | `http://pinchtab:9867` | 90% задач — парсинг, клики, формы (~800 токенов/страница) |
+| **Browserless** | `http://browserless:3000` | Скриншоты, сложные JS-сайты, визуальные задачи |
 
-### Скриншоты
-```
-сделай скриншот сайта example.com
-сфоткай главную страницу
-```
+## PinchTab (основной)
 
-### Формы
-```
-зайди в Jira, заполни тикет
-отправь форму обратной связи
+### Навигация и чтение
+```bash
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh navigate "https://example.com"
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh snapshot
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh text
 ```
 
-### Парсинг
-```
-спарь цены с сайта X
-собери контакты со страницы
+### Действия
+```bash
+# Клик по элементу из снапшота (e0, e1, e2...)
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh action click e5
+
+# Ввод текста
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh action fill e3 "текст"
+
+# Нажатие клавиши
+bash /home/node/.openclaw/skills/browser-automation/pinchtab.sh action press e0 Enter
 ```
 
-### Навигация
-```
-зайди на мой банк, скачай выписку
-открой Confluence, найди страницу X
+### Типичный workflow
+1. `navigate` → открыть страницу
+2. `snapshot` → получить accessibility tree (элементы e0, e1, e2...)
+3. `action click eN` → кликнуть нужный элемент
+4. `snapshot` / `text` → проверить результат
+
+## Browserless (скриншоты и fallback)
+
+```bash
+# Скриншот через CDP
+curl -s http://browserless:3000/screenshot \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}' -o /tmp/screenshot.png
 ```
 
-## Интеграция
-Использует browserless (http://browserless:3000)
+## Примеры задач
+
+```
+# Парсинг цен
+navigate → snapshot → найти элементы с ценами → text
+
+# Логин на сайт
+navigate login page → snapshot → action fill email/password → action click submit
+
+# Скачать таблицу
+navigate → action click "Export" → text
+```

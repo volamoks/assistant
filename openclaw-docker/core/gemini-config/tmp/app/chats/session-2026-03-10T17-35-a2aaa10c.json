@@ -1,0 +1,19 @@
+{
+  "sessionId": "a2aaa10c-3ed4-4093-95ef-a335a86768c2",
+  "projectHash": "f53b52ad6d21cceb72dfa78fb67614fe14f110c58e68412b01508d6a485501c3",
+  "startTime": "2026-03-10T17:35:31.924Z",
+  "lastUpdated": "2026-03-10T17:35:31.924Z",
+  "messages": [
+    {
+      "id": "2b9bc888-02a1-4c34-896d-426b17e8e4d9",
+      "timestamp": "2026-03-10T17:35:31.924Z",
+      "type": "user",
+      "content": [
+        {
+          "text": "auth login"
+        }
+      ]
+    }
+  ],
+  "kind": "main"
+}
