@@ -155,9 +155,25 @@ model_list:
       api_key: os.environ/DASHSCOPE_API_KEY
 
   # === Google Gemini (direct API) ===
+  # Pro models - no daily limit (use API key, not OAuth)
+  - model_name: gemini/gemini-3.1-pro-preview
+    litellm_params:
+      model: gemini/gemini-3.1-pro-preview
+      api_key: os.environ/GEMINI_API_KEY
+
   - model_name: gemini/gemini-2.5-pro
     litellm_params:
       model: gemini/gemini-2.5-pro
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: gemini/gemini-2.5-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: gemini/gemini-3-flash-preview
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
       api_key: os.environ/GEMINI_API_KEY
 
   - model_name: gemini/gemini-2.0-flash

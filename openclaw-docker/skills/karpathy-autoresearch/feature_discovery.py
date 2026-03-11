@@ -264,9 +264,13 @@ Output as JSON with "features" array."""
 
 def discover_features(
     days_back: int = 7,
-    memory_dir: Path = Path("/home/node/.openclaw/workspace-main/memory")
+    memory_dir: Path = None
 ) -> Dict[str, Any]:
     """Run full feature discovery pipeline."""
+    if memory_dir is None:
+        config = load_config()
+        config_paths = config.get("paths", {})
+        memory_dir = Path(config_paths.get("memory_dir", "/data/obsidian/Claw/Memory"))
     
     print(f"🔍 Feature Discovery: analyzing last {days_back} days...")
     
@@ -350,16 +354,23 @@ def main():
     )
     parser.add_argument("--days", type=int, default=7, help="Days of logs to analyze")
     parser.add_argument("--output", type=Path, default=Path("/tmp/karpathy_features.json"))
-    parser.add_argument("--memory-dir", type=Path, 
-                        default=Path("/home/node/.openclaw/workspace-main/memory"))
+    parser.add_argument("--memory-dir", type=Path, default=None, help="Memory directory (defaults to config)")
     parser.add_argument("--no-llm", action="store_true", help="Skip LLM analysis")
     args = parser.parse_args()
     
     print("🚀 Feature Discovery Pipeline")
     print("=" * 60)
     
+    # Load config to get memory_dir
+    config = load_config()
+    if args.memory_dir is None:
+        config_paths = config.get("paths", {})
+        memory_dir = Path(config_paths.get("memory_dir", "/data/obsidian/Claw/Memory"))
+    else:
+        memory_dir = args.memory_dir
+    
     # Run discovery
-    results = discover_features(args.days, args.memory_dir)
+    results = discover_features(args.days, memory_dir)
     
     if "error" in results:
         print(f"❌ {results['error']}")

@@ -3,8 +3,8 @@
 
 set -e
 
-PROJECT_DIR="/Users/abror_mac_mini/Projects/bot"
-OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/vault/Bot/crash-configs"
+PROJECT_DIR="/data/bot/openclaw-docker"
+OBSIDIAN_DIR="/data/obsidian/vault/Bot/crash-configs"
 CONTAINER_NAME="openclaw-latest"
 
 echo "=== OpenClaw Manual Recovery ==="
@@ -19,21 +19,37 @@ mkdir -p "$OBSIDIAN_DIR"
 
 DIFF=$(git diff openclaw-docker/ 2>/dev/null)
 MODIFIED=$(git status --short openclaw-docker/ | grep -v "^?" | awk '{print $2}' | tr '\n' ', ')
+GATEWAY_LOG=$(tail -100 /home/node/.openclaw/gateway.log 2>/dev/null | grep -iE "error|warn|fatal|crash" | tail -20)
 
 cat > "$CRASH_FILE" <<EOF
 # Crash Config — $TIMESTAMP
 
 **Trigger:** manual /recover
 **Modified files:** ${MODIFIED:-none}
+**Container:** $CONTAINER_NAME
 
 ## Git Diff (что изменил бот)
 
 \`\`\`diff
 ${DIFF:-No changes detected}
 \`\`\`
+
+## Gateway Errors (last 20)
+
+\`\`\`
+${GATEWAY_LOG:-No recent errors in gateway.log}
+\`\`\`
+
+## Recovery Actions Taken
+
+1. Saved this crash config
+2. Ran \`git checkout -- openclaw-docker/\`
+3. Ran \`docker restart $CONTAINER_NAME\`
+
+---
 EOF
 
-echo "Crash config saved: Bot/crash-configs/$TIMESTAMP-crash.md"
+echo "✅ Crash config saved: Bot/crash-configs/$TIMESTAMP-crash.md"
 echo ""
 # -------------------------------------------------------
 

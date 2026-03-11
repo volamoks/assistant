@@ -500,7 +500,7 @@
         }
       },
       "acpx": {
-        "enabled": false
+        "enabled": true
       },
       "google-gemini-cli-auth": {
         "enabled": true

@@ -252,7 +252,7 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze session logs for patterns")
     parser.add_argument("--days", type=int, default=7, help="Days of logs to analyze")
     parser.add_argument("--output", type=Path, default=Path("/tmp/karpathy_patterns.json"))
-    parser.add_argument("--memory-dir", type=Path, default=Path("/home/node/.openclaw/workspace-main/memory"))
+    parser.add_argument("--memory-dir", type=Path, default=None, help="Memory directory (defaults to config)")
     parser.add_argument("--no-llm", action="store_true", help="Skip LLM analysis")
     args = parser.parse_args()
     
@@ -261,8 +261,15 @@ def main():
     # Load config
     config = load_config()
     
+    # Get memory dir from config or use default
+    if args.memory_dir is None:
+        config_paths = config.get("paths", {})
+        memory_dir = Path(config_paths.get("memory_dir", "/data/obsidian/Claw/Memory"))
+    else:
+        memory_dir = args.memory_dir
+    
     # Get memory files
-    memory_files = get_memory_files(args.days, args.memory_dir)
+    memory_files = get_memory_files(args.days, memory_dir)
     print(f"📁 Found {len(memory_files)} memory files")
     
     if not memory_files:

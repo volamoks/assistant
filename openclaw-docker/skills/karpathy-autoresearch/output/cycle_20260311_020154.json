@@ -1,0 +1,10 @@
+{
+  "started_at": "2026-03-11T02:01:53.978624",
+  "mode": "night",
+  "steps": {
+    "analysis": {
+      "status": "failed"
+    }
+  },
+  "success": false
+}

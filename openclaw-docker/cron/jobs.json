@@ -14,10 +14,8 @@
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
-        "kind": "agentTurn",
-        "message": "Run the morning digest script and send the output to Telegram:\nbash: /data/bot/openclaw-docker/scripts/jobs/morning_digest.sh",
-        "thinking": "low",
-        "timeoutSeconds": 90
+        "kind": "systemEvent",
+        "text": "bash: /data/bot/openclaw-docker/scripts/cron/morning_digest.sh"
       },
       "delivery": {
         "mode": "announce",
@@ -25,16 +23,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773201600000,
-        "lastRunAtMs": 1773115200014,
-        "lastStatus": "ok",
-        "lastDurationMs": 34004,
-        "consecutiveErrors": 0,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "nextRunAtMs": 1773288000000,
+        "lastRunAtMs": 1773201600035,
+        "lastStatus": "error",
+        "lastDurationMs": 90008,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773115234018
+      "updatedAtMs": 1773201690043
     },
     {
       "id": "intraday-snapshot",
@@ -58,16 +56,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773111600033,
+        "nextRunAtMs": 1773284400000,
+        "lastRunAtMs": 1773198000040,
         "lastStatus": "ok",
-        "lastDurationMs": 50232,
+        "lastDurationMs": 14457,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773111650265
+      "updatedAtMs": 1773198014497
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -91,16 +89,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773183600000,
-        "lastStatus": "ok",
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1773151468349,
-        "lastDurationMs": 136331,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773270000000,
+        "lastStatus": "error",
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1773183600025,
+        "lastDurationMs": 300014,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-requested",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773151604680
+      "updatedAtMs": 1773183900039
     },
     {
       "id": "crash-analysis",
@@ -121,17 +119,16 @@
         "timeoutSeconds": 180
       },
       "state": {
-        "nextRunAtMs": 1773180000000,
+        "nextRunAtMs": 1773241200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773179400039,
+        "lastRunAtMs": 1773240600027,
         "lastStatus": "ok",
-        "lastDurationMs": 12108,
+        "lastDurationMs": 17535,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773180000018
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773179412147,
+      "updatedAtMs": 1773240617562,
       "delivery": {
         "mode": "none"
       }
@@ -158,16 +155,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773111672734,
-        "lastStatus": "error",
-        "lastDurationMs": 90036,
+        "nextRunAtMs": 1773284400000,
+        "lastRunAtMs": 1773198021738,
+        "lastStatus": "ok",
+        "lastDurationMs": 13472,
         "consecutiveErrors": 0,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-requested",
-        "lastError": "replaced with python script"
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773111762770
+      "updatedAtMs": 1773198035210
     },
     {
       "id": "telegram-dashboard",
@@ -191,16 +188,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773199800000,
-        "lastRunAtMs": 1773113419007,
+        "nextRunAtMs": 1773286200000,
+        "lastRunAtMs": 1773199820253,
         "lastStatus": "ok",
-        "lastDurationMs": 34498,
+        "lastDurationMs": 33137,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773113453505
+      "updatedAtMs": 1773199853390
     },
     {
       "id": "vault-gardening",
@@ -256,17 +253,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773180000000,
+        "nextRunAtMs": 1773241200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773178220929,
+        "lastRunAtMs": 1773239420390,
         "lastStatus": "ok",
-        "lastDurationMs": 17566,
+        "lastDurationMs": 16629,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773180000018
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773178238495
+      "updatedAtMs": 1773239437019
     },
     {
       "id": "finance-enrichment",
@@ -357,16 +353,16 @@
         "mode": "none"
       },
       "state": {
-        "consecutiveErrors": 4,
-        "nextRunAtMs": 1773180000000,
-        "lastRunAtMs": 1773093717345,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 60031,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773180000018
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773266400000,
+        "lastRunAtMs": 1773180152133,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 90977,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773093777376
+      "updatedAtMs": 1773180243110
     },
     {
       "id": "context-logger",
@@ -425,20 +421,20 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
+        "nextRunAtMs": 1773284400000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773111790363,
+        "lastRunAtMs": 1773198045064,
         "lastRunStatus": "ok",
-        "lastDurationMs": 191043,
+        "lastDurationMs": 103123,
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1773111981406
+      "updatedAtMs": 1773198148187
     },
     {
       "id": "watchdog",
-      "agentId": "coder",
+      "agentId": "main",
       "name": "OpenClaw Watchdog",
       "enabled": true,
       "schedule": {
@@ -446,27 +442,22 @@
         "expr": "*/5 * * * *",
         "tz": "Asia/Tashkent"
       },
-      "sessionTarget": "isolated",
+      "sessionTarget": "main",
       "wakeMode": "now",
       "payload": {
-        "kind": "agentTurn",
-        "message": "SILENT TASK — only alert if restart occurred.\nbash: bash /data/bot/openclaw-docker/scripts/watchdog.sh\n\nIf output contains 'restarting' or 'failure' → send brief alert to Telegram using:\n```bash\npython3 /data/bot/openclaw-docker/skills/telegram/notify.py \"⚠️ OpenClaw Gateway Alert\\n\\n[restart/failure details]\"\n```\n\nIf gateway is healthy → complete silently, no output."
-      },
-      "delivery": {
-        "mode": "none"
+        "kind": "systemEvent",
+        "text": "SILENT TASK. bash: /data/bot/openclaw-docker/scripts/cron/watchdog.sh"
       },
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773179700029,
+        "lastRunAtMs": 1773240900051,
         "lastRunStatus": "ok",
-        "lastDurationMs": 15906,
-        "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773180000000,
-        "lastDelivered": false,
-        "runningAtMs": 1773180000018
+        "lastDurationMs": 48836,
+        "lastDeliveryStatus": "not-requested",
+        "nextRunAtMs": 1773241200000
       },
-      "updatedAtMs": 1773179715935
+      "updatedAtMs": 1773240948887
     },
     {
       "id": "git-backup",
@@ -474,9 +465,10 @@
       "name": "Git Backup",
       "enabled": true,
       "schedule": {
+        "expr": "0 * * * *",
         "kind": "cron",
-        "expr": "0 3 * * *",
-        "tz": "Asia/Tashkent"
+        "tz": "Asia/Tashkent",
+        "staggerMs": 300000
       },
       "sessionTarget": "isolated",
       "wakeMode": "now",
@@ -490,16 +482,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773180000000,
-        "lastStatus": "error",
+        "nextRunAtMs": 1773241219024,
+        "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773093815355,
-        "lastRunStatus": "error",
-        "lastDurationMs": 120008,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773180000018
+        "lastRunAtMs": 1773180253976,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 85675,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773093935363
+      "updatedAtMs": 1773240216167
     },
     {
       "id": "docker-arch-analyzer",
@@ -523,16 +515,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastStatus": "error",
+        "nextRunAtMs": 1773284400000,
+        "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773112000174,
-        "lastRunStatus": "error",
-        "lastDurationMs": 53379,
-        "lastDeliveryStatus": "not-requested",
-        "lastError": "delivery mode changed to notify.py"
+        "lastRunAtMs": 1773198156776,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 17950,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773112053553
+      "updatedAtMs": 1773198174726
     },
     {
       "id": "31eb68a9-4695-4749-996d-52f1e2e0a87b",
@@ -582,10 +574,8 @@
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
-        "kind": "agentTurn",
-        "message": "WEEKLY REVIEW — собери задачи из Vikunja с рекомендациями и отправь Abror на согласование. НЕ РЕАЛИЗУЙ НИЧЕГО САМ.\n\n## ШАГ 1: Получи задачи из Vikunja\nВызови:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh weekly-report\n```\n\nПрочитай вывод — там все открытые задачи по проектам с описаниями и рекомендациями.\n\n## ШАГ 2: Классифицируй задачи + извлеки рекомендации\nРаздели задачи по типам и извлеки рекомендации из описания:\n- [BUG] → 📌 ФИКСЫ (с рекомендациями по fix)\n- [IMPROVE] → 🔧 УЛУЧШЕНИЯ (с планом реализации)\n- [IDEA] → 🔍 НОВЫЕ ИДЕИ\n- [CONFIG] → ⚙️ ИЗМЕНЕНИЯ КОНФИГА\n\n## ШАГ 3: Отправь в Telegram с рекомендациями\nОтправь Abror:\n\n```\n🔧 Еженедельный ревью — {DD MMM}\nНакопилось {N} задач в Vikunja:\n\n📌 ФИКСЫ (баги):\n1. [Заголовок] — Priority {N}\n   💡 Рекомендация: [кратко из описания]\n   Vikunja: #<task_id>\n\n🔧 УЛУЧШЕНИЯ:\n2. [Заголовок] — Priority {N}\n   💡 План: [шаги из описания]\n   Приоритет: [HIGH/MEDIUM/LOW]\n   Vikunja: #<task_id>\n\n🔍 НОВЫЕ ИДЕИ (из discovery):\n3. [Заголовок] — Low/Med\n   Vikunja: #<task_id>\n\n⚙️ CONFIG CHANGES:\n4. [Заголовок] → [файл]\n   💡 Изменение: [что менять]\n   Vikunja: #<task_id>\n\n---\nОтветь:\n• \"применяй 1,3\" — реализую выбранные\n• \"покажи 2\" — расскажу подробнее\n• \"пропускай всё\" — закрою задачи\n```\n\n## ШАГ 4: Если нечего\nЕсли задач нет — отправь: \"✅ Еженедельный ревью: нет накопленных задач в Vikunja, всё актуально.\"\n\n**ВАЖНО: сам ничего не меняй. Реализация — только после явного \"применяй N\" от Abror.**",
-        "thinking": "low",
-        "timeoutSeconds": 180
+        "kind": "systemEvent",
+        "text": "bash: /data/bot/openclaw-docker/scripts/cron/weekly_review.sh"
       },
       "delivery": {
         "mode": "announce",
@@ -611,7 +601,7 @@
       "name": "morning-briefing",
       "enabled": true,
       "createdAtMs": 1772532782154,
-      "updatedAtMs": 1773112091723,
+      "updatedAtMs": 1773198334251,
       "schedule": {
         "expr": "0 3 * * *",
         "kind": "cron",
@@ -620,21 +610,19 @@
       "sessionTarget": "isolated",
       "wakeMode": "now",
       "payload": {
-        "kind": "agentTurn",
-        "message": "Утренний брифинг из Vikunja. Получи задачи и отправь краткую сводку в Telegram Abror.\n\n## ШАГ 1: Получи задачи из Vikunja\nВызови:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh list-overdue\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh list-by-status undone\n```\n\n## ШАГ 2: Классифицируй\nРаздели задачи:\n- Просроченные (overdue) — срочно\n- [BUG] задачи — баги\n- [IMPROVE] задачи — улучшения\n- [IDEA] задачи — идеи\n\n## ШАГ 3: Отправь в Telegram\nОтправь Abror:\n\n```\n🌙 Утренний брифинг — D MMM\n\n⚠️ Просрочено: N задач\n1. [Заголовок] — было до {due_date}\n\n🔴 Баги: N задач\n2. [Заголовок] — Priority {N}\n\n🔧 Улучшения: N задач\n3. [Заголовок]\n\n💡 Идеи: N задач\n4. [Заголовок]\n\n📄 Полная сводка: vikunja.sh weekly-report\n```\n\nФормат: компактный, только заголовки без описаний.",
-        "thinking": "low",
-        "timeoutSeconds": 180
+        "kind": "systemEvent",
+        "text": "SILENT TASK. bash: /data/bot/openclaw-docker/scripts/cron/morning_briefing.sh"
       },
       "delivery": {
         "mode": "announce",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773112053553,
+        "nextRunAtMs": 1773284400000,
+        "lastRunAtMs": 1773198174726,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 38170,
+        "lastDurationMs": 159525,
         "lastDeliveryStatus": "delivered",
         "consecutiveErrors": 0,
         "lastDelivered": true
@@ -662,16 +650,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773154856850,
+        "nextRunAtMs": 1773241200000,
+        "lastRunAtMs": 1773219634418,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 30610,
+        "lastDurationMs": 10243,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773154887460
+      "updatedAtMs": 1773219644661
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
@@ -680,7 +668,7 @@
       "name": "Crypto Daily Report",
       "enabled": true,
       "createdAtMs": 1772607679973,
-      "updatedAtMs": 1773132854024,
+      "updatedAtMs": 1773198516018,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -695,14 +683,14 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773132553980,
+        "nextRunAtMs": 1773284400000,
+        "lastRunAtMs": 1773198350542,
         "lastRunStatus": "error",
         "lastStatus": "error",
-        "lastDurationMs": 300044,
+        "lastDurationMs": 165476,
         "lastDeliveryStatus": "unknown",
-        "consecutiveErrors": 1,
-        "lastError": "Error: cron: job execution timed out"
+        "consecutiveErrors": 2,
+        "lastError": "Delivering to Telegram requires target <chatId>"
       },
       "delivery": {
         "mode": "announce"
@@ -747,7 +735,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773112484337,
+      "updatedAtMs": 1773198816059,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -767,14 +755,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "lastRunAtMs": 1773112391762,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 92575,
-        "lastDeliveryStatus": "delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": true
+        "nextRunAtMs": 1773284400000,
+        "lastRunAtMs": 1773198516018,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 300041,
+        "lastDeliveryStatus": "unknown",
+        "consecutiveErrors": 1,
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -871,16 +859,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773201600000,
-        "lastRunAtMs": 1773147671473,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 36919,
-        "lastDeliveryStatus": "not-delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": false
+        "nextRunAtMs": 1773288000000,
+        "lastRunAtMs": 1773234515085,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 490,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 1,
+        "lastError": "Error: All models failed (2): ollama/llama3.2:1b: Unknown model: ollama/llama3.2:1b. Ollama requires authentication to be registered as a provider. Set OLLAMA_API_KEY=\"ollama-local\" (any value works) or run \"openclaw configure\". See: https://docs.openclaw.ai/providers/ollama (model_not_found) | anthropic/claude-opus-4-6: No API key found for provider \"anthropic\". Auth store: /home/node/.openclaw/agents/main/agent/auth-profiles.json (agentDir: /home/node/.openclaw/agents/main/agent). Configure auth for this agent (openclaw agents add <id>) or copy auth-profiles.json from the main agentDir. (auth)"
       },
-      "updatedAtMs": 1773147708392
+      "updatedAtMs": 1773234515575
     },
     {
       "id": "8c767997-87cb-4374-8468-b7fd3e8c2b4d",
@@ -925,7 +913,7 @@
       "name": "Obsidian RAG Reindex (daytime)",
       "enabled": true,
       "createdAtMs": 1772828148831,
-      "updatedAtMs": 1773147824214,
+      "updatedAtMs": 1773234515665,
       "schedule": {
         "kind": "cron",
         "expr": "0 12,18 * * *",
@@ -943,14 +931,14 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773212400000,
-        "lastRunAtMs": 1773147708392,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 115822,
-        "lastDeliveryStatus": "not-delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": false
+        "nextRunAtMs": 1773298800000,
+        "lastRunAtMs": 1773234515575,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 90,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 1,
+        "lastError": "Error: All models failed (2): ollama/llama3.2:1b: Unknown model: ollama/llama3.2:1b. Ollama requires authentication to be registered as a provider. Set OLLAMA_API_KEY=\"ollama-local\" (any value works) or run \"openclaw configure\". See: https://docs.openclaw.ai/providers/ollama (model_not_found) | anthropic/claude-opus-4-6: No API key found for provider \"anthropic\". Auth store: /home/node/.openclaw/agents/main/agent/auth-profiles.json (agentDir: /home/node/.openclaw/agents/main/agent). Configure auth for this agent (openclaw agents add <id>) or copy auth-profiles.json from the main agentDir. (auth)"
       }
     },
     {
@@ -960,10 +948,10 @@
       "description": "Night mode autoresearch with Feature Discovery",
       "enabled": true,
       "createdAtMs": 1773132247639,
-      "updatedAtMs": 1773132247639,
+      "updatedAtMs": 1773222614152,
       "schedule": {
-        "kind": "cron",
         "expr": "0 21 * * *",
+        "kind": "cron",
         "tz": "UTC"
       },
       "sessionTarget": "isolated",
@@ -971,14 +959,20 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run the Karpathy Autoresearch cycle:\nbash: python3 /home/node/.openclaw/skills/karpathy-autoresearch/run.py\n\nThe script handles its own Telegram reporting via reporter.py. Do not send any additional messages.",
-        "model": "ollama/llama3.2:1b",
-        "timeoutSeconds": 600
+        "model": "minimax-portal/MiniMax-M2.5",
+        "timeoutSeconds": 1800
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773194400000
+        "nextRunAtMs": 1773262800000,
+        "lastRunAtMs": 1773194444768,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 600700,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 1
       }
     },
     {
@@ -1003,16 +997,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773181800000,
-        "consecutiveErrors": 1,
-        "lastRunAtMs": 1773143461721,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 120007,
-        "lastError": "Error: cron: job execution timed out",
-        "lastDeliveryStatus": "not-requested"
+        "nextRunAtMs": 1773268200000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1773181833671,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 10357,
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773143581728
+      "updatedAtMs": 1773181844028
     },
     {
       "id": "77b95df3-f902-4122-bcba-68e413584821",
@@ -1021,7 +1015,7 @@
       "name": "Crypto Proactive Monitor",
       "enabled": true,
       "createdAtMs": 1773146452092,
-      "updatedAtMs": 1773176853294,
+      "updatedAtMs": 1773237790687,
       "schedule": {
         "kind": "cron",
         "expr": "0 * * * *",
@@ -1035,11 +1029,11 @@
         "text": "SILENT TASK. Run: python3 ~/.openclaw/skills/crypto_assistant/proactive_monitor.py"
       },
       "state": {
-        "nextRunAtMs": 1773180190000,
-        "lastRunAtMs": 1773176718305,
+        "nextRunAtMs": 1773241390000,
+        "lastRunAtMs": 1773237790034,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 134989,
+        "lastDurationMs": 653,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
       }
@@ -1051,7 +1045,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773178324280,
+      "updatedAtMs": 1773239599846,
       "schedule": {
         "kind": "cron",
         "expr": "0,30 * * * *",
@@ -1069,15 +1063,37 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773180000000,
-        "lastRunAtMs": 1773178243644,
+        "nextRunAtMs": 1773241200000,
+        "lastRunAtMs": 1773239449264,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 80636,
+        "lastDurationMs": 150582,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
-        "lastDelivered": false,
-        "runningAtMs": 1773180000018
+        "lastDelivered": false
+      }
+    },
+    {
+      "id": "7b2a1ed2-0bf7-41da-b9f6-c629588af3fa",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "⚠️ Karpathy: переключить с MiniMax",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1773222712982,
+      "updatedAtMs": 1773222712982,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-03-27T20:00:00.000Z"
+      },
+      "sessionTarget": "main",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "systemEvent",
+        "text": "⚠️ НАПОМИНАНИЕ: Завтра (28 марта) истекает MiniMax Coding Plan. Переключи Karpathy Autoresearch крон на Zhipu GLM или Alibaba Bailian.\n\nКрон ID: 834da575-2773-42b6-a8b3-78fbfd2e0336\nКоманда: openclaw cron edit 834da575 --model zhipu/glm-5 --timeout 1800"
+      },
+      "state": {
+        "nextRunAtMs": 1774641600000
       }
     }
   ]

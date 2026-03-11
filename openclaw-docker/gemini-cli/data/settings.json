@@ -1,4 +1,13 @@
 {
   "theme": "Default",
-  "mcpServers": {}
+  "mcpServers": {
+    "composio": {
+      "command": "mcp",
+      "args": [],
+      "env": {
+        "COMPOSIO_API_KEY": "ak_kVZicK4rWhwoksfTyVJg"
+      },
+      "trust": true
+    }
+  }
 }

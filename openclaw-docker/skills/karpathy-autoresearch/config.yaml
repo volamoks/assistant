@@ -39,17 +39,17 @@ hypothesis:
     - workflow_enhancement         # Improve workflows
     - error_handling               # Better error handling
     - performance_tuning           # Speed/memory optimizations
-  llm_model: "ollama/qwen3.5:9b"  # Model for hypothesis generation (local)
+  llm_model: "qwen3.5-plus"  # Model for hypothesis generation
 
 # ── A/B Testing ────────────────────────────────────────────────────────────────
 testing:
-  iterations: 50                  # Test iterations per hypothesis (5 → 50 for night mode)
+  iterations: 5                  # Test iterations per hypothesis (5 → 50 for night mode)
   success_threshold: 0.8          # Success rate to auto-apply (0-1)
   test_timeout: 60                # Seconds per test iteration
-  parallel_tests: 5               # Parallel test workers (2 → 5 for night mode)
-  validation_model: "ollama/qwen3.5:9b"  # 2-stage validation (local)
-  cheap_validation_model: "ollama/qwen3.5:9b"  # Cheap model for initial validation (local)
-  use_real_harness: true          # Use real A/B test harness (not simulation)
+  parallel_tests: 2               # Parallel test workers (2 → 5 for night mode)
+  validation_model: "qwen3.5-plus"  # 2-stage validation
+  cheap_validation_model: "qwen3.5-plus"  # Cheap model for initial validation
+  use_real_harness: false          # Use simulation-based tester (not real A/B)
   min_samples: 10                 # Minimum sessions per group for real tests
   metrics:
     - success_rate
@@ -75,7 +75,7 @@ reporting:
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 paths:
-  memory_dir: "/data/obsidian/vault/Bot"
+  memory_dir: "/data/obsidian/Claw/Memory"
   skills_dir: "/home/node/.openclaw/skills"
   prompts_dir: "/home/node/.openclaw/prompts"
   temp_dir: "/tmp"
@@ -85,9 +85,9 @@ paths:
 llm:
   base_url: "http://litellm-proxy:4000"
   api_key: ""                     # Set via LITELLM_MASTER_KEY env var
-  default_model: "ollama/qwen3.5:9b"
-  analysis_model: "ollama/qwen3.5:9b"
-  testing_model: "ollama/qwen3.5:9b"        # Local model for testing (cheaper)
+  default_model: "qwen3.5-plus"
+  analysis_model: "qwen3.5-plus"
+  testing_model: "qwen3.5-plus"
   temperature: 0.3
   max_tokens: 2000
 
@@ -98,7 +98,7 @@ feature_discovery:
     - repeated_user_requests       # "сделай X" в логах
     - manual_workarounds           # ручная работа → автоматизировать
     - missing_integrations         # "нет API для Y"
-  llm_model: "ollama/qwen3.5:9b"
+  llm_model: "qwen3.5-plus"
   max_features_per_run: 2
   require_approval: true
 

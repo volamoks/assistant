@@ -1,5 +1,7 @@
 {
   "projects": {
-    "/app": "app"
+    "/app": "app",
+    "/home/node/.openclaw/workspace-main": "workspace-main",
+    "/tmp": "tmp"
   }
 }

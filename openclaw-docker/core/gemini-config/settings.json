@@ -1,5 +1,5 @@
 {
-  "selectedAuthType": "login-with-google",
+  "selectedAuthType": "oauth-personal",
   "security": {
     "auth": {
       "selectedType": "gemini-api-key"

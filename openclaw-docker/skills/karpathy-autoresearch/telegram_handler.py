@@ -179,6 +179,9 @@ def run_autoresearch_cycle(
     
     def run_cycle():
         """Background task to run the cycle."""
+        # Pass environment variables to subprocess
+        env = os.environ.copy()
+        
         try:
             # Step 1: Analysis
             update_status("🔄 *Autoresearch Cycle*\n\n📊 Шаг 1/6: Анализ логов...")
@@ -188,7 +191,8 @@ def run_autoresearch_cycle(
                  "--days", "7", "--output", "/tmp/karpathy_patterns.json"],
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
+                env=env
             )
             
             if result.returncode != 0:
@@ -205,7 +209,8 @@ def run_autoresearch_cycle(
                  "--output", "/tmp/karpathy_hypotheses.json"],
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
+                env=env
             )
             
             if result.returncode != 0:
@@ -222,7 +227,8 @@ def run_autoresearch_cycle(
                  "--output", "/tmp/karpathy_test_results.json"],
                 capture_output=True,
                 text=True,
-                timeout=600
+                timeout=600,
+                env=env
             )
             
             if result.returncode != 0:
@@ -239,7 +245,8 @@ def run_autoresearch_cycle(
                      "--test-results", "/tmp/karpathy_test_results.json"],
                     capture_output=True,
                     text=True,
-                    timeout=300
+                    timeout=300,
+                    env=env
                 )
             
             # Step 5: Feedback Loop

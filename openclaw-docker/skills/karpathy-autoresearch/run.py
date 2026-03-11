@@ -44,12 +44,16 @@ def run_step(script_name: str, args: List[str], description: str) -> bool:
     
     cmd = [sys.executable, str(script_path)] + args
     
+    # Pass environment variables to subprocess
+    env = os.environ.copy()
+    
     try:
         result = subprocess.run(
             cmd,
             capture_output=False,
             text=True,
-            check=True
+            check=True,
+            env=env
         )
         print(f"✅ {description} completed")
         return True
@@ -92,7 +96,7 @@ def get_parallel_workers(config: Dict[str, Any]) -> int:
     return testing_config.get("parallel_tests", 2)  # Day: 2 workers
 
 
-def run_full_cycle(config: Dict[str, Any], dry_run: bool = False) -> Dict[str, Any]:
+def run_full_cycle(config: Dict[str, Any], dry_run: bool = False, use_real_harness: bool = None, use_simulation: bool = False) -> Dict[str, Any]:
     """Run the complete autoresearch cycle with Feature Discovery."""
     
     results = {
@@ -159,12 +163,11 @@ def run_full_cycle(config: Dict[str, Any], dry_run: bool = False) -> Dict[str, A
         return results
     
     # Step 4: Test hypotheses (with 2-stage validation)
-    use_real_harness = args.use_real_harness
     if use_real_harness is None:
         # Default from config
         use_real_harness = testing_config.get("use_real_harness", True)
-    
-    if args.use_simulation:
+
+    if use_simulation:
         use_real_harness = False
     
     test_script = "test_harness.py" if use_real_harness else "tester.py"
@@ -285,7 +288,7 @@ Examples:
         config["application"]["auto_apply"] = True
     
     # Run cycle
-    results = run_full_cycle(config, dry_run=args.dry_run)
+    results = run_full_cycle(config, dry_run=args.dry_run, use_real_harness=args.use_real_harness, use_simulation=args.use_simulation)
     
     # Save results
     save_cycle_results(results)

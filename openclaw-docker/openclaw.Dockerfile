@@ -41,8 +41,10 @@ RUN printf '#!/bin/bash\nexec /usr/local/bin/gemini --experimental-acp --model g
     && chmod +x /usr/local/bin/gemini-acp-wrapper
 
 # Create acpx state dir writable by container user (501:20)
-# NOTE: /home/node/.gemini is mounted as a volume (core/gemini-config) for credential persistence
-RUN mkdir -p /home/node/.acpx \
+# Configure gemini as default agent using --experimental-acp (OAuth via core/gemini-config volume)
+RUN mkdir -p /home/node/.acpx/sessions \
+    && printf '{"defaultAgent":"gemini","defaultPermissions":"approve-reads","nonInteractivePermissions":"deny","authPolicy":"skip","ttl":300,"agents":{"gemini":{"command":"gemini --experimental-acp"}}}\n' \
+       > /home/node/.acpx/config.json \
     && chown -R 501:20 /home/node/.acpx
 
 # Add a mock host user mapping for the volume bounds and add to dialout
