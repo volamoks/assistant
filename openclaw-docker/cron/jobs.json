@@ -49,7 +49,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this bash script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 60
       },
       "delivery": {
@@ -115,20 +115,20 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run the crash analyzer script:\nbash: bash /data/bot/openclaw-docker/scripts/crash_analyzer.sh\n\nIf output is empty — output nothing, absolute silence.\nIf the script reports processed files — echo the output verbatim.",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 180
       },
       "state": {
-        "nextRunAtMs": 1773241200000,
+        "nextRunAtMs": 1773243000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773240600027,
+        "lastRunAtMs": 1773242400029,
         "lastStatus": "ok",
-        "lastDurationMs": 17535,
+        "lastDurationMs": 14811,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773240617562,
+      "updatedAtMs": 1773242414840,
       "delivery": {
         "mode": "none"
       }
@@ -148,7 +148,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/task_briefing.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 30
       },
       "delivery": {
@@ -214,7 +214,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/vault_gardening.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 30
       },
       "delivery": {
@@ -253,7 +253,7 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773241200000,
+        "nextRunAtMs": 1773243000000,
         "consecutiveErrors": 0,
         "lastRunAtMs": 1773239420390,
         "lastStatus": "ok",
@@ -280,7 +280,7 @@
         "kind": "agentTurn",
         "message": "SILENT TASK.\n\nRun nightly finance enrichment:\nbash: /data/bot/openclaw-docker/scripts/jobs/finance_enrichment.sh\n\nIf enrichment fails or Ollama is unreachable — output a brief error message. If successful — complete silently with no output. Do NOT send any Telegram messages.",
         "thinking": "low",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 60
       },
       "delivery": {
@@ -313,7 +313,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/daily_report.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 120
       },
       "delivery": {
@@ -346,7 +346,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 180
       },
       "delivery": {
@@ -379,7 +379,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/context_logger.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 60
       },
       "delivery": {
@@ -451,13 +451,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773240900051,
+        "lastRunAtMs": 1773242414840,
         "lastRunStatus": "ok",
-        "lastDurationMs": 48836,
+        "lastDurationMs": 14342,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773241200000
+        "nextRunAtMs": 1773242700000
       },
-      "updatedAtMs": 1773240948887
+      "updatedAtMs": 1773242429182
     },
     {
       "id": "git-backup",
@@ -475,24 +475,23 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script:\nbash: bash /data/bot/openclaw-docker/scripts/jobs/git_backup.sh",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 120
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773241219024,
+        "nextRunAtMs": 1773244819024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773241152115,
+        "lastRunAtMs": 1773241368783,
         "lastRunStatus": "ok",
-        "lastDurationMs": 15220,
+        "lastDurationMs": 60426,
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773241368364
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773241167335
+      "updatedAtMs": 1773241429209
     },
     {
       "id": "docker-arch-analyzer",
@@ -509,7 +508,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script:\nbash: bash /data/bot/openclaw-docker/scripts/jobs/docker-arch-analyzer.sh",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 180
       },
       "delivery": {
@@ -644,14 +643,14 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/inbox_router.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 90
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773241200000,
+        "nextRunAtMs": 1773284400000,
         "lastRunAtMs": 1773219634418,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
@@ -853,7 +852,7 @@
         "kind": "agentTurn",
         "message": "SILENT TASK. Run the Plaud monitor script:\nbash: python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py\n\nIf the script successfully processes new recordings, send the brief summary result to Telegram using:\n```bash\npython3 /data/bot/openclaw-docker/skills/telegram/notify.py \"[summary from plaud_monitor.py]\"\n```\n\nIf the output is empty or says 'No files found', output nothing.",
         "thinking": "low",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 240
       },
       "delivery": {
@@ -925,7 +924,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 180
       },
       "delivery": {
@@ -991,7 +990,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/skills_index.py",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 240
       },
       "delivery": {
@@ -1030,7 +1029,7 @@
         "text": "SILENT TASK. Run: python3 ~/.openclaw/skills/crypto_assistant/proactive_monitor.py"
       },
       "state": {
-        "nextRunAtMs": 1773241390000,
+        "nextRunAtMs": 1773244990000,
         "lastRunAtMs": 1773237790034,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
@@ -1057,14 +1056,14 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — логирование ошибок и варнингов бота.\n\n## ШАГ 1: Проверь логи Gateway\n```bash\ncat /home/node/.openclaw/gateway.log 2>/dev/null | tail -200\n```\nИщи:\n- **ERROR** → критичные ошибки\n- **WARN** → предупреждения\n- **onnxruntime warning** → варнинги моделей\n- **timeout** → таймауты\n- **deprecated** → устаревшие API\n\n## ШАГ 2: Проверь сессии на ошибки\nCall sessions_list: activeMinutes=60, limit=10\nДля каждой сессии запиши:\n- sessionKey\n- lastError / lastStatus\n- consecutiveErrors\n- contextTokens (если >100k — варнинг)\n\n## ШАГ 3: Проверь cron warnings\nCall cron list — найди jobs с:\n- consecutiveErrors > 0\n- lastDurationMs > 300000 (5 мин — медленно)\n- timeoutSeconds < lastDurationMs (риск таймаута)\n\n## ШАГ 4: Запиши в error-log.md\nДобавь запись в `/data/obsidian/vault/Bot/error-log.md`:\n\n```markdown\n## YYYY-MM-DD HH:MM\n\n### 🔴 Errors\n[если есть]\n\n### 🟡 Warnings\n[если есть — onnxruntime, deprecated, slow queries, high context]\n\n### 🟠 Cron Risks\n[кроны с риском таймаута или повторяющимися ошибками]\n\n---\n```\n\nЕсли ошибок и варнингов нет — не пиши ничего, выйди тихо.\n\nНе отправляй Telegram.",
-        "model": "ollama/llama3.2:1b",
+        "model": "ollama/qwen3.5:0.8b",
         "timeoutSeconds": 240
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773241200000,
+        "nextRunAtMs": 1773243000000,
         "lastRunAtMs": 1773239449264,
         "lastRunStatus": "ok",
         "lastStatus": "ok",

@@ -43,7 +43,7 @@ RUN printf '#!/bin/bash\nexec /usr/local/bin/gemini --experimental-acp --model g
 # Create acpx state dir writable by container user (501:20)
 # Configure gemini as default agent using --experimental-acp (OAuth via core/gemini-config volume)
 RUN mkdir -p /home/node/.acpx/sessions \
-    && printf '{"defaultAgent":"gemini","defaultPermissions":"approve-reads","nonInteractivePermissions":"deny","authPolicy":"skip","ttl":300,"agents":{"gemini":{"command":"gemini --experimental-acp"}}}\n' \
+    && printf '{"defaultAgent":"gemini","defaultPermissions":"approve-reads","nonInteractivePermissions":"deny","authPolicy":"skip","ttl":300,"agents":{"gemini":{"command":"gemini --experimental-acp --model gemini-3-flash-preview"}}}\n' \
        > /home/node/.acpx/config.json \
     && chown -R 501:20 /home/node/.acpx
 

@@ -88,7 +88,7 @@ else
         else
             # First restart attempt
             increment_failure_count
-            local failures=$(get_failure_count)
+            failures=$(get_failure_count)
             log "⚠️ Failure count: $failures"
             
             if restart_gateway; then

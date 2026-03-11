@@ -3,14 +3,15 @@
 
 set -e
 
-PROJECT_DIR="/data/bot/openclaw-docker"
+GIT_ROOT="/data/bot"
+PROJECT_DIR="$GIT_ROOT/openclaw-docker"
 OBSIDIAN_DIR="/data/obsidian/vault/Bot/crash-configs"
 CONTAINER_NAME="openclaw-latest"
 
 echo "=== OpenClaw Manual Recovery ==="
 echo ""
 
-cd "$PROJECT_DIR"
+cd "$GIT_ROOT"
 
 # --- Save broken config to Obsidian before restoring ---
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
