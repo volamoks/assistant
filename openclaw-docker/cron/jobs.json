@@ -485,14 +485,14 @@
         "nextRunAtMs": 1773241219024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773180253976,
+        "lastRunAtMs": 1773241152115,
         "lastRunStatus": "ok",
-        "lastDurationMs": 85675,
+        "lastDurationMs": 15220,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false,
-        "runningAtMs": 1773241152106
+        "runningAtMs": 1773241368364
       },
-      "updatedAtMs": 1773240216167
+      "updatedAtMs": 1773241167335
     },
     {
       "id": "docker-arch-analyzer",

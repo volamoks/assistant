@@ -2,7 +2,7 @@
   "selectedAuthType": "oauth-personal",
   "security": {
     "auth": {
-      "selectedType": "gemini-api-key"
+      "selectedType": "oauth-personal"
     }
   },
   "general": {

@@ -208,7 +208,8 @@ services:
       - EMAIL_PASS_YANDEX=${EMAIL_PASS_YANDEX}
       - EMAIL_PASS_YAHOO=${EMAIL_PASS_YAHOO}
       - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # GEMINI_API_KEY intentionally omitted — gemini CLI uses OAuth (core/gemini-config volume)
+      # If set, gemini CLI overrides OAuth with API key and logs out the account
       - GOOGLE_GENAI_USE_GCA=true
       - GEMINI_CONFIG_DIR=/home/node/.gemini
     networks:
