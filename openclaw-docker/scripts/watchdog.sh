@@ -1,11 +1,18 @@
 #!/bin/bash
 # OpenClaw Watchdog - Auto-healing with rollback
 # Checks if Gateway is healthy, restarts if not, rolls back after repeated failures
+#
+# DESIGN NOTES:
+# - Failure count stored in PERSISTENT location (not /tmp) to survive container restarts
+# - docker restart kills this script — so git checkout + Telegram happen BEFORE restart
+# - On rollback: fix config first, notify, THEN restart (script dies but fix already applied)
 
 LOG="/tmp/openclaw_watchdog.log"
 PORT=18789
 RECOVER_SCRIPT="/data/bot/openclaw-docker/recover.sh"
-FAILURE_COUNT_FILE="/tmp/openclaw_watchdog_failures"
+NOTIFY_SCRIPT="/data/bot/openclaw-docker/skills/telegram/notify.py"
+FAILURE_COUNT_FILE="/data/bot/openclaw-docker/scripts/watchdog_failures"
+CHAT_ID="6053956251"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOG
@@ -35,7 +42,11 @@ reset_failure_count() {
 
 restart_gateway() {
     log "⚠️ Gateway unhealthy, restarting..."
+    # NOTE: docker restart kills this container (and this script) after SIGTERM
+    # That's OK — the restart is the goal, script death is expected
     docker restart openclaw-latest 2>&1 | tee -a $LOG
+    # If we're still alive after restart (unlikely from inside container),
+    # check if healthy
     sleep 15
     if check_gateway; then
         log "✅ Gateway restarted successfully"
@@ -48,23 +59,60 @@ restart_gateway() {
 
 rollback_gateway() {
     log "🔙 Multiple failures detected, rolling back to last git commit..."
-    
-    # Log to Obsidian error-log.md
+
+    local failures=$(get_failure_count)
+    local timestamp=$(date '+%Y-%m-%d %H:%M')
+
+    # Step 1: Log to Obsidian error-log.md (before restart)
     ERROR_LOG="/data/obsidian/vault/Bot/error-log.md"
-    TIMESTAMP=$(date '+%Y-%m-%d %H:%M')
     cat >> "$ERROR_LOG" <<EOF
 
-### 🔴 Watchdog Rollback — $TIMESTAMP
+### 🔴 Watchdog Rollback — $timestamp
 
-**Reason:** Gateway unhealthy after 2 restart attempts
+**Reason:** Gateway unhealthy after multiple restart attempts
 **Action:** recover.sh executed (git checkout + restart)
-**Failure count:** $(get_failure_count)
+**Failure count:** $failures
 
 EOF
-    
-    bash "$RECOVER_SCRIPT" 2>&1 | tee -a $LOG
+
+    # Step 2: Run git checkout to restore config (before restart)
+    log "🔧 Restoring config via git checkout..."
+    GIT_ROOT="/data/bot"
+    if cd "$GIT_ROOT" && git checkout -- openclaw-docker/ 2>&1 | tee -a $LOG; then
+        log "✅ Config restored from last git commit"
+    else
+        log "❌ Git checkout failed — attempting restart anyway"
+    fi
+
+    # Step 3: Save crash config to Obsidian (before restart)
+    CRASH_DIR="/data/obsidian/vault/Bot/crash-configs"
+    mkdir -p "$CRASH_DIR"
+    CRASH_FILE="$CRASH_DIR/$(date +%Y-%m-%d_%H-%M-%S)-watchdog-rollback.md"
+    cat > "$CRASH_FILE" <<EOF
+# Watchdog Rollback — $(date +%Y-%m-%d_%H-%M-%S)
+
+**Trigger:** automatic watchdog (failure count: $failures)
+**Action:** git checkout -- openclaw-docker/ + docker restart
+
+## Recovery Timeline
+$(cat "$LOG" 2>/dev/null | tail -30)
+EOF
+    log "📝 Crash config saved: Bot/crash-configs/"
+
+    # Step 4: Send Telegram notification (before restart)
+    python3 "$NOTIFY_SCRIPT" "🔙 Watchdog Rollback
+
+Failure count: $failures
+Action: git checkout + restart
+Time: $timestamp
+Config restored to last commit." --chat-id "$CHAT_ID" 2>/dev/null || true
+
+    # Step 5: Reset failure count (before restart — /tmp is lost anyway)
     reset_failure_count
-    log "✅ Rollback complete — check Obsidian Bot/error-log.md"
+
+    # Step 6: Restart container (this kills our script — that's OK, config is already fixed)
+    log "🔄 Restarting container (script will be killed — that's expected)..."
+    docker restart openclaw-latest 2>&1 | tee -a $LOG
 }
 
 # Main
@@ -86,23 +134,17 @@ else
             log "✅ Recovered on attempt 2"
             reset_failure_count
         else
-            # First restart attempt
             increment_failure_count
             failures=$(get_failure_count)
             log "⚠️ Failure count: $failures"
-            
-            if restart_gateway; then
-                reset_failure_count
+
+            if [ "$failures" -ge 2 ]; then
+                # Multiple failures across restarts → rollback
+                log "🔙 Too many failures ($failures), triggering rollback..."
+                rollback_gateway
             else
-                # Second restart attempt
-                increment_failure_count
-                failures=$(get_failure_count)
-                log "⚠️ Failure count: $failures"
-                
-                if [ "$failures" -ge 2 ]; then
-                    log "🔙 Too many failures, triggering rollback..."
-                    rollback_gateway
-                fi
+                # First failure → just restart
+                restart_gateway
             fi
         fi
     fi

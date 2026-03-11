@@ -63,7 +63,18 @@ git checkout -- openclaw-docker/
 echo "Done."
 echo ""
 
-echo "Restarting container..."
+echo "Sending Telegram notification (before restart kills this script)..."
+NOTIFY_SCRIPT="/data/bot/openclaw-docker/skills/telegram/notify.py"
+python3 "$NOTIFY_SCRIPT" "🔙 Recovery complete
+
+Config restored to last git commit.
+Modified files: ${MODIFIED:-none}
+Crash config: Bot/crash-configs/$TIMESTAMP-crash.md
+
+Container restarting..." --chat-id "6053956251" 2>/dev/null || true
+echo ""
+
+echo "Restarting container (this script will be killed — that's expected)..."
 docker restart "$CONTAINER_NAME"
 echo "Done."
 echo ""
