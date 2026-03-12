@@ -1,10 +1,9 @@
 #!/bin/bash
 # web_clip.sh — Clip a web page to Obsidian vault as clean Markdown
-# Uses Crawl4AI for best quality (JS-rendered, fit_markdown)
-# Falls back to urllib if Crawl4AI unavailable
+# Priority: PinchTab (fast, ~800 tokens) → Crawl4AI (JS-heavy) → urllib (fallback)
 #
 # Usage: web_clip.sh <URL> [max_chars] [save: true|false]
-# Example: web_clip.sh "https://zasqlpython.ru" 4000 true
+# Example: web_clip.sh "https://example.com" 4000 true
 
 URL="${1:-}"
 MAX_CHARS="${2:-4000}"
@@ -14,8 +13,10 @@ CLIPS_DIR="${VAULT_PATH}/Web Clips"
 DATE=$(date +%Y-%m-%d)
 TIME=$(date +%H:%M)
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+PINCHTAB_HOST="${PINCHTAB_HOST:-http://pinchtab:9867}"
 CRAWL4AI_HOST="${CRAWL4AI_HOST:-http://crawl4ai:11235}"
 CRAWL4AI_TOKEN="${CRAWL4AI_API_TOKEN:-crawl4ai-local-secret}"
+PINCHTAB_SH="/data/bot/openclaw-docker/skills/browser-automation/pinchtab.sh"
 
 if [ -z "$URL" ]; then
     echo "Usage: web_clip.sh <URL> [max_chars] [save: true|false]"
@@ -24,6 +25,44 @@ fi
 
 echo "🌐 Clipping: $URL"
 
+# ─── Primary: PinchTab (fast, accessibility tree, ~800 tokens) ───────────────
+PINCHTAB_RUNNING=$(curl -s --max-time 3 "${PINCHTAB_HOST}/health" 2>/dev/null | grep -c "ok\|healthy\|alive" || echo "0")
+
+if [ "$PINCHTAB_RUNNING" != "0" ] && [ -f "$PINCHTAB_SH" ]; then
+    echo "⚡ Using PinchTab (fast)"
+    NAV_OK=$(bash "$PINCHTAB_SH" navigate "$URL" 2>&1)
+    if echo "$NAV_OK" | grep -qi "error\|failed"; then
+        echo "⚠️  PinchTab navigate failed, trying next..."
+    else
+        TITLE=$(bash "$PINCHTAB_SH" snapshot 2>/dev/null | python3 -c "
+import json,sys
+try:
+    d=json.load(sys.stdin)
+    print(d.get('title','Untitled'))
+except:
+    print('Untitled')
+" 2>/dev/null || echo "Untitled")
+        BODY=$(bash "$PINCHTAB_SH" text 2>/dev/null | head -c "$MAX_CHARS")
+        if [ -n "$BODY" ] && [ ${#BODY} -gt 100 ]; then
+            echo "✅ Using PinchTab"
+            # skip to save
+            TITLE="${TITLE:-Untitled}"
+            SAFE_TITLE=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 -]/-/g' | sed 's/--*/-/g' | tr ' ' '-' | cut -c1-60)
+            if [ "$SAVE" = "true" ]; then
+                mkdir -p "$CLIPS_DIR"
+                FILENAME="${CLIPS_DIR}/${DATE}-${SAFE_TITLE}.md"
+                printf -- "---\nsource: %s\nclipped: %s\ntags: [web-clip]\n---\n\n# %s\n\n> Clipped from [%s](%s) on %s at %s\n\n---\n\n%s\n" \
+                    "$URL" "$TIMESTAMP" "$TITLE" "$URL" "$URL" "$DATE" "$TIME" "$BODY" > "$FILENAME"
+                echo ""; echo "✅ Saved: $FILENAME"; echo "📎 Title: $TITLE"
+            else
+                echo ""; echo "## $TITLE"; echo "> Source: $URL"; echo ""; echo "$BODY"
+            fi
+            exit 0
+        fi
+    fi
+fi
+
+# ─── Secondary: Crawl4AI (JS-heavy pages) ────────────────────────────────────
 # --- Auto-start Crawl4AI if not running ---
 COMPOSE_FILE="/data/bot/openclaw-docker/docker-compose.yml"
 CRAWL4AI_RUNNING=$(curl -s --max-time 3 "${CRAWL4AI_HOST}/health" 2>/dev/null | grep -c '"status":"ok"' || echo "0")
@@ -31,20 +70,15 @@ CRAWL4AI_RUNNING=$(curl -s --max-time 3 "${CRAWL4AI_HOST}/health" 2>/dev/null | 
 if [ "$CRAWL4AI_RUNNING" = "0" ]; then
     echo "⏳ Starting Crawl4AI..."
     docker compose -f "$COMPOSE_FILE" --profile crawl up -d crawl4ai 2>/dev/null
-
-    # Wait for health check (max 30s)
     for i in $(seq 1 10); do
         sleep 3
         READY=$(curl -s --max-time 3 "${CRAWL4AI_HOST}/health" 2>/dev/null | grep -c '"status":"ok"' || echo "0")
-        if [ "$READY" != "0" ]; then
-            echo "✅ Crawl4AI ready"
-            break
-        fi
-        [ $i -eq 10 ] && echo "⚠️  Crawl4AI slow to start, proceeding anyway..."
+        if [ "$READY" != "0" ]; then echo "✅ Crawl4AI ready"; break; fi
+        [ $i -eq 10 ] && echo "⚠️  Crawl4AI slow, proceeding anyway..."
     done
 fi
 
-# --- Try Crawl4AI (best quality markdown, JS-rendered) ---
+# --- Try Crawl4AI ---
 CRAWL_RESPONSE=$(curl -s --max-time 30 \
     -X POST "${CRAWL4AI_HOST}/crawl" \
     -H "Authorization: Bearer ${CRAWL4AI_TOKEN}" \

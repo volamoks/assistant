@@ -1,67 +1,96 @@
 ---
 name: Agent Developer
-description: Guidelines and standards for creating and configuring new Agents, Subagents, and Cron Jobs in the OpenClaw ecosystem. MUST follow these rules when user asks to add a new agent, subagent, or cron job.
+description: >
+  Authoritative guide for creating new Agents, Skills, and Cron Jobs in this OpenClaw instance.
+  MUST follow these rules — wrong structure causes crash loops or silent failures.
 triggers:
   - create agent
   - new agent
   - add agent
   - add cron
   - new cron job
+  - create skill
+  - new skill
+  - add skill
   - create subagent
 ---
 
 # Agent Developer Skill
 
-When the user asks you to create a new Agent, Subagent, or Cron Job, you **MUST** follow these guidelines. Failure to do so creates duplicate configs, broken agents, and security risks.
+> **Read this fully before starting.** Wrong config = crash loop or agent that never runs.
 
-> **Architecture Principle:** Separation of Concerns. Config in JSON, logic in shell scripts, prompts in `/prompts/`.
+---
+
+## ⚡ CRITICAL RULES (non-negotiable)
+
+1. **Named agent configs in `openclaw.json` → crash loop.** Never add `systemPromptPath`, `contextFiles`, `tools`, `temperature` to agent entries.
+2. **`agents.defaults.models`** — only: `{ "model-id": { "streaming": bool } }`. Nothing else.
+3. **`subagents.allowAgents`** — valid ONLY inside `agents.list[].subagents`, NOT in defaults.
+4. **`gateway.bind`** — only `"lan"` or `"loopback"`. Nothing else.
+5. **Single-file volume mounts → EACCES**. Always mount full directories.
 
 ---
 
 ## 1. Creating a New Agent
 
-### Step 1 — Create the system prompt
+### Step 1 — SOUL file (source template)
 
-Save the agent's personality/instructions to:
+Create the agent persona in git:
 ```
-/home/node/.openclaw/prompts/SOUL_<AGENTNAME>.md
-```
-This maps to the host path: `openclaw-docker/prompts/SOUL_<AGENTNAME>.md`
-
-### Step 2 — Create the agent JSON
-
-Save to `openclaw-docker/core/agents/<agentname>.json`:
-
-```json
-{
-  "id": "agent_<agentname>",
-  "name": "Display Name",
-  "description": "One-line description of what the agent does.",
-  "model": "litellm/fast",
-  "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_<AGENTNAME>.md",
-  "contextFiles": [
-    "/home/node/.openclaw/prompts/MEMORY.md"
-  ],
-  "tools": [],
-  "temperature": 0.5
-}
+openclaw-docker/prompts/SOUL_<NAME>.md
 ```
 
-**Model aliases (use these — never hardcode versioned IDs):**
-| Alias | Use case |
-|---|---|
-| `litellm/smart` | Complex reasoning, long tasks |
-| `litellm/fast` | Routing, quick replies, light tasks |
-| `litellm/thinking` | Deep analysis, DeepSeek R1 |
-| `ollama/qwen3.5:0.8b` | Silent background cron jobs |
-| `ollama/qwen3:8b` | Nightly jobs needing reasoning |
+Minimal structure:
+```markdown
+# SOUL.md — Claw <Name>
 
-**Available tools (reference real names):**
-- `agent_router` — call the router
-- `agent_coder`, `agent_research`, `agent_analyst` — specialist subagents
-- `obsidian_search` — semantic Obsidian vault search (RAG)
-- `web_search` — SearxNG web search
-- `exec` — run bash commands
+You are the **<NAME> AGENT** — [one-line purpose].
+
+---
+
+## Objective
+
+[What this agent does. Be specific.]
+
+## ⚡ File Discovery (MANDATORY)
+
+Before reading files or guessing paths — search first:
+
+\`\`\`bash
+bash /data/bot/openclaw-docker/scripts/bot_search.sh "what you need"
+# --only skills|prompts|scripts|context|obsidian  |  --limit N
+\`\`\`
+
+Returns ranked file paths. Read only what's relevant. **Never `ls skills/` blindly.**
+
+---
+
+## Rules
+
+- [Agent-specific rules]
+- See `TOOLS.md` for exact paths, skill commands, and protocols.
+
+*Every response MUST start with `[🦀 Claw/<agentid>]` and end with context estimate `(~Xk)`.*
+```
+
+### Step 2 — Agent workspace directory
+
+Create on the **host** (mounted via `./core` → `/home/node/.openclaw`):
+```
+openclaw-docker/core/workspace-<name>/
+  SOUL.md       ← COPY of prompts/SOUL_<NAME>.md (or enhanced version)
+  AGENTS.md     ← symlink or copy from core/workspace/AGENTS.md
+  TOOLS.md      ← symlink or copy from core/workspace/TOOLS.md
+  USER.md       ← symlink or copy from core/workspace/USER.md
+  HEARTBEAT.md  ← empty file (agent writes here)
+  IDENTITY.md   ← optional, agent-specific identity
+```
+
+Fastest way — copy from existing agent and edit SOUL.md:
+```bash
+cp -r openclaw-docker/core/workspace-analyst/ openclaw-docker/core/workspace-<name>/
+# Then edit: core/workspace-<name>/SOUL.md
+```
 
 ### Step 3 — Register in openclaw.json
 
@@ -69,20 +98,46 @@ Add to `openclaw-docker/core/openclaw.json` under `agents.list`:
 
 ```json
 {
-  "id": "agent_<agentname>",
-  "name": "agent_<agentname>",
-  "workspace": "/home/node/.openclaw/workspace",
-  "agentDir": "/home/node/.openclaw/agents/<agentname>/agent"
+  "id": "<name>",
+  "name": "<name>",
+  "workspace": "/home/node/.openclaw/workspace-<name>",
+  "agentDir": "/home/node/.openclaw/agents/<name>/agent",
+  "model": {
+    "primary": "bailian/kimi-k2.5"
+  }
 }
 ```
 
-**Also add the agent as a tool in `router.json` if it should be callable from the Router:**
+**Model choices:**
+| Model | Use case |
+|-------|----------|
+| `bailian/kimi-k2.5` | Default — fast, capable |
+| `bailian/qwen3.5-plus` | Routing, structured tasks |
+| `bailian/qwen3-max-2026-01-23` | Analysis, research |
+| `ollama/qwen3.5:0.8b` | Silent background cron jobs |
+| `ollama/qwen3.5:9b` | Heavier offline tasks |
+
+**To make the agent callable from main:**
+
+In the `main` agent entry, add to `subagents.allowAgents`:
 ```json
-// In core/agents/router.json, add to "tools" array:
-"agent_<agentname>"
+{
+  "id": "main",
+  "subagents": {
+    "allowAgents": ["coder", "researcher", ..., "<name>"]
+  }
+}
 ```
 
-### Step 4 — Restart openclaw
+### Step 4 — Index the new SOUL file into ChromaDB
+
+```bash
+docker exec openclaw-latest python3 /data/bot/openclaw-docker/scripts/jobs/bot_files_index.py --force
+```
+
+This ensures `bot_search.sh "what agent handles X"` returns the new agent.
+
+### Step 5 — Restart
 
 ```bash
 docker restart openclaw-latest
@@ -90,22 +145,70 @@ docker restart openclaw-latest
 
 ---
 
-## 2. Creating a Cron Job
+## 2. Creating a New Skill
 
-### Rules (non-negotiable):
+Skills are **markdown-only** — the agent reads `SKILL.md` and follows its instructions.
 
-1. **NO BASH IN JSON** — `cron/jobs.json` must NOT contain complex logic
-2. **All logic in scripts** — write a `.sh` or `.py` file in `openclaw-docker/scripts/jobs/`
-3. **Use env vars** — never hardcode `/data/obsidian`, `/data/bot` etc.
+> **CRITICAL: `.js`/`.mjs` files are NOT executed by OpenClaw skills.**
+> If you need code execution, write a bash/python script and reference it from `SKILL.md`.
+
+### Step 1 — Create skill folder
+
+```
+openclaw-docker/skills/<skill-name>/
+  SKILL.md    ← Required: frontmatter + instructions
+  scripts/    ← Optional: bash/python scripts called from SKILL.md
+```
+
+### Step 2 — SKILL.md format
+
+```markdown
+---
+name: skill_name
+description: "One line. Exactly when the agent should use this skill."
+triggers:
+  - trigger phrase one
+  - trigger phrase two
+---
+
+# Skill Title
+
+Instructions for the agent. Use exact bash commands.
+
+## Usage
+
+\`\`\`bash
+bash /data/bot/openclaw-docker/skills/<skill-name>/scripts/main.sh "arg"
+\`\`\`
+```
+
+### Step 3 — Index the new skill into ChromaDB
+
+```bash
+docker exec openclaw-latest python3 /data/bot/openclaw-docker/scripts/jobs/skills_index.py --force
+```
+
+This ensures `bot_search.sh "X"` returns the skill.
+
+Or wait for nightly cron (03:30 Tashkent).
+
+---
+
+## 3. Creating a Cron Job
+
+### Rules:
+
+1. **NO complex logic in `cron/jobs.json`** — only metadata and a command to run the script
+2. **All logic in scripts** — `openclaw-docker/scripts/jobs/<job>.sh` or `.py`
+3. **Use env vars** — never hardcode paths
 
 ### Step 1 — Write the script
 
 `openclaw-docker/scripts/jobs/<job_name>.sh`:
-
 ```bash
 #!/bin/bash
-# Job description
-# Uses: $OBSIDIAN_VAULT_PATH, $BOT_PROJECT_PATH, $TELEGRAM_CHAT_ID
+# Description of what this does
+# Uses: $OBSIDIAN_VAULT_PATH, $BOT_PROJECT_PATH
 
 echo "[job-name] Starting at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
@@ -114,12 +217,9 @@ echo "[job-name] Starting at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "[job-name] Done"
 ```
 
-Make executable:
-```bash
-chmod +x openclaw-docker/scripts/jobs/<job_name>.sh
-```
+Make executable: `chmod +x openclaw-docker/scripts/jobs/<job_name>.sh`
 
-### Step 2 — Add entry to cron/jobs.json
+### Step 2 — Add to cron/jobs.json
 
 ```json
 {
@@ -135,7 +235,7 @@ chmod +x openclaw-docker/scripts/jobs/<job_name>.sh
   "wakeMode": "now",
   "payload": {
     "kind": "agentTurn",
-    "message": "SILENT TASK. Run the script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/<job_name>.sh",
+    "message": "SILENT TASK. Run script, output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/<job_name>.sh",
     "model": "ollama/qwen3.5:0.8b"
   },
   "delivery": {
@@ -148,7 +248,7 @@ chmod +x openclaw-docker/scripts/jobs/<job_name>.sh
 }
 ```
 
-**For jobs that should notify Telegram on completion:**
+**With Telegram notification:**
 ```json
 "delivery": {
   "mode": "announce",
@@ -157,71 +257,32 @@ chmod +x openclaw-docker/scripts/jobs/<job_name>.sh
 }
 ```
 
----
+### Step 3 — Re-index scripts
 
-## 4. Creating a New Skill
-
-Skills extend what agents know and can do. They are **markdown-only** — no code execution.
-
-> **CRITICAL: JavaScript files (index.mjs, .js) are NOT supported by OpenClaw skills.**
-> Skills work ONLY through `SKILL.md` instructions. If you need code execution, write a bash/python script and call it from `SKILL.md`.
-
-### Skill folder structure
-
-```
-skills/<skill-name>/
-  SKILL.md       ← Required: frontmatter + markdown instructions
-  README.md      ← Required for tool-dispatch skills (OpenClaw reads this on invocation)
-  scripts/       ← Optional: helper scripts referenced from SKILL.md
+```bash
+docker exec openclaw-latest python3 /data/bot/openclaw-docker/scripts/jobs/bot_files_index.py --force
 ```
 
-### SKILL.md format
-
-```markdown
----
-name: my_skill
-description: "One line. When should agent use this skill."
-triggers:
-  - trigger phrase one
-  - trigger phrase two
 ---
 
-# Skill Title
+## ✅ Full Checklist
 
-Markdown instructions for the agent. Include exact bash commands to run.
+### New Agent
+- [ ] `prompts/SOUL_<NAME>.md` created with bot_search rule included
+- [ ] `core/workspace-<name>/` created with SOUL.md + AGENTS.md + TOOLS.md + USER.md + HEARTBEAT.md
+- [ ] Entry added to `core/openclaw.json > agents.list` (minimal: id + workspace + agentDir + model)
+- [ ] Added to `main` agent's `subagents.allowAgents` (if callable from router)
+- [ ] `bot_files_index.py --force` run to index new SOUL file
+- [ ] `docker restart openclaw-latest`
 
-## Usage
+### New Skill
+- [ ] `skills/<name>/SKILL.md` created with frontmatter (name + description + triggers)
+- [ ] Logic in `skills/<name>/scripts/` (not inline JS)
+- [ ] `skills_index.py --force` run to index new skill
+- [ ] Skill tested: `bot_search.sh "trigger phrase" --only skills`
 
-\`\`\`bash
-bash /data/bot/openclaw-docker/scripts/my_script.sh "arg"
-\`\`\`
-```
-
-### Real tool names (for agent JSON `tools` field)
-
-| Tool | Purpose |
-|---|---|
-| `exec` | Run shell commands |
-| `read` | Read files |
-| `write` | Write files |
-| `apply_patch` | Apply unified diffs |
-| `web_search` | Web search via SearxNG |
-| `web_fetch` | Fetch a URL |
-| `browser` | Headless browser |
-| `cron` | Manage cron jobs |
-| `sessions_spawn` | Spawn subagent |
-
-> Skills (`obsidian_search`, `web_search` skill) are injected via SKILL.md into the agent's system prompt — they are NOT listed in the `tools` JSON field.
-
----
-
-## Checklist before finishing
-
-- [ ] `SOUL_<AGENTNAME>.md` created in `prompts/`
-- [ ] `<agentname>.json` created in `core/agents/` with **real tool names** (exec/read/write, not shell.execute/file.read)
-- [ ] Agent registered in `core/openclaw.json > agents.list`
-- [ ] Agent added to `router.json > tools` (if callable from Router)
-- [ ] For cron: script in `scripts/jobs/`, entry in `cron/jobs.json`
-- [ ] For skill: `SKILL.md` + `README.md` in `skills/<name>/`, logic in bash script
-- [ ] `docker restart openclaw-latest` executed
-
+### New Cron Job
+- [ ] Script in `scripts/jobs/<name>.sh` (chmod +x)
+- [ ] Entry in `cron/jobs.json` (no complex bash, just script call)
+- [ ] Script re-indexed: `bot_files_index.py --force`
+- [ ] Tested manually: `docker exec openclaw-latest bash /data/bot/openclaw-docker/scripts/jobs/<name>.sh`

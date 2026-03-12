@@ -23,16 +23,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773288000000,
-        "lastRunAtMs": 1773201600035,
-        "lastStatus": "error",
-        "lastDurationMs": 90008,
-        "consecutiveErrors": 1,
-        "lastRunStatus": "error",
+        "nextRunAtMs": 1773374400000,
+        "lastRunAtMs": 1773293994790,
+        "lastStatus": "skipped",
+        "lastDurationMs": 0,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "skipped",
         "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "lastError": "isolated job requires payload.kind=agentTurn"
       },
-      "updatedAtMs": 1773201690043
+      "updatedAtMs": 1773293994790
     },
     {
       "id": "intraday-snapshot",
@@ -56,16 +56,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773198000040,
-        "lastStatus": "ok",
-        "lastDurationMs": 14457,
-        "consecutiveErrors": 0,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773370800000,
+        "lastRunAtMs": 1773293994790,
+        "lastStatus": "error",
+        "lastDurationMs": 60360,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-requested",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773198014497
+      "updatedAtMs": 1773294055150
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -119,16 +119,16 @@
         "timeoutSeconds": 180
       },
       "state": {
-        "nextRunAtMs": 1773281400000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1773280800030,
-        "lastStatus": "ok",
-        "lastDurationMs": 52109,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773295800000,
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1773294055150,
+        "lastStatus": "error",
+        "lastDurationMs": 180102,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-requested",
+        "runningAtMs": 1773295802208
       },
-      "updatedAtMs": 1773280852139,
+      "updatedAtMs": 1773294235252,
       "delivery": {
         "mode": "none"
       }
@@ -155,16 +155,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773198021738,
-        "lastStatus": "ok",
-        "lastDurationMs": 13472,
-        "consecutiveErrors": 0,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773370800000,
+        "lastRunAtMs": 1773294235253,
+        "lastStatus": "error",
+        "lastDurationMs": 30042,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-requested",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773198035210
+      "updatedAtMs": 1773294265295
     },
     {
       "id": "telegram-dashboard",
@@ -188,16 +188,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773286200000,
-        "lastRunAtMs": 1773199820253,
+        "nextRunAtMs": 1773372600000,
+        "lastRunAtMs": 1773294265295,
         "lastStatus": "ok",
-        "lastDurationMs": 33137,
+        "lastDurationMs": 25878,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773199853390
+      "updatedAtMs": 1773294291173
     },
     {
       "id": "vault-gardening",
@@ -253,16 +253,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773282600000,
+        "nextRunAtMs": 1773297000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773280852139,
+        "lastRunAtMs": 1773294291173,
         "lastStatus": "ok",
-        "lastDurationMs": 19733,
+        "lastDurationMs": 7284,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773280871872
+      "updatedAtMs": 1773294298457
     },
     {
       "id": "finance-enrichment",
@@ -421,16 +421,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
+        "nextRunAtMs": 1773370800000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773198045064,
+        "lastRunAtMs": 1773294298457,
         "lastRunStatus": "ok",
-        "lastDurationMs": 103123,
+        "lastDurationMs": 19704,
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1773198148187
+      "updatedAtMs": 1773294318161
     },
     {
       "id": "watchdog",
@@ -451,13 +451,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773280871872,
+        "lastRunAtMs": 1773293872511,
         "lastRunStatus": "ok",
-        "lastDurationMs": 13031,
+        "lastDurationMs": 120070,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773281100000
+        "nextRunAtMs": 1773295800000,
+        "runningAtMs": 1773295802208
       },
-      "updatedAtMs": 1773280884903
+      "updatedAtMs": 1773293992581
     },
     {
       "id": "git-backup",
@@ -482,17 +483,15 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773280819024,
-        "lastStatus": "ok",
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1773277282366,
-        "lastRunStatus": "ok",
-        "lastDurationMs": 63964,
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773280922312
+        "nextRunAtMs": 1773298819024,
+        "lastStatus": "error",
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1773294318161,
+        "lastRunStatus": "error",
+        "lastDurationMs": 120155,
+        "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773277346330
+      "updatedAtMs": 1773294438316
     },
     {
       "id": "docker-arch-analyzer",
@@ -516,16 +515,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastStatus": "ok",
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1773198156776,
-        "lastRunStatus": "ok",
-        "lastDurationMs": 17950,
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773370800000,
+        "lastStatus": "error",
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1773294438316,
+        "lastRunStatus": "error",
+        "lastDurationMs": 180112,
+        "lastDeliveryStatus": "not-requested",
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773198174726
+      "updatedAtMs": 1773294618428
     },
     {
       "id": "31eb68a9-4695-4749-996d-52f1e2e0a87b",
@@ -602,7 +601,7 @@
       "name": "morning-briefing",
       "enabled": true,
       "createdAtMs": 1772532782154,
-      "updatedAtMs": 1773198334251,
+      "updatedAtMs": 1773294618429,
       "schedule": {
         "expr": "0 3 * * *",
         "kind": "cron",
@@ -619,14 +618,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773198174726,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 159525,
-        "lastDeliveryStatus": "delivered",
+        "nextRunAtMs": 1773370800000,
+        "lastRunAtMs": 1773294618428,
+        "lastRunStatus": "skipped",
+        "lastStatus": "skipped",
+        "lastDurationMs": 1,
+        "lastDeliveryStatus": "unknown",
         "consecutiveErrors": 0,
-        "lastDelivered": true
+        "lastError": "isolated job requires payload.kind=agentTurn"
       }
     },
     {
@@ -651,16 +650,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773242632769,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 35263,
-        "lastDeliveryStatus": "not-delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": false
+        "nextRunAtMs": 1773306000000,
+        "lastRunAtMs": 1773294618429,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 90081,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 1,
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773242668032
+      "updatedAtMs": 1773294708510
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
@@ -669,7 +668,7 @@
       "name": "Crypto Daily Report",
       "enabled": true,
       "createdAtMs": 1772607679973,
-      "updatedAtMs": 1773198516018,
+      "updatedAtMs": 1773294770461,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -684,13 +683,13 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773198350542,
+        "nextRunAtMs": 1773370800000,
+        "lastRunAtMs": 1773294708510,
         "lastRunStatus": "error",
         "lastStatus": "error",
-        "lastDurationMs": 165476,
+        "lastDurationMs": 61951,
         "lastDeliveryStatus": "unknown",
-        "consecutiveErrors": 2,
+        "consecutiveErrors": 3,
         "lastError": "Delivering to Telegram requires target <chatId>"
       },
       "delivery": {
@@ -736,7 +735,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773198816059,
+      "updatedAtMs": 1773294832180,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -756,14 +755,14 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773198516018,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 300041,
-        "lastDeliveryStatus": "unknown",
-        "consecutiveErrors": 1,
-        "lastError": "cron: job execution timed out"
+        "nextRunAtMs": 1773370800000,
+        "lastRunAtMs": 1773294770461,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 61719,
+        "lastDeliveryStatus": "delivered",
+        "consecutiveErrors": 0,
+        "lastDelivered": true
       }
     },
     {
@@ -860,16 +859,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773288000000,
-        "lastRunAtMs": 1773234515085,
+        "nextRunAtMs": 1773298800000,
+        "lastRunAtMs": 1773294832180,
         "lastRunStatus": "error",
         "lastStatus": "error",
-        "lastDurationMs": 490,
+        "lastDurationMs": 240146,
         "lastDeliveryStatus": "not-requested",
-        "consecutiveErrors": 1,
-        "lastError": "Error: All models failed (2): ollama/llama3.2:1b: Unknown model: ollama/llama3.2:1b. Ollama requires authentication to be registered as a provider. Set OLLAMA_API_KEY=\"ollama-local\" (any value works) or run \"openclaw configure\". See: https://docs.openclaw.ai/providers/ollama (model_not_found) | anthropic/claude-opus-4-6: No API key found for provider \"anthropic\". Auth store: /home/node/.openclaw/agents/main/agent/auth-profiles.json (agentDir: /home/node/.openclaw/agents/main/agent). Configure auth for this agent (openclaw agents add <id>) or copy auth-profiles.json from the main agentDir. (auth)"
+        "consecutiveErrors": 2,
+        "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773234515575
+      "updatedAtMs": 1773295072326
     },
     {
       "id": "8c767997-87cb-4374-8468-b7fd3e8c2b4d",
@@ -1017,7 +1016,7 @@
       "name": "Crypto Proactive Monitor",
       "enabled": true,
       "createdAtMs": 1773146452092,
-      "updatedAtMs": 1773277407939,
+      "updatedAtMs": 1773295192536,
       "schedule": {
         "kind": "cron",
         "expr": "0 * * * *",
@@ -1031,11 +1030,11 @@
         "text": "SILENT TASK. Run: python3 ~/.openclaw/skills/crypto_assistant/proactive_monitor.py"
       },
       "state": {
-        "nextRunAtMs": 1773280990000,
-        "lastRunAtMs": 1773277390025,
+        "nextRunAtMs": 1773298990000,
+        "lastRunAtMs": 1773295072327,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 17914,
+        "lastDurationMs": 120209,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
       }
@@ -1047,7 +1046,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773280919557,
+      "updatedAtMs": 1773295739566,
       "schedule": {
         "kind": "cron",
         "expr": "0,30 * * * *",
@@ -1065,14 +1064,14 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773282600000,
-        "lastRunAtMs": 1773280884903,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 34654,
-        "lastDeliveryStatus": "not-delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": false
+        "nextRunAtMs": 1773297000000,
+        "lastRunAtMs": 1773295499539,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 240027,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 2,
+        "lastError": "Error: cron: job execution timed out"
       }
     },
     {

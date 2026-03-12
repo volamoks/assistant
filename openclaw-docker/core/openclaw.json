@@ -377,6 +377,11 @@
     },
     "agentToAgent": {
       "enabled": true
+    },
+    "web": {
+      "search": {
+        "enabled": false
+      }
     }
   },
   "commands": {

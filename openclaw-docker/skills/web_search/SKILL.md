@@ -32,26 +32,37 @@ Replace `QUERY` with URL-encoded search terms.
 
 ## Fetch full page content (for deeper research)
 
-After getting URLs from search, use `web_clip.sh` to fetch one specific page:
+**PinchTab — primary (fast, ~800 tokens, accessibility tree):**
 
 ```bash
-# Read page inline (no save, 2000 char limit = ~500 tokens):
+PT="bash /data/bot/openclaw-docker/skills/browser-automation/pinchtab.sh"
+$PT navigate "URL_HERE"
+$PT text           # clean text, ~800 tokens
+$PT snapshot       # structured accessibility tree
+```
+
+**web_clip.sh — for JS-heavy pages or saving to Obsidian:**
+
+```bash
+# Read inline (2000 chars ≈ 500 tokens):
 bash /data/bot/openclaw-docker/scripts/web_clip.sh "URL_HERE" 2000 false
 
-# Save to Obsidian for later:
+# Save to Obsidian for later reference:
 bash /data/bot/openclaw-docker/scripts/web_clip.sh "URL_HERE" 4000 true
 ```
+
+> `web_clip.sh` tries PinchTab first, then Crawl4AI. Never starts Crawl4AI unnecessarily.
 
 ## Token-saving strategy
 
 | Need | Command | ~Tokens |
 |---|---|---|
-| Quick answer / overview | Basic search (5 results) | 300–500 |
-| Read one specific page | web_clip.sh url 2000 false | 500–700 |
-| Save article to Obsidian | web_clip.sh url 4000 true | 0 (saved, not in ctx) |
-| Deep research | search + clip top 2–3 pages | 1000–2000 |
+| Quick answer | SearXNG search (5 results) | 300–500 |
+| Read one page | `pinchtab.sh navigate + text` | ~800 |
+| Save article | `web_clip.sh url 4000 true` | 0 (saved to Obsidian) |
+| Deep research | search + pinchtab top 2–3 pages | 1500–2500 |
 
-**Rule:** Never load full pages unless the snippets are insufficient.
+**Rule:** PinchTab for page content. SearXNG for search. Never use paid APIs — we run everything locally.
 
 ## Options
 
