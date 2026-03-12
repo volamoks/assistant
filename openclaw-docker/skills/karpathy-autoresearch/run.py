@@ -44,8 +44,28 @@ def run_step(script_name: str, args: List[str], description: str) -> bool:
     
     cmd = [sys.executable, str(script_path)] + args
     
-    # Pass environment variables to subprocess
+    # Pass environment variables to subprocess - explicitly ensure critical vars
     env = os.environ.copy()
+    
+    # Critical env vars that must be explicitly passed
+    critical_vars = [
+        'LITELLM_MASTER_KEY',
+        'LITELLM_BASE',
+        'TELEGRAM_CHAT_ID',
+        'TELEGRAM_BOT_TOKEN',
+        'OPENCLAW_SESSION_KEY',
+        'PATH',
+        'PYTHONPATH',
+        'HOME',
+        'USER',
+    ]
+    
+    for var in critical_vars:
+        if var in os.environ:
+            env[var] = os.environ[var]
+        elif var in ['LITELLM_MASTER_KEY', 'TELEGRAM_CHAT_ID']:
+            # Warn but don't fail - these might be set elsewhere
+            print(f"⚠️ Warning: {var} not set in environment")
     
     try:
         result = subprocess.run(

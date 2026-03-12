@@ -89,16 +89,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773270000000,
+        "nextRunAtMs": 1773356400000,
         "lastStatus": "error",
-        "consecutiveErrors": 1,
-        "lastRunAtMs": 1773183600025,
-        "lastDurationMs": 300014,
+        "consecutiveErrors": 2,
+        "lastRunAtMs": 1773270000030,
+        "lastDurationMs": 300044,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "not-requested",
         "lastError": "cron: job execution timed out"
       },
-      "updatedAtMs": 1773183900039
+      "updatedAtMs": 1773270300074
     },
     {
       "id": "crash-analysis",
@@ -119,16 +119,16 @@
         "timeoutSeconds": 180
       },
       "state": {
-        "nextRunAtMs": 1773243000000,
+        "nextRunAtMs": 1773281400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773242400029,
+        "lastRunAtMs": 1773280800030,
         "lastStatus": "ok",
-        "lastDurationMs": 14811,
+        "lastDurationMs": 52109,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773242414840,
+      "updatedAtMs": 1773280852139,
       "delivery": {
         "mode": "none"
       }
@@ -221,16 +221,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773253800000,
-        "lastRunAtMs": 1773167412109,
+        "nextRunAtMs": 1773340200000,
+        "lastRunAtMs": 1773253844607,
         "lastStatus": "ok",
-        "lastDurationMs": 22285,
+        "lastDurationMs": 16921,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773167434394
+      "updatedAtMs": 1773253861528
     },
     {
       "id": "actual-sync",
@@ -253,16 +253,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773243000000,
+        "nextRunAtMs": 1773282600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773239420390,
+        "lastRunAtMs": 1773280852139,
         "lastStatus": "ok",
-        "lastDurationMs": 16629,
+        "lastDurationMs": 19733,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773239437019
+      "updatedAtMs": 1773280871872
     },
     {
       "id": "finance-enrichment",
@@ -287,16 +287,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773262800000,
-        "lastRunAtMs": 1773176460119,
+        "nextRunAtMs": 1773349200000,
+        "lastRunAtMs": 1773262873122,
         "lastStatus": "ok",
-        "lastDurationMs": 12487,
+        "lastDurationMs": 39612,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773176472606
+      "updatedAtMs": 1773262912734
     },
     {
       "id": "6ed0bf91-2fae-40a1-81be-775c58a2ec48",
@@ -320,16 +320,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773252000000,
+        "nextRunAtMs": 1773338400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773165689723,
+        "lastRunAtMs": 1773252041421,
         "lastStatus": "ok",
-        "lastDurationMs": 11322,
+        "lastDurationMs": 13788,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773165701045
+      "updatedAtMs": 1773252055209
     },
     {
       "id": "obsidian-reindex",
@@ -354,15 +354,15 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773266400000,
-        "lastRunAtMs": 1773180152133,
+        "nextRunAtMs": 1773352800000,
+        "lastRunAtMs": 1773266471412,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 90977,
+        "lastDurationMs": 62464,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773180243110
+      "updatedAtMs": 1773266533876
     },
     {
       "id": "context-logger",
@@ -386,16 +386,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773252000000,
+        "nextRunAtMs": 1773338400000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773165701045,
+        "lastRunAtMs": 1773252055209,
         "lastRunStatus": "ok",
-        "lastDurationMs": 23172,
+        "lastDurationMs": 42859,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773165724217
+      "updatedAtMs": 1773252098068
     },
     {
       "id": "telegram-monitor",
@@ -451,13 +451,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773242414840,
+        "lastRunAtMs": 1773280871872,
         "lastRunStatus": "ok",
-        "lastDurationMs": 14342,
+        "lastDurationMs": 13031,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773242700000
+        "nextRunAtMs": 1773281100000
       },
-      "updatedAtMs": 1773242429182
+      "updatedAtMs": 1773280884903
     },
     {
       "id": "git-backup",
@@ -482,16 +482,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773244819024,
+        "nextRunAtMs": 1773280819024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773241368783,
+        "lastRunAtMs": 1773277282366,
         "lastRunStatus": "ok",
-        "lastDurationMs": 60426,
+        "lastDurationMs": 63964,
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "lastDelivered": false,
+        "runningAtMs": 1773280922312
       },
-      "updatedAtMs": 1773241429209
+      "updatedAtMs": 1773277346330
     },
     {
       "id": "docker-arch-analyzer",
@@ -532,7 +533,7 @@
       "name": "nightly-analysis",
       "enabled": true,
       "createdAtMs": 1772531832671,
-      "updatedAtMs": 1773176599649,
+      "updatedAtMs": 1773255904005,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -551,11 +552,11 @@
         "channel": "last"
       },
       "state": {
-        "nextRunAtMs": 1773255600000,
-        "lastRunAtMs": 1773176482702,
+        "nextRunAtMs": 1773342000000,
+        "lastRunAtMs": 1773255712599,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 116947,
+        "lastDurationMs": 191406,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -651,15 +652,15 @@
       },
       "state": {
         "nextRunAtMs": 1773284400000,
-        "lastRunAtMs": 1773219634418,
+        "lastRunAtMs": 1773242632769,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 10243,
+        "lastDurationMs": 35263,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773219644661
+      "updatedAtMs": 1773242668032
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
@@ -825,16 +826,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773259200000,
-        "lastRunAtMs": 1773172917573,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 600043,
-        "lastDeliveryStatus": "not-requested",
-        "consecutiveErrors": 1,
-        "lastError": "cron: job execution timed out"
+        "nextRunAtMs": 1773345600000,
+        "lastRunAtMs": 1773259273737,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 350311,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0,
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773173517616
+      "updatedAtMs": 1773259624048
     },
     {
       "id": "plaud-monitor",
@@ -948,7 +949,7 @@
       "description": "Night mode autoresearch with Feature Discovery",
       "enabled": true,
       "createdAtMs": 1773132247639,
-      "updatedAtMs": 1773222614152,
+      "updatedAtMs": 1773263133456,
       "schedule": {
         "expr": "0 21 * * *",
         "kind": "cron",
@@ -966,13 +967,14 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773262800000,
-        "lastRunAtMs": 1773194444768,
-        "lastRunStatus": "error",
-        "lastStatus": "error",
-        "lastDurationMs": 600700,
-        "lastDeliveryStatus": "not-requested",
-        "consecutiveErrors": 1
+        "nextRunAtMs": 1773349200000,
+        "lastRunAtMs": 1773262926772,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 206684,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0,
+        "lastDelivered": false
       }
     },
     {
@@ -997,16 +999,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773268200000,
+        "nextRunAtMs": 1773354600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773181833671,
+        "lastRunAtMs": 1773268256975,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 10357,
+        "lastDurationMs": 20686,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773181844028
+      "updatedAtMs": 1773268277661
     },
     {
       "id": "77b95df3-f902-4122-bcba-68e413584821",
@@ -1015,7 +1017,7 @@
       "name": "Crypto Proactive Monitor",
       "enabled": true,
       "createdAtMs": 1773146452092,
-      "updatedAtMs": 1773237790687,
+      "updatedAtMs": 1773277407939,
       "schedule": {
         "kind": "cron",
         "expr": "0 * * * *",
@@ -1029,11 +1031,11 @@
         "text": "SILENT TASK. Run: python3 ~/.openclaw/skills/crypto_assistant/proactive_monitor.py"
       },
       "state": {
-        "nextRunAtMs": 1773244990000,
-        "lastRunAtMs": 1773237790034,
+        "nextRunAtMs": 1773280990000,
+        "lastRunAtMs": 1773277390025,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 653,
+        "lastDurationMs": 17914,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
       }
@@ -1045,7 +1047,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773239599846,
+      "updatedAtMs": 1773280919557,
       "schedule": {
         "kind": "cron",
         "expr": "0,30 * * * *",
@@ -1063,11 +1065,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773243000000,
-        "lastRunAtMs": 1773239449264,
+        "nextRunAtMs": 1773282600000,
+        "lastRunAtMs": 1773280884903,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 150582,
+        "lastDurationMs": 34654,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1094,6 +1096,29 @@
       },
       "state": {
         "nextRunAtMs": 1774641600000
+      }
+    },
+    {
+      "id": "de42c62e-8992-42e7-b7a7-39629d27101d",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "A2UI WebApp хостинг",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1773252594941,
+      "updatedAtMs": 1773252594941,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-03-12T09:00:00.000Z"
+      },
+      "sessionTarget": "main",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "systemEvent",
+        "text": "🔔 НАПОМИНАНИЕ: Залить A2UI WebApp файлы на хостинг\n\nФайлы: /home/node/.openclaw/workspace-main/a2ui/webapp/\nХостинг: bot.volamoks.store/a2ui/webapp/\n\nКоманды:\n1. cp -r webapp/ /path/to/webserver/\n2. Проверить https://bot.volamoks.store/a2ui/webapp/\n3. Протестировать форму бронирования в Telegram"
+      },
+      "state": {
+        "nextRunAtMs": 1773306000000
       }
     }
   ]

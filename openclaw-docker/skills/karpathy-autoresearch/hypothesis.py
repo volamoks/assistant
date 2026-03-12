@@ -84,40 +84,70 @@ Output as JSON with "hypotheses" array."""
     if LITELLM_KEY:
         headers["Authorization"] = f"Bearer {LITELLM_KEY}"
     
-    try:
-        resp = requests.post(
-            f"{LITELLM_BASE}/chat/completions",
-            headers=headers,
-            json={
-                "model": model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                "temperature": 0.5,
-                "max_tokens": 3000
-            },
-            timeout=60
-        )
-        resp.raise_for_status()
-        result = resp.json()["choices"][0]["message"]["content"]
-        # Try to parse JSON from the response
+    # Retry logic with exponential backoff for 400 errors
+    max_retries = 3
+    last_error = None
+    
+    for attempt in range(max_retries):
         try:
-            data = json.loads(result)
-            return data.get("hypotheses", [])
-        except json.JSONDecodeError:
-            # If not valid JSON, try to extract JSON from markdown code block
-            import re
-            json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', result, re.DOTALL)
-            if json_match:
-                data = json.loads(json_match.group(1))
-                return data.get("hypotheses", [])
+            resp = requests.post(
+                f"{LITELLM_BASE}/chat/completions",
+                headers=headers,
+                json={
+                    "model": model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    "temperature": 0.5,
+                    "max_tokens": 3000
+                },
+                timeout=60
+            )
+            resp.raise_for_status()
+            result = resp.json()["choices"][0]["message"]["content"]
+            break  # Success, exit retry loop
+        except requests.HTTPError as e:
+            last_error = e
+            if e.response.status_code == 400 and attempt < max_retries - 1:
+                wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
+                print(f"⚠️ LLM 400 error, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                import time
+                time.sleep(wait_time)
+                continue
             else:
-                print(f"⚠️ Could not parse JSON from response")
+                print(f"❌ LLM HTTP error: {e}")
                 return []
-    except Exception as e:
-        print(f"❌ LLM error: {e}")
+        except Exception as e:
+            last_error = e
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt
+                print(f"⚠️ LLM error, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                import time
+                time.sleep(wait_time)
+                continue
+            else:
+                print(f"❌ LLM error after {max_retries} retries: {e}")
+                return []
+    else:
+        # All retries exhausted
+        print(f"❌ LLM error after {max_retries} retries: {last_error}")
         return []
+    
+    # Try to parse JSON from the response
+    try:
+        data = json.loads(result)
+        return data.get("hypotheses", [])
+    except json.JSONDecodeError:
+        # If not valid JSON, try to extract JSON from markdown code block
+        import re
+        json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', result, re.DOTALL)
+        if json_match:
+            data = json.loads(json_match.group(1))
+            return data.get("hypotheses", [])
+        else:
+            print(f"⚠️ Could not parse JSON from response")
+            return []
 
 
 def score_hypothesis(hypothesis: Dict[str, Any], patterns: Dict[str, Any]) -> float:
