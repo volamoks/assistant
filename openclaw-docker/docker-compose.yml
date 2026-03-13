@@ -141,7 +141,7 @@ services:
       retries: 3
       start_period: 60s
     user: "501:20" # Run as host user for correct file ownership
-    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; sudo chmod a+rx /root /root/.bun /root/.bun/bin /root/.bun/bin/bun 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; sudo chmod a+rx /root /root/.bun /root/.bun/bin /root/.bun/bin/bun 2>/dev/null || true; sudo chown -R 501:20 /home/node/.npm 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

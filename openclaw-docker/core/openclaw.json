@@ -23,81 +23,6 @@
   },
   "models": {
     "providers": {
-      "litellm": {
-        "baseUrl": "http://litellm:4000",
-        "apiKey": "sk-litellm-openclaw-proxy",
-        "api": "openai-completions",
-        "models": [
-          {
-            "id": "litellm/thinking",
-            "name": "Thinking (DeepSeek R1)"
-          },
-          {
-            "id": "deepseek/deepseek-chat",
-            "name": "DeepSeek Chat (litellm)"
-          },
-          {
-            "id": "deepseek/deepseek-reasoner",
-            "name": "DeepSeek R1 (litellm)"
-          },
-          {
-            "id": "litellm/or-deepseek-chat",
-            "name": "DeepSeek Chat (OpenRouter)"
-          },
-          {
-            "id": "openrouter/deepseek/deepseek-r1",
-            "name": "DeepSeek R1 (OpenRouter)"
-          },
-          {
-            "id": "litellm/minimax/MiniMax-M2.5",
-            "name": "MiniMax M2.5 (direct)"
-          },
-          {
-            "id": "openrouter/minimax/minimax-01",
-            "name": "MiniMax 01 (OpenRouter)"
-          },
-          {
-            "id": "openrouter/deepseek/deepseek-v3.2",
-            "name": "DeepSeek V3 (Custom)"
-          },
-          {
-            "id": "kimi-k2.5",
-            "name": "Kimi K2.5 (Alibaba)"
-          },
-          {
-            "id": "bailian/qwen3.5-plus",
-            "name": "Qwen3.5 Plus (Bailian)"
-          },
-          {
-            "id": "bailian/qwen3-max-2026-01-23",
-            "name": "Qwen3 Max (Bailian)"
-          },
-          {
-            "id": "bailian/qwen3-coder-plus",
-            "name": "Qwen3 Coder Plus (Bailian)"
-          },
-          {
-            "id": "bailian/kimi-k2.5",
-            "name": "Kimi K2.5 (Bailian)"
-          },
-          {
-            "id": "bailian/MiniMax-M2.5",
-            "name": "MiniMax M2.5 (Bailian)"
-          },
-          {
-            "id": "bailian/qwen3-vl-plus",
-            "name": "Qwen3 VL Plus (Bailian Vision)"
-          },
-          {
-            "id": "openrouter/openrouter/hunter-alpha",
-            "name": "Hunter Alpha 1M (FREE)"
-          },
-          {
-            "id": "openrouter/openrouter/healer-alpha",
-            "name": "Healer Alpha (FREE)"
-          }
-        ]
-      },
       "groq": {
         "baseUrl": "https://api.groq.com/openai/v1",
         "apiKey": "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",
@@ -159,6 +84,25 @@
           }
         ]
       },
+      "litellm": {
+        "baseUrl": "http://litellm:4000",
+        "apiKey": "sk-litellm-openclaw-proxy",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "claw-main",
+            "name": "Claw Main"
+          },
+          {
+            "id": "claw-coder",
+            "name": "Claw Coder"
+          },
+          {
+            "id": "claw-architect",
+            "name": "Claw Architect"
+          }
+        ]
+      },
       "bailian": {
         "baseUrl": "http://litellm:4000",
         "apiKey": "sk-litellm-openclaw-proxy",
@@ -197,6 +141,24 @@
         "primary": "litellm/vision"
       },
       "models": {
+        "litellm/claw-main": {
+          "streaming": true
+        },
+        "litellm/claw-coder": {
+          "streaming": true
+        },
+        "litellm/claw-architect": {
+          "streaming": true
+        },
+        "litellm/claw-cron-fast": {
+          "streaming": true
+        },
+        "litellm/claw-cron-smart": {
+          "streaming": true
+        },
+        "litellm/vision": {
+          "streaming": true
+        },
         "litellm/thinking": {
           "streaming": true
         },
@@ -263,10 +225,10 @@
         "mode": "safeguard"
       },
       "blockStreamingDefault": "on",
-      "blockStreamingBreak": "text_end",
+      "blockStreamingBreak": "message_end",
       "blockStreamingChunk": {
-        "minChars": 100,
-        "maxChars": 500
+        "minChars": 300,
+        "maxChars": 1500
       },
       "timeoutSeconds": 1800,
       "heartbeat": {
@@ -283,7 +245,7 @@
         "id": "main",
         "workspace": "/home/node/.openclaw/workspace-main",
         "model": {
-          "primary": "bailian/qwen3.5-plus"
+          "primary": "litellm/claw-main"
         },
         "subagents": {
           "allowAgents": [
@@ -464,7 +426,7 @@
       ],
       "groupPolicy": "allowlist",
       "streaming": "partial",
-      "blockStreaming": false,
+      "blockStreaming": true,
       "accounts": {
         "default": {
           "dmPolicy": "allowlist",
@@ -523,8 +485,8 @@
           "freshTailCount": 32,
           "contextThreshold": 0.75,
           "incrementalMaxDepth": -1,
-          "summaryModel": "claw-main",
-          "summaryProvider": "litellm"
+          "summaryModel": "MiniMax-M2.5",
+          "summaryProvider": "minimax"
         }
       },
       "acpx": {
