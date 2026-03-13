@@ -2,7 +2,7 @@
   "id": "agent_coder",
   "name": "Specialist (Coder)",
   "description": "DevOps & Backend Engineer powered by MiniMax M2.5. Native MCP support for full-repo understanding.",
-  "model": "kimi-k2.5",
+  "model": "litellm/claw-coder",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CODER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",

@@ -1,10 +1,31 @@
-FROM ghcr.io/openclaw/openclaw:2026.3.8
+# --- Build Stage ---
+FROM node:20-slim AS builder
 
-# Temporarily switch to root to install system dependencies
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    python3 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Bun for qmd
+RUN curl -fsSL https://bun.sh/install | bash
+
+# --- Final Stage ---
+FROM ghcr.io/openclaw/openclaw:2026.3.12
+
+# Metadata
+LABEL maintainer="Antigravity"
+LABEL version="2026.3.13-optimized"
+
 USER root
 
-# Install docker CLI, sudo, python tools, jq, and column (bsdmainutils)
-RUN apt-get update && apt-get install -y \
+# Combine RUN commands to reduce layers
+# Install docker CLI, sudo, python tools, jq, column, and ffmpeg
+RUN apt-get update && apt-get install -y --no-install-recommends \
     docker.io \
     sudo \
     python3-pip \
@@ -13,47 +34,46 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install actualpy and other dependencies globally
-RUN pip3 install --break-system-packages actualpy python-dotenv telethon pandas pydub markitdown
+# Copy Bun from builder
+COPY --from=builder /root/.bun /root/.bun
+ENV PATH="/root/.bun/bin:${PATH}"
 
-# Install Gemini CLI and acpx for ACPX agent support
-RUN npm install -g @google/gemini-cli acpx@0.1.15
-
-# Install ClawVault (persistent agent memory) and qmd (BM25+vector search)
-RUN npm install -g clawvault
-RUN curl -fsSL https://bun.sh/install | bash \
-    && export PATH=/root/.bun/bin:$PATH \
+# Install global tools in a single layer
+RUN pip3 install --no-cache-dir --break-system-packages \
+    actualpy \
+    python-dotenv \
+    telethon \
+    pandas \
+    pydub \
+    markitdown \
+    && npm install -g @google/gemini-cli acpx@0.1.15 clawvault \
     && bun install -g github:tobi/qmd \
     && bun pm -g trust --all \
-    && cd /root/.bun/install/global/node_modules/@tobilu/qmd \
-    && bun install \
-    && bun run build \
-    && ln -sf /root/.bun/install/global/node_modules/@tobilu/qmd/dist/qmd.js /usr/local/bin/qmd \
+    && printf '#!/bin/bash\nexec /root/.bun/bin/bun /root/.bun/install/global/node_modules/@tobilu/qmd/src/cli/qmd.ts "$@"\n' \
+       > /usr/local/bin/qmd \
     && chmod +x /usr/local/bin/qmd
+
+# Setup directories and permissions
 RUN mkdir -p /root/.config/qmd /root/.cache/qmd \
     && mkdir -p /home/node/.config/qmd /home/node/.cache/qmd \
-    && chown -R 501:20 /home/node/.config /home/node/.cache
+    && mkdir -p /home/node/.acpx/sessions \
+    && chown -R 501:20 /home/node/.config /home/node/.cache /home/node/.acpx
 
-# Gemini ACP wrapper: acpx expects "gemini" but needs --experimental-acp + flash model
-# gemini-2.5-flash avoids gemini-3.1-pro-preview quota limits in ACP mode
+# Gemini ACP wrapper
 RUN printf '#!/bin/bash\nexec /usr/local/bin/gemini --experimental-acp --model gemini-2.5-flash "$@"\n' \
     > /usr/local/bin/gemini-acp-wrapper \
     && chmod +x /usr/local/bin/gemini-acp-wrapper
 
-# Create acpx state dir writable by container user (501:20)
-# Configure gemini as default agent using --experimental-acp (OAuth via core/gemini-config volume)
-RUN mkdir -p /home/node/.acpx/sessions \
-    && printf '{"defaultAgent":"gemini","defaultPermissions":"approve-reads","nonInteractivePermissions":"deny","authPolicy":"skip","ttl":300,"agents":{"gemini":{"command":"gemini --experimental-acp --model gemini-3-flash-preview"}}}\n' \
-       > /home/node/.acpx/config.json \
-    && chown -R 501:20 /home/node/.acpx
+# ACPX configuration
+RUN printf '{"defaultAgent":"gemini","defaultPermissions":"approve-reads","nonInteractivePermissions":"deny","authPolicy":"skip","ttl":300,"agents":{"gemini":{"command":"gemini --experimental-acp --model gemini-3-flash-preview"}}}\n' \
+    > /home/node/.acpx/config.json \
+    && chown 501:20 /home/node/.acpx/config.json
 
-# Add a mock host user mapping for the volume bounds and add to dialout
+# User and sudo setup
 RUN groupadd -g 20 dialout_host 2>/dev/null || true; \
-    useradd -u 501 -g 20 -m -s /bin/bash hostuser
-
-# Add dialout group to sudoers and allow NOPASSWD
-RUN echo "%dialout ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dialout \
+    useradd -u 501 -g 20 -m -s /bin/bash hostuser 2>/dev/null || true; \
+    echo "%dialout ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dialout \
     && chmod 0440 /etc/sudoers.d/dialout
 
-# Revert back to the unprivileged host user mapping
+# Revert to unprivileged user
 USER 501:20

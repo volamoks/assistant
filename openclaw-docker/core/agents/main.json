@@ -2,7 +2,7 @@
     "id": "main",
     "name": "General Chat (Default)",
     "description": "The main conversational partner. Alive, fast, and universal. Routes complex tasks to agent_pm.",
-    "model": "kimi-k2.5",
+    "model": "litellm/claw-main",
     "systemPromptPath": "/home/node/.openclaw/prompts/SOUL.md",
     "contextFiles": [
         "/home/node/.openclaw/prompts/MEMORY.md"

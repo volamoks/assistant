@@ -13,6 +13,7 @@ Docling (ML, slow) is NOT used here — it's for document_intelligence skill
 when the bot needs to read a specific complex document with full structure.
 """
 
+import os
 import sys
 import sqlite3
 import re

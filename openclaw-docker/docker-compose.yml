@@ -68,7 +68,7 @@ services:
       - default
       - jarvis_net
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:4000/health || exit 1" ]
+      test: [ "CMD-SHELL", "python3 -c \"import urllib.request; req = urllib.request.Request('http://localhost:4000/health', headers={'Authorization': 'Bearer sk-litellm-openclaw-proxy'}); urllib.request.urlopen(req, timeout=10); exit(0)\" || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -133,6 +133,7 @@ services:
       dockerfile: openclaw.Dockerfile
     container_name: openclaw-latest
     restart: unless-stopped
+    stop_grace_period: 30s
     healthcheck:
       test: [ "CMD-SHELL", "curl -s -o /dev/null http://localhost:18789/ || exit 1" ]
       interval: 30s
@@ -140,7 +141,7 @@ services:
       retries: 3
       start_period: 60s
     user: "501:20" # Run as host user for correct file ownership
-    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; sudo chmod a+rx /root /root/.bun /root/.bun/bin /root/.bun/bin/bun 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -193,6 +194,7 @@ services:
       - VIKUNJA_TOKEN=${VIKUNJA_TOKEN}
       - PLAUD_TOKEN=${PLAUD_TOKEN}
       - PLAUD_API_DOMAIN=${PLAUD_API_DOMAIN}
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - BYBIT_API=${BYBIT_API}
       - BYBIT_API_SECRET=${BYBIT_API_SECRET}
       - RYOT_URL=http://ryot:8000/backend/graphql

@@ -91,7 +91,10 @@
       "Bash(tailscale status:*)",
       "Bash(ipconfig getifaddr:*)",
       "Bash(# Check if macOS firewall is blocking and if port is actually listening /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate lsof -i :18789)",
-      "Read(//Users/abror_mac_mini/Projects/bot/openclaw-docker/prompts/**)"
+      "Read(//Users/abror_mac_mini/Projects/bot/openclaw-docker/prompts/**)",
+      "Bash(MC_PORT=3030 docker compose up -d)",
+      "Bash(/dev/null cat:*)",
+      "Bash(python3 -c \":*)"
     ],
     "additionalDirectories": [
       "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/To claw/Bot",
@@ -101,7 +104,8 @@
       "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/Personal/CV",
       "/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/To claw/possible_improvements",
       "/Users/abror_mac_mini/Library/LaunchAgents",
-      "/Users/abror_mac_mini/Projects/bot"
+      "/Users/abror_mac_mini/Projects/bot",
+      "/Users/abror_mac_mini/Projects/bot/openclaw-docker/core"
     ]
   }
 }

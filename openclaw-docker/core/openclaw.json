@@ -49,6 +49,10 @@
             "name": "DeepSeek R1 (OpenRouter)"
           },
           {
+            "id": "litellm/minimax/MiniMax-M2.5",
+            "name": "MiniMax M2.5 (direct)"
+          },
+          {
             "id": "openrouter/minimax/minimax-01",
             "name": "MiniMax 01 (OpenRouter)"
           },
@@ -83,6 +87,14 @@
           {
             "id": "bailian/qwen3-vl-plus",
             "name": "Qwen3 VL Plus (Bailian Vision)"
+          },
+          {
+            "id": "openrouter/openrouter/hunter-alpha",
+            "name": "Hunter Alpha 1M (FREE)"
+          },
+          {
+            "id": "openrouter/openrouter/healer-alpha",
+            "name": "Healer Alpha (FREE)"
           }
         ]
       },
@@ -179,10 +191,10 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian/qwen3.5-plus"
+        "primary": "litellm/claw-main"
       },
       "imageModel": {
-        "primary": "bailian/qwen3-vl-plus"
+        "primary": "litellm/vision"
       },
       "models": {
         "litellm/thinking": {
@@ -234,6 +246,12 @@
           "streaming": true
         },
         "bailian/qwen3-vl-plus": {
+          "streaming": true
+        },
+        "openrouter/openrouter/hunter-alpha": {
+          "streaming": true
+        },
+        "openrouter/openrouter/healer-alpha": {
           "streaming": true
         }
       },
@@ -288,7 +306,7 @@
         "workspace": "/home/node/.openclaw/workspace-coder",
         "agentDir": "/home/node/.openclaw/agents/coder/agent",
         "model": {
-          "primary": "bailian/kimi-k2.5"
+          "primary": "litellm/claw-coder"
         }
       },
       {
@@ -345,7 +363,7 @@
         "workspace": "/home/node/.openclaw/workspace-architect",
         "agentDir": "/home/node/.openclaw/agents/architect/agent",
         "model": {
-          "primary": "bailian/qwen3-max-2026-01-23"
+          "primary": "litellm/claw-architect"
         }
       },
       {
@@ -449,10 +467,15 @@
       "blockStreaming": false,
       "accounts": {
         "default": {
-          "dmPolicy": "pairing",
+          "dmPolicy": "allowlist",
           "botToken": "8183387556:AAG7_Gw-XmQkW1G_4Jj-JtnxgrYzcw3bKa8",
           "groupPolicy": "allowlist",
-          "streaming": "partial"
+          "streaming": "partial",
+          "webhookUrl": "https://tg.volamoks.store/telegram/callback",
+          "webhookPath": "/telegram/callback",
+          "webhookPort": 18790,
+          "webhookSecret": "bf188a0d840f626f6fd177a4f2911b7a9ed54d71352a6f5a9ba590a7a98fe153",
+          "webhookHost": "0.0.0.0"
         }
       }
     }
@@ -500,7 +523,7 @@
           "freshTailCount": 32,
           "contextThreshold": 0.75,
           "incrementalMaxDepth": -1,
-          "summaryModel": "bailian/kimi-k2.5",
+          "summaryModel": "claw-main",
           "summaryProvider": "litellm"
         }
       },
