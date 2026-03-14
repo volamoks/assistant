@@ -1,5 +1,5 @@
 # --- Build Stage ---
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,13 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://bun.sh/install | bash
 
 # --- Final Stage ---
-FROM ghcr.io/openclaw/openclaw:2026.3.12
+FROM node:22-slim
+
+# Copy from local context
+WORKDIR /app
+RUN apt-get update && apt-get install -y git
+COPY openclaw /app
+RUN npm i -g pnpm && pnpm install --no-frozen-lockfile --shamefully-hoist && pnpm build
 
 # Metadata
 LABEL maintainer="Antigravity"

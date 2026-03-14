@@ -8,4 +8,8 @@ ingress:
     service: http://host.docker.internal:5006
   - hostname: chat.volamoks.store
     service: http://host.docker.internal:3005
+  - hostname: vault.volamoks.store
+    service: http://host.docker.internal:7080
+  - hostname: bot.volamoks.store
+    service: http://host.docker.internal:7090
   - service: http_status:404

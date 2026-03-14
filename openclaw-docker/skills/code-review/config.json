@@ -1,0 +1,5 @@
+{
+  "name": "code-review",
+  "description": "Performs a rigorous code review",
+  "trigger": "/review"
+}

@@ -1,0 +1,5 @@
+{
+  "name": "ceo-review",
+  "description": "Reviews the current plan through the lens of a startup CEO",
+  "trigger": "/plan-ceo-review"
+}

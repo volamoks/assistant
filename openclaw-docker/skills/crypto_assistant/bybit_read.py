@@ -9,11 +9,19 @@ import json
 import sys
 from datetime import datetime
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory of 'skills' and current directory to path for imports
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
-sys.path.insert(0, os.path.expanduser('~/.openclaw/skills'))
-from bybit_integration.src.client import BybitClient
+try:
+    from bybit_integration.src.client import BybitClient
+except ImportError:
+    # Fallback to absolute path search
+    skills_path = os.path.expanduser('~/Projects/bot/openclaw-docker/skills')
+    if skills_path not in sys.path:
+        sys.path.insert(0, skills_path)
+    from bybit_integration.src.client import BybitClient
 
 
 def get_portfolio_summary():

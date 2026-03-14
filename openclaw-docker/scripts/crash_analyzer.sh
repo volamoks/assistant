@@ -47,11 +47,31 @@ for FILE in "${FILES[@]}"; do
 Crash report:
 ${CONTENT}"
 
-  # Вызов Ollama напрямую (не через агента)
-  RESPONSE=$(curl -s --max-time 30 -X POST "$OLLAMA_URL" \
-    -H "Content-Type: application/json" \
-    -d "{\"model\": \"$OLLAMA_MODEL\", \"prompt\": $(echo "$PROMPT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'), \"stream\": false}" \
-    | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("response",""))' 2>/dev/null)
+  # Вызов Ollama напрямую через Python
+  RESPONSE=$(python3 -c "
+import json
+import urllib.request
+import urllib.error
+
+payload = {
+    'model': '$OLLAMA_MODEL',
+    'prompt': '''$PROMPT''',
+    'stream': False
+}
+
+try:
+    req = urllib.request.Request(
+        '$OLLAMA_URL',
+        data=json.dumps(payload).encode(),
+        headers={'Content-Type': 'application/json'},
+        timeout=30
+    )
+    with urllib.request.urlopen(req) as resp:
+        data = json.load(resp)
+        print(data.get('response', ''))
+except Exception as e:
+    print('', end='')
+" 2>/dev/null)
 
   # Если модель DeepSeek возвращает теги <think>, вырезаем их для чистоты лога
   CLEAN_RESPONSE=$(echo "$RESPONSE" | sed -e 's/<think>.*<\/think>//g' | sed '/^$/N;/^\n$/D')
@@ -75,13 +95,16 @@ ${CONTENT}"
   rm -f "$FILE"
   echo "Processed and deleted: $FILENAME" >&2
 
-  # Telegram уведомление
+  # Telegram уведомление через Python
   MSG="🔴 *Crash analyzed: ${FILENAME%.md}*%0A%0A$(echo "$RESPONSE" | head -4 | sed 's/[*#]//g' | python3 -c 'import sys; print("%0A".join(l.strip() for l in sys.stdin if l.strip()))')"
 
-  curl -s --max-time 10 \
-    "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-    -d "chat_id=${TELEGRAM_CHAT}&text=${MSG}&parse_mode=Markdown" \
-    > /dev/null 2>&1
+  python3 -c "
+import urllib.request
+url = 'https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage'
+data = 'chat_id=${TELEGRAM_CHAT}&text=${MSG}&parse_mode=Markdown'
+req = urllib.request.Request(url, data=data.encode(), headers={'Content-Type': 'application/x-www-form-urlencoded'})
+urllib.request.urlopen(req, timeout=10)
+" > /dev/null 2>&1
 
 done
 

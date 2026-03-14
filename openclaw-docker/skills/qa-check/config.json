@@ -1,0 +1,5 @@
+{
+  "name": "qa-check",
+  "description": "Performs a QA overview",
+  "trigger": "/qa"
+}

@@ -27,9 +27,9 @@ import yaml
 # ── Config ────────────────────────────────────────────────────────────────────
 
 CONFIG_PATH = Path("~/.openclaw/skills/karpathy-autoresearch/config.yaml").expanduser()
-LITELLM_BASE = os.environ.get("LITELLM_BASE", "http://litellm-proxy:4000")
+LITELLM_BASE = os.environ.get("LITELLM_BASE", "http://litellm:4000")
 LITELLM_KEY = os.environ.get("LITELLM_MASTER_KEY", "")
-DEFAULT_MODEL = "bailian/qwen3-max"
+DEFAULT_MODEL = "qwen3-max"
 
 # ── Pattern Definitions ───────────────────────────────────────────────────────
 

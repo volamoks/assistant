@@ -13,6 +13,10 @@ from pathlib import Path
 from datetime import datetime
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+LITELLM_URL = os.getenv("LITELLM_URL", "http://localhost:18788/v1/chat/completions")
+USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
+CLAW_MODEL = os.getenv("CLAW_MODEL", "litellm/claw-cron-smart")  # 9b model
+
 VAULT_PATH = Path(os.getenv("USER_VAULT_PATH", "/data/obsidian"))
 MEMORY_FILE = Path("/home/node/.openclaw/prompts/MEMORY.md")
 VIKUNJA_SH = Path("/data/bot/openclaw-docker/skills/vikunja/vikunja.sh")
@@ -76,13 +80,18 @@ def collect_context() -> str:
 
 
 def generate_summary(context: str) -> str:
-    if not GROQ_API_KEY:
-        return "Error: GROQ_API_KEY not set"
+    if not GROQ_API_KEY and not USE_LOCAL_LLM:
+        return "Error: GROQ_API_KEY not set and local LLM not enabled"
 
     today = datetime.now().strftime("%d %b %Y")
+    model = CLAW_MODEL if USE_LOCAL_LLM else "llama-3.3-70b-versatile"
+    url = LITELLM_URL if USE_LOCAL_LLM else "https://api.groq.com/openai/v1/chat/completions"
+    headers = {"Content-Type": "application/json"}
+    if not USE_LOCAL_LLM:
+        headers["Authorization"] = f"Bearer {GROQ_API_KEY}"
 
     payload = {
-        "model": "llama-3.3-70b-versatile",
+        "model": model,
         "messages": [
             {
                 "role": "system",
@@ -113,13 +122,10 @@ def generate_summary(context: str) -> str:
     }
 
     resp = requests.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {GROQ_API_KEY}",
-            "Content-Type": "application/json",
-        },
+        url,
+        headers=headers,
         json=payload,
-        timeout=30,
+        timeout=60,  # Local model might be slower than Groq
     )
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"].strip()

@@ -14,6 +14,7 @@ Usage:
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -26,7 +27,7 @@ except ImportError:
 # MiniMax Portal (OAuth) — прямой вызов через Anthropic API
 MINIMAX_PORTAL_URL = "https://api.minimax.io/anthropic/v1/messages"
 MODEL = "MiniMax-M2.5"
-API_KEY = "sk-cp-IyEf5WZx0qYfnGVXA-mt4aqihJ6Aj5LkWLbPZtIzLv8hgKIPDPiEcZEWOdIb__5EDttH1RXNWPjcHWLQFOIPBI20Fmwe1QloH0lCRmS33YzVZAaRFbCskf8"
+API_KEY = os.environ.get("MINIMAX_API_KEY")
 
 SYSTEM_PROMPT = """Ты классификатор финансовых SMS. Верни ТОЛЬКО JSON без markdown:
 {"class": "transaction|transfer|promotional|informational", "confidence": 0.0-1.0, "reason": "почему", "amount": number|null, "currency": "UZS|USD|etc"}

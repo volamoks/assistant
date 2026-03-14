@@ -1,0 +1,5 @@
+{
+  "name": "retro",
+  "description": "Guides a project retrospective",
+  "trigger": "/retro"
+}

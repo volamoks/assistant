@@ -1,0 +1,38 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "coder": {
+      "description": "Coding agent powered by KiloCode",
+      "model": "kilocode/deepseek-chat",
+      "prompt": "You are an expert coder. Use the provided model to write, debug, and refactor code.",
+      "tools": {
+        "websearch": true,
+        "codesearch": true,
+        "read": true
+      }
+    },
+    "researcher": {
+      "description": "Research agent powered by KiloCode",
+      "model": "kilocode/minimax-m2.5-free",
+      "prompt": "You are an expert researcher. Use the provided model to analyze information and provide deep insights.",
+      "tools": {
+        "websearch": true,
+        "codesearch": true,
+        "read": true
+      }
+    }
+  },
+  "default_agent": "coder",
+  "provider": {
+    "openai": {
+      "name": "KiloCode",
+      "url": "https://api.kilo.ai/api/gateway/",
+      "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnYiOiJwcm9kdWN0aW9uIiwia2lsbFVzZXJJZCI6ImFjMDNkMDQyLWU1YTYtNGE5My05Yzc0LTZkYTYzZDQ2MTNjNiIsImFwaVRva2VuUGVwcGVyIjpudWxsLCJ2ZXJzaW9uIjozLCJpYXQiOjE3NzIzNTU0NDAsImV4cCI6MTkzMDAzNTQ0MH0.H7JFN2I55e8oKlPvZJKNH3pgVFVW-XJ73Q2rBjFRH1Q",
+      "models": [
+        "kilocode/deepseek-chat",
+        "kilocode/nemotron-super",
+        "kilocode/minimax-m2.5-free"
+      ]
+    }
+  }
+}

@@ -83,7 +83,7 @@ paths:
 
 # ── LLM Configuration ──────────────────────────────────────────────────────────
 llm:
-  base_url: "http://litellm-proxy:4000"
+  base_url: "http://litellm:4000"
   api_key: ""                     # Set via LITELLM_MASTER_KEY env var
   default_model: "qwen3.5-plus"
   analysis_model: "qwen3.5-plus"

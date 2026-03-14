@@ -100,6 +100,7 @@ function resolveApiKey(provider: string, readEnv: ReadEnvFn): string | undefined
     together: ["TOGETHER_API_KEY"],
     openrouter: ["OPENROUTER_API_KEY"],
     "github-copilot": ["GITHUB_COPILOT_API_KEY", "GITHUB_TOKEN"],
+    "opencode-zen": ["OPENCODE_ZEN_API_KEY", "OPENCODE_API_KEY"],
   };
 
   const providerKey = provider.trim().toLowerCase();
@@ -120,13 +121,13 @@ type AuthProfileCredential =
   | { type: "api_key"; provider: string; key?: string; email?: string }
   | { type: "token"; provider: string; token?: string; expires?: number; email?: string }
   | ({
-      type: "oauth";
-      provider: string;
-      access?: string;
-      refresh?: string;
-      expires?: number;
-      email?: string;
-    } & Record<string, unknown>);
+    type: "oauth";
+    provider: string;
+    access?: string;
+    refresh?: string;
+    expires?: number;
+    email?: string;
+  } & Record<string, unknown>);
 
 type AuthProfileStore = {
   profiles: Record<string, AuthProfileCredential>;
@@ -303,17 +304,17 @@ function parseAuthProfileStore(raw: string): AuthProfileStore | undefined {
     const rawOrder = isRecord(parsed.order) ? parsed.order : undefined;
     const order: Record<string, string[]> | undefined = rawOrder
       ? Object.entries(rawOrder).reduce<Record<string, string[]>>((acc, [provider, value]) => {
-          if (!Array.isArray(value)) {
-            return acc;
-          }
-          const ids = value
-            .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
-            .filter(Boolean);
-          if (ids.length > 0) {
-            acc[provider] = ids;
-          }
+        if (!Array.isArray(value)) {
           return acc;
-        }, {})
+        }
+        const ids = value
+          .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
+          .filter(Boolean);
+        if (ids.length > 0) {
+          acc[provider] = ids;
+        }
+        return acc;
+      }, {})
       : undefined;
 
     return {
@@ -687,31 +688,31 @@ function createLcmDependencies(api: OpenClawPluginApi): LcmDependencies {
 
         const resolvedModel =
           isRecord(knownModel) &&
-          typeof knownModel.api === "string" &&
-          typeof knownModel.provider === "string" &&
-          typeof knownModel.id === "string"
+            typeof knownModel.api === "string" &&
+            typeof knownModel.provider === "string" &&
+            typeof knownModel.id === "string"
             ? {
-                ...knownModel,
-                id: knownModel.id,
-                provider: knownModel.provider,
-                api: knownModel.api,
-              }
+              ...knownModel,
+              id: knownModel.id,
+              provider: knownModel.provider,
+              api: knownModel.api,
+            }
             : {
-                id: modelId,
-                name: modelId,
-                provider: providerId,
-                api: fallbackApi,
-                reasoning: false,
-                input: ["text"],
-                cost: {
-                  input: 0,
-                  output: 0,
-                  cacheRead: 0,
-                  cacheWrite: 0,
-                },
-                contextWindow: 200_000,
-                maxTokens: 8_000,
-              };
+              id: modelId,
+              name: modelId,
+              provider: providerId,
+              api: fallbackApi,
+              reasoning: false,
+              input: ["text"],
+              cost: {
+                input: 0,
+                output: 0,
+                cacheRead: 0,
+                cacheWrite: 0,
+              },
+              contextWindow: 200_000,
+              maxTokens: 8_000,
+            };
 
         let resolvedApiKey = apiKey?.trim() || resolveApiKey(providerId, readEnv);
         if (!resolvedApiKey && typeof mod.getEnvApiKey === "function") {
@@ -825,9 +826,9 @@ function createLcmDependencies(api: OpenClawPluginApi): LcmDependencies {
     resolveModel: (modelRef, providerHint) => {
       const raw =
         (modelRef?.trim() ||
-         envSnapshot.pluginSummaryModel ||
-         envSnapshot.lcmSummaryModel ||
-         envSnapshot.openclawDefaultModel).trim();
+          envSnapshot.pluginSummaryModel ||
+          envSnapshot.lcmSummaryModel ||
+          envSnapshot.openclawDefaultModel).trim();
       if (!raw) {
         throw new Error("No model configured for LCM summarization.");
       }

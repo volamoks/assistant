@@ -25,7 +25,8 @@ if [ ! -f "$DATA_DIR/telegram_monitor.json" ]; then
 fi
 
 # ========== CONFIG ==========
-VAULT_PATH="${USER_VAULT_PATH:-/data/obsidian/vault}"
+# Force correct vault path
+VAULT_PATH="/data/obsidian/vault"
 TODAY=$(date '+%Y-%m-%d')
 REPORT_DATE=$(date '+%d %b %Y')
 REPORT_PATH="$VAULT_PATH/Bot/morning-reports/$TODAY.md"
@@ -189,8 +190,14 @@ echo "=== TELEGRAM MESSAGE ==="
 echo "$TELEGRAM_MSG"
 echo "=== END TELEGRAM ==="
 
-# ========== NOTIFY TELEGRAM ==========
+# ========== NOTIFY TELEGRAM WITH LINK ==========
 NOTIFY_SCRIPT="/data/bot/openclaw-docker/skills/telegram/notify.py"
+
+# Add link to the message
+TELEGRAM_MSG="$TELEGRAM_MSG
+
+📖 Подробнее: https://vault.volamoks.store/report/$TODAY"
+
 if [ -f "$NOTIFY_SCRIPT" ]; then
     python3 "$NOTIFY_SCRIPT" "$TELEGRAM_MSG" --chat-id "6053956251" 2>/dev/null || true
 fi

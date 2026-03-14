@@ -1,75 +1,134 @@
+middleware:
+  - path: ./middleware.py
+    class: middleware.AgentSignatureMiddleware
+
 model_list:
-  - model_name: thinking
-    litellm_params:
-      model: deepseek/deepseek-reasoner
-      api_key: os.environ/DEEPSEEK_API_KEY
-      api_base: https://api.deepseek.com/v1
+  # =========================================================
+  # === OpenClaw canonical aliases — THE ONLY MODELS THE BOT SEES ===
+  # =========================================================
 
-  # DeepSeek via API
-  - model_name: deepseek/deepseek-chat
-    litellm_params:
-      model: deepseek/deepseek-chat
-      api_key: os.environ/DEEPSEEK_API_KEY
-      api_base: https://api.deepseek.com/v1
-
-  - model_name: deepseek/deepseek-reasoner
-    litellm_params:
-      model: deepseek/deepseek-reasoner
-      api_key: os.environ/DEEPSEEK_API_KEY
-      api_base: https://api.deepseek.com/v1
-
-  # DeepSeek via OpenRouter
-  - model_name: openrouter/deepseek/deepseek-chat
-    litellm_params:
-      model: openrouter/deepseek/deepseek-chat
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  - model_name: or-deepseek-chat
-    litellm_params:
-      model: openrouter/deepseek/deepseek-chat
-
-  - model_name: openrouter/deepseek/deepseek-v3.2
-    litellm_params:
-      model: openrouter/deepseek/deepseek-v3.2
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  - model_name: openrouter/deepseek/deepseek-r1
-    litellm_params:
-      model: openrouter/deepseek/deepseek-r1
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  # Hunter Alpha + Healer Alpha (OpenRouter promo - free limited time)
-  - model_name: openrouter/openrouter/hunter-alpha
-    litellm_params:
-      model: openrouter/openrouter/hunter-alpha
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  - model_name: openrouter/openrouter/healer-alpha
-    litellm_params:
-      model: openrouter/openrouter/healer-alpha
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  # Minimax via OpenRouter
-  - model_name: openrouter/minimax/minimax-01
-    litellm_params:
-      model: openrouter/minimax/minimax-01
-      api_key: os.environ/OPENROUTER_API_KEY
-
-  # Minimax via OpenAI compatible endpoint
-  - model_name: minimax/MiniMax-M2.5
+  # --- claw-main: Primary model for conversations + orchestration ---
+  - model_name: claw-main
     litellm_params:
       model: openai/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
       api_base: https://api.minimax.io/v1
 
-  # Minimax-portal for Openclaw OAuth mapping
-  - model_name: minimax-portal/MiniMax-M2.5
+  # --- claw-coder: Specialized for implementation ---
+  - model_name: claw-coder
     litellm_params:
       model: openai/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
       api_base: https://api.minimax.io/v1
 
-  # Local Ollama
+  # --- claw-architect / claw-thinking: Deep reasoning ---
+  - model_name: claw-architect
+    litellm_params:
+      model: openai/deepseek-reasoner
+      api_base: https://api.deepseek.com
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+  - model_name: claw-thinking
+    litellm_params:
+      model: openai/deepseek-reasoner
+      api_base: https://api.deepseek.com
+      api_key: os.environ/DEEPSEEK_API_KEY
+
+  # --- claw-researcher: Exploration and analysis ---
+  - model_name: claw-researcher
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-vision: Image processing ---
+  - model_name: claw-vision
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-summarizer: Context compaction ---
+  - model_name: claw-summarizer
+    litellm_params:
+      model: openai/MiniMax-M2.5-highspeed
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # ==========================================
+  # === FREE MODEL POOLS (Rotation & Failover) ===
+  # ==========================================
+
+  # --- claw-free-fast: Low-latency, free tasks ---
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/minimax-m2.5-free
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/stepfun/step-3.5-flash:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # --- claw-free-smart: Intelligent, free tasks ---
+  - model_name: claw-free-smart
+    litellm_params:
+      model: openai/moonshotai/kimi-k2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+  - model_name: claw-free-smart
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+  - model_name: claw-free-smart
+    litellm_params:
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # ==========================================
+  # Cron Agents - ALL LOCAL (FREE)
+  # ==========================================
+
+  - model_name: claw-cron-fast
+    litellm_params:
+      model: ollama_chat/qwen3.5:0.8b
+      api_base: os.environ/OLLAMA_HOST
+      timeout: 30
+      stream: false
+
+  - model_name: claw-cron-smart
+    litellm_params:
+      model: ollama_chat/qwen3.5:9b
+      api_base: os.environ/OLLAMA_HOST
+      timeout: 60
+      stream: false
+
+  # ==========================================
+  # === LOCAL MODELS (Ollama) & ALIASES ===
+  # ==========================================
+
+  - model_name: local-small
+    litellm_params:
+      model: ollama_chat/qwen3.5:0.8b
+      api_base: os.environ/OLLAMA_HOST
+      timeout: 30
+      stream: false
+
+  - model_name: local-medium
+    litellm_params:
+      model: ollama_chat/qwen3.5:9b
+      api_base: os.environ/OLLAMA_HOST
+      timeout: 60
+      stream: false
+
   - model_name: ollama/qwen3.5:0.8b
     litellm_params:
       model: ollama_chat/qwen3.5:0.8b
@@ -85,176 +144,6 @@ model_list:
       model: ollama_chat/llama3.2:1b
       api_base: os.environ/OLLAMA_HOST
 
-  # === Kimi K2.5 via KiloCode Gateway ===
-  # Routed through LiteLLM to normalize delta.reasoning -> delta.content
-  # OpenClaw sends: moonshotai/kimi-k2.5:free (provider prefix stripped)
-  - model_name: moonshotai/kimi-k2.5:free
-    litellm_params:
-      model: openai/moonshotai/kimi-k2.5:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-      reasoning_effort: high
-
-  # Fast variant — no forced reasoning, for routing/dispatch
-  - model_name: moonshotai/kimi-k2.5-fast
-    litellm_params:
-      model: openai/moonshotai/kimi-k2.5:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # Free models via KiloCode
-  - model_name: kilocode/minimax-m2.5-free
-    litellm_params:
-      model: openai/minimax/minimax-m2.5:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # NVIDIA Nemotron 3 Super — 1M context, 120B MoE, free
-  - model_name: kilocode/nemotron-super
-    litellm_params:
-      model: openai/nvidia/nemotron-3-super-120b-a12b:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # Arcee Trinity Large — 400B MoE, 128k context, agentic, free
-  - model_name: kilocode/trinity-large
-    litellm_params:
-      model: openai/arcee-ai/trinity-large-preview:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # xAI Grok Code Fast — 256k context, free (note: provider logs prompts)
-  - model_name: kilocode/grok-code-fast
-    litellm_params:
-      model: openai/x-ai/grok-code-fast-1:optimized:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # CoreThink — reasoning model, 78k, free (limited time)
-  - model_name: kilocode/corethink
-    litellm_params:
-      model: openai/corethink:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  - model_name: kilocode/stepfun-flash-free
-    litellm_params:
-      model: openai/stepfun/step-3.5-flash:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  - model_name: kilocode/auto-free
-    litellm_params:
-      model: openai/kilo/auto-free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-
-  # === Alibaba Cloud Bailian (Coding Plan, ap-southeast-1) ===
-  # Names WITHOUT bailian/ prefix — openclaw strips provider prefix before sending to LiteLLM
-  - model_name: qwen3.5-plus
-    litellm_params:
-      model: openai/qwen3.5-plus
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: kimi-k2.5
-    litellm_params:
-      model: openai/kimi-k2.5
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: qwen3-max-2026-01-23
-    litellm_params:
-      model: openai/qwen3-max-2026-01-23
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: qwen3-coder-plus
-    litellm_params:
-      model: openai/qwen3-coder-plus
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: bailian-minimax
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: qwen3-coder-next
-    litellm_params:
-      model: openai/qwen3-coder-next
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  - model_name: glm-4.7
-    litellm_params:
-      model: openai/glm-4.7
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  # =========================================================
-  # === OpenClaw model aliases — change model in ONE place ===
-  # =========================================================
-  # To swap main model: change the `model:` line under claw-main
-  # To swap cron models: change claw-cron-fast or claw-cron-smart
-  # Usage in openclaw: litellm/claw-main, litellm/claw-cron-fast, litellm/claw-cron-smart
-
-  - model_name: claw-main        # Primary model: conversations + heavy agent tasks
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_key: os.environ/MINIMAX_API_KEY
-      api_base: https://api.minimax.io/v1
-
-  - model_name: claw-coder       # Specialized for coding and implementation
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_key: os.environ/MINIMAX_API_KEY
-      api_base: https://api.minimax.io/v1
-
-  - model_name: claw-architect   # Specialized for planning and design
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_key: os.environ/MINIMAX_API_KEY
-      api_base: https://api.minimax.io/v1
-
-  - model_name: claw-cron-fast   # Fast/cheap: simple checks, keepalive, log parsing
-    litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
-
-  - model_name: claw-cron-smart  # Smart: analysis, reports, research tasks
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_key: os.environ/MINIMAX_API_KEY
-      api_base: https://api.minimax.io/v1
-
-  # === Google Gemini (direct API) ===
-  # Pro models - no daily limit (use API key, not OAuth)
-  - model_name: gemini/gemini-3.1-pro-preview
-    litellm_params:
-      model: gemini/gemini-3.1-pro-preview
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-2.5-pro
-    litellm_params:
-      model: gemini/gemini-2.5-pro
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-2.5-flash
-    litellm_params:
-      model: gemini/gemini-2.5-flash
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-3-flash-preview
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-2.0-flash
-    litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/GEMINI_API_KEY
 
   # === Qwen Vision-Language (VL) models ===
   - model_name: qwen3-vl-plus
@@ -279,10 +168,19 @@ model_list:
 
 
 litellm_settings:
+  cache: true
+  cache_params:
+    type: redis
+    host: redis-cache
+    port: 6379
+  cache_key_params:
+    - model
+    - messages
+    - temperature
+    - max_tokens
   drop_params: true
-  request_timeout: 600
+  request_timeout: 300   # ← увеличено до 300 сек для DeepSeek
   num_retries: 2
-  stream: true
   log_level: DEBUG
   log_requests: true
   log_cache_stats: true
@@ -291,25 +189,24 @@ litellm_settings:
 
 router_settings:
   fallbacks:
-    # Bailian (Alibaba) models → fallback to direct MiniMax (paid) then bailian-minimax
-    - qwen3.5-plus: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - qwen3-max-2026-01-23: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - qwen3-max: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - qwen3-coder-plus: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - qwen3-coder-next: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - glm-4.7: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    - kimi-k2.5: ["minimax/MiniMax-M2.5", "bailian-minimax"]
-    # Direct MiniMax fallback to kilocode free
-    - minimax/MiniMax-M2.5: ["kilocode/minimax-m2.5-free"]
-    # Alias fallbacks
-    - claw-main: ["kilocode/minimax-m2.5-free"]
-    - claw-coder: ["kilocode/minimax-m2.5-free"]
-    - claw-architect: ["kilocode/minimax-m2.5-free"]
-    - claw-cron-fast: ["minimax/MiniMax-M2.5"]
-    - claw-cron-smart: ["kilocode/minimax-m2.5-free"]
-    # Vision models fallback to standard models (without vision)
-    - vision: ["qwen3.5-plus"]
-    - qwen3-vl-plus: ["qwen3.5-plus"]
+    # --- Primary Aliases ---
+    - claw-main: ["claw-free-smart", "claw-summarizer"]
+    - claw-coder: ["claw-free-smart", "claw-summarizer"]
+    - claw-architect: ["claw-thinking", "claw-main"]
+    - claw-researcher: ["claw-free-smart", "claw-summarizer"]
+    - claw-thinking: ["claw-main"]
+    - claw-vision: ["claw-free-smart"]
+    - claw-summarizer: ["claw-free-fast", "local-medium"]
+
+    # --- Cron Agents ---
+    - claw-cron-fast: ["ollama/qwen3.5:0.8b", "ollama/llama3.2:1b"]
+    - claw-cron-smart: ["ollama/qwen3.5:9b"]
+
+    # --- Legacy/Specific Fallbacks ---
+    - nemotron-super: ["claw-free-smart"]
+    - qwen3.5-plus: ["claw-free-smart"]
+    - qwen3-max: ["claw-free-smart"]
+    - kimi-k2.5: ["claw-free-smart"]
   retry_policy:
     RateLimitError: 2
     ServiceUnavailableError: 2
@@ -321,4 +218,6 @@ router_settings:
 # LiteLLM master key for authentication
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-cache_responses: false
+  model_health_check: false
+  health_check_interval: 0
+  disable_background_health_checks: true

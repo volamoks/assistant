@@ -1,0 +1,5 @@
+{
+  "name": "ship",
+  "description": "Generates deployment and shipping checklists",
+  "trigger": "/ship"
+}

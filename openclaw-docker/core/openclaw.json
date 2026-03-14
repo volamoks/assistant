@@ -53,81 +53,21 @@
           }
         ]
       },
-      "minimax-portal": {
-        "baseUrl": "https://api.minimax.io/anthropic",
-        "apiKey": "sk-cp-IyEf5WZx0qYfnGVXA-mt4aqihJ6Aj5LkWLbPZtIzLv8hgKIPDPiEcZEWOdIb__5EDttH1RXNWPjcHWLQFOIPBI20Fmwe1QloH0lCRmS33YzVZAaRFbCskf8",
-        "api": "anthropic-messages",
-        "models": [
-          {
-            "id": "MiniMax-M2.5",
-            "name": "MiniMax M2.5",
-            "reasoning": true,
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            },
-            "contextWindow": 200000,
-            "maxTokens": 8192
-          }
-        ]
-      },
-      "alibaba": {
-        "baseUrl": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-        "apiKey": "sk-sp-40a4d02919d541019ad999cc3fa532c7",
-        "api": "openai-completions",
-        "models": [
-          {
-            "id": "kimi-k2.5",
-            "name": "Kimi K2.5"
-          }
-        ]
-      },
       "litellm": {
-        "baseUrl": "http://litellm:4000",
+        "baseUrl": "http://litellm-proxy:4000",
         "apiKey": "sk-litellm-openclaw-proxy",
         "api": "openai-completions",
         "models": [
-          {
-            "id": "claw-main",
-            "name": "Claw Main"
-          },
-          {
-            "id": "claw-coder",
-            "name": "Claw Coder"
-          },
-          {
-            "id": "claw-architect",
-            "name": "Claw Architect"
-          }
-        ]
-      },
-      "bailian": {
-        "baseUrl": "http://litellm:4000",
-        "apiKey": "sk-litellm-openclaw-proxy",
-        "api": "openai-completions",
-        "models": [
-          {
-            "id": "bailian/qwen3.5-plus",
-            "name": "Qwen3.5 Plus (Bailian)"
-          },
-          {
-            "id": "bailian/qwen3-max-2026-01-23",
-            "name": "Qwen3 Max (Bailian)"
-          },
-          {
-            "id": "bailian/qwen3-coder-plus",
-            "name": "Qwen3 Coder Plus (Bailian)"
-          },
-          {
-            "id": "bailian/kimi-k2.5",
-            "name": "Kimi K2.5 (Bailian)"
-          },
-          {
-            "id": "bailian/MiniMax-M2.5",
-            "name": "MiniMax M2.5 (Bailian)"
-          }
+          { "id": "claw-main", "name": "Claw Main" },
+          { "id": "claw-coder", "name": "Claw Coder" },
+          { "id": "claw-researcher", "name": "Claw Researcher" },
+          { "id": "claw-architect", "name": "Claw Architect" },
+          { "id": "claw-thinking", "name": "Claw Thinking" },
+          { "id": "claw-free-fast", "name": "Claw Free Fast" },
+          { "id": "claw-free-smart", "name": "Claw Free Smart" },
+          { "id": "local-small", "name": "Local Small (Ollama)" },
+          { "id": "local-medium", "name": "Local Medium (Ollama)" },
+          { "id": "nomic-embed-text", "name": "Nomic Embed Text (local)" }
         ]
       }
     }
@@ -141,81 +81,12 @@
         "primary": "litellm/vision"
       },
       "models": {
-        "litellm/claw-main": {
-          "streaming": true
-        },
-        "litellm/claw-coder": {
-          "streaming": true
-        },
-        "litellm/claw-architect": {
-          "streaming": true
-        },
-        "litellm/claw-cron-fast": {
-          "streaming": true
-        },
-        "litellm/claw-cron-smart": {
-          "streaming": true
-        },
-        "litellm/vision": {
-          "streaming": true
-        },
-        "litellm/thinking": {
-          "streaming": true
-        },
-        "deepseek/deepseek-chat": {
-          "streaming": true
-        },
-        "deepseek/deepseek-reasoner": {
-          "streaming": true
-        },
-        "litellm/or-deepseek-chat": {
-          "streaming": true
-        },
-        "openrouter/deepseek/deepseek-r1": {
-          "streaming": true
-        },
-        "openrouter/arcee-ai/trinity-mini:free": {
-          "streaming": false
-        },
-        "openrouter/arcee-ai/trinity-large-preview:free": {
-          "streaming": false
-        },
-        "openrouter/minimax/minimax-01": {
-          "streaming": true
-        },
-        "ollama/qwen3.5:0.8b": {
-          "streaming": true
-        },
-        "ollama/qwen3.5:9b": {
-          "streaming": true
-        },
-        "minimax-portal/MiniMax-M2.5": {
-          "streaming": true
-        },
-        "bailian/qwen3.5-plus": {
-          "streaming": true
-        },
-        "bailian/qwen3-max-2026-01-23": {
-          "streaming": true
-        },
-        "bailian/qwen3-coder-plus": {
-          "streaming": true
-        },
-        "bailian/kimi-k2.5": {
-          "streaming": true
-        },
-        "bailian/MiniMax-M2.5": {
-          "streaming": true
-        },
-        "bailian/qwen3-vl-plus": {
-          "streaming": true
-        },
-        "openrouter/openrouter/hunter-alpha": {
-          "streaming": true
-        },
-        "openrouter/openrouter/healer-alpha": {
-          "streaming": true
-        }
+        "litellm/claw-main": { "streaming": true },
+        "litellm/claw-coder": { "streaming": true },
+        "litellm/claw-researcher": { "streaming": true },
+        "litellm/claw-architect": { "streaming": true },
+        "litellm/claw-free-fast": { "streaming": true },
+        "litellm/claw-free-smart": { "streaming": true }
       },
       "workspace": "/home/node/.openclaw/workspace",
       "memorySearch": {
@@ -233,7 +104,7 @@
       "timeoutSeconds": 1800,
       "heartbeat": {
         "every": "15m",
-        "model": "ollama/qwen3.5:0.8b"
+        "model": "litellm/claw-free-fast"
       },
       "subagents": {
         "maxConcurrent": 8,
@@ -277,7 +148,7 @@
         "workspace": "/home/node/.openclaw/workspace-researcher",
         "agentDir": "/home/node/.openclaw/agents/researcher/agent",
         "model": {
-          "primary": "bailian/qwen3-max-2026-01-23"
+          "primary": "litellm/claw-researcher"
         }
       },
       {
@@ -286,7 +157,7 @@
         "workspace": "/home/node/.openclaw/workspace-analyst",
         "agentDir": "/home/node/.openclaw/agents/analyst/agent",
         "model": {
-          "primary": "bailian/qwen3-max-2026-01-23"
+          "primary": "litellm/claw-researcher"
         }
       },
       {
@@ -334,7 +205,7 @@
         "workspace": "/home/node/.openclaw/workspace",
         "agentDir": "/home/node/.openclaw/agents/tester/agent",
         "model": {
-          "primary": "bailian/kimi-k2.5"
+          "primary": "litellm/claw-main"
         }
       }
     ]
@@ -426,7 +297,7 @@
       ],
       "groupPolicy": "allowlist",
       "streaming": "partial",
-      "blockStreaming": true,
+      "blockStreaming": false,
       "accounts": {
         "default": {
           "dmPolicy": "allowlist",
@@ -485,8 +356,8 @@
           "freshTailCount": 32,
           "contextThreshold": 0.75,
           "incrementalMaxDepth": -1,
-          "summaryModel": "MiniMax-M2.5",
-          "summaryProvider": "minimax"
+          "summaryModel": "claw-summarizer",
+          "summaryProvider": "litellm"
         }
       },
       "acpx": {

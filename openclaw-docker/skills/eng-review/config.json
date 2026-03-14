@@ -1,0 +1,5 @@
+{
+  "name": "eng-review",
+  "description": "Reviews the current plan through the lens of a Staff Engineer",
+  "trigger": "/plan-eng-review"
+}
