@@ -7,37 +7,40 @@ LITELLM_URL = "http://localhost:18788/v1/chat/completions"
 API_KEY = "sk-litellm-openclaw-proxy" 
 
 MODELS = [
-    "claw-main",
-    "claw-coder",
-    "claw-architect",
-    "claw-thinking",
-    "claw-researcher",
-    "claw-summarizer",
-    "claw-free-fast",
-    "claw-free-smart",
-    "local-small",
-    "local-medium"
+  "litellm/claw-main",
+  "litellm/claw-coder",
+  "litellm/claw-architect",
+  "litellm/claw-thinking",
+  "litellm/claw-researcher",
+  "litellm/claw-summarizer",
+  "litellm/claw-free-fast",
+  "litellm/claw-free-smart",
+  "litellm/kilo-deepseek-chat",
+  "litellm/local-small"
 ]
 
 def test_model(model_name):
-    print(f"Testing model: {model_name}...", end=" ", flush=True)
+    print(f"Testing {model_name}...", end=" ", flush=True)
     payload = {
         "model": model_name,
         "messages": [{"role": "user", "content": "ping"}],
         "max_tokens": 5
     }
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {API_KEY}"
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
     }
+    
+    import time
+    start = time.time()
     try:
-        response = requests.post(LITELLM_URL, headers=headers, json=payload, timeout=30)
+        response = requests.post(LITELLM_URL, json=payload, headers=headers, timeout=60)
+        duration = time.time() - start
         if response.status_code == 200:
-            print("✅ OK")
+            print(f"✅ OK ({duration:.1f}s)")
             return True
         else:
-            print(f"❌ FAIL ({response.status_code})")
-            print(f"   Response: {response.text}")
+            print(f"❌ FAIL ({response.status_code}) - {response.text[:200]}")
             return False
     except Exception as e:
         print(f"💥 ERROR: {str(e)}")
