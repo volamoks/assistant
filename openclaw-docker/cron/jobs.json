@@ -144,16 +144,16 @@
         "timeoutSeconds": 360
       },
       "state": {
-        "nextRunAtMs": 1773549000000,
+        "nextRunAtMs": 1773552600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773547228178,
+        "lastRunAtMs": 1773550800024,
         "lastStatus": "ok",
-        "lastDurationMs": 16831,
+        "lastDurationMs": 11556,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773547245009,
+      "updatedAtMs": 1773550811580,
       "delivery": {
         "mode": "none"
       }
@@ -265,15 +265,15 @@
         "model": "local-small"
       },
       "state": {
-        "nextRunAtMs": 1773549000000,
+        "nextRunAtMs": 1773552600000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773547245009,
+        "lastRunAtMs": 1773550811580,
         "lastStatus": "ok",
-        "lastDurationMs": 20867,
+        "lastDurationMs": 11021,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773547265876
+      "updatedAtMs": 1773550822601
     },
     {
       "id": "finance-enrichment",
@@ -440,13 +440,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773547265876,
+        "lastRunAtMs": 1773550822601,
         "lastRunStatus": "ok",
-        "lastDurationMs": 11444,
+        "lastDurationMs": 2963,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773547500000
+        "nextRunAtMs": 1773551100000
       },
-      "updatedAtMs": 1773547277320
+      "updatedAtMs": 1773550825564
     },
     {
       "id": "git-backup",
@@ -472,7 +472,8 @@
         "lastRunAtMs": 1773547358478,
         "lastRunStatus": "ok",
         "lastDurationMs": 2473,
-        "lastDeliveryStatus": "not-requested"
+        "lastDeliveryStatus": "not-requested",
+        "runningAtMs": 1773550887066
       },
       "updatedAtMs": 1773547360951
     },
@@ -723,7 +724,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773547310474,
+      "updatedAtMs": 1773550880634,
       "schedule": {
         "kind": "cron",
         "expr": "*/30 * * * *",
@@ -742,11 +743,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773549000000,
-        "lastRunAtMs": 1773547277320,
+        "nextRunAtMs": 1773552600000,
+        "lastRunAtMs": 1773550825564,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 33154,
+        "lastDurationMs": 55070,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1033,7 +1034,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773546352566,
+      "updatedAtMs": 1773549943332,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -1051,11 +1052,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773548100000,
-        "lastRunAtMs": 1773546303631,
+        "nextRunAtMs": 1773551700000,
+        "lastRunAtMs": 1773549912993,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 48935,
+        "lastDurationMs": 30339,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1168,15 +1169,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773547440000,
-        "lastRunAtMs": 1773547336237,
+        "nextRunAtMs": 1773551040000,
+        "lastRunAtMs": 1773550880634,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 19967,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773547440019
+        "lastDurationMs": 4402,
+        "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773547356204
+      "updatedAtMs": 1773550885036
     },
     {
       "id": "lcm-db-vacuum",
