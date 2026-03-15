@@ -19,15 +19,15 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/cleanup_memory.sh"
       },
       "state": {
-        "nextRunAtMs": 1773536536899,
-        "lastRunAtMs": 1773514936921,
+        "nextRunAtMs": 1773558136899,
+        "lastRunAtMs": 1773536536935,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 36959,
+        "lastDurationMs": 4780,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
       },
-      "updatedAtMs": 1773514973880
+      "updatedAtMs": 1773536541715
     },
     {
       "id": "morning-digest",
@@ -53,16 +53,16 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773547200000,
-        "lastRunAtMs": 1773460800029,
+        "nextRunAtMs": 1773633600000,
+        "lastRunAtMs": 1773547200038,
         "lastStatus": "ok",
-        "lastDurationMs": 18817,
+        "lastDurationMs": 28140,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
       },
-      "updatedAtMs": 1773460818846
+      "updatedAtMs": 1773547228178
     },
     {
       "id": "intraday-snapshot",
@@ -81,15 +81,15 @@
         "text": "SILENT. bash: /data/bot/openclaw-docker/scripts/jobs/intraday_snapshot.sh"
       },
       "state": {
-        "nextRunAtMs": 1773544200000,
-        "lastRunAtMs": 1773458124102,
+        "nextRunAtMs": 1773630600000,
+        "lastRunAtMs": 1773544200023,
         "lastStatus": "ok",
-        "lastDurationMs": 198360,
+        "lastDurationMs": 13576,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773458322462
+      "updatedAtMs": 1773544213599
     },
     {
       "id": "b4610658-3551-409a-a0ae-337ed1f6c6a4",
@@ -114,17 +114,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773529200000,
+        "nextRunAtMs": 1773615600000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773442800030,
-        "lastDurationMs": 22630,
+        "lastRunAtMs": 1773529200026,
+        "lastDurationMs": 144609,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773529200018
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773442822660
+      "updatedAtMs": 1773529344635
     },
     {
       "id": "crash-analysis",
@@ -145,17 +144,16 @@
         "timeoutSeconds": 360
       },
       "state": {
-        "nextRunAtMs": 1773529200000,
+        "nextRunAtMs": 1773549000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773527400037,
+        "lastRunAtMs": 1773547228178,
         "lastStatus": "ok",
-        "lastDurationMs": 12725,
+        "lastDurationMs": 16831,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1773529200018
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773527412762,
+      "updatedAtMs": 1773547245009,
       "delivery": {
         "mode": "none"
       }
@@ -177,15 +175,15 @@
         "text": "SILENT. bash: python3 /data/bot/openclaw-docker/scripts/jobs/task_briefing.py"
       },
       "state": {
-        "nextRunAtMs": 1773543600000,
-        "lastRunAtMs": 1773457216510,
+        "nextRunAtMs": 1773630000000,
+        "lastRunAtMs": 1773543612162,
         "lastStatus": "ok",
-        "lastDurationMs": 537161,
+        "lastDurationMs": 8010,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773457753671
+      "updatedAtMs": 1773543620172
     },
     {
       "id": "telegram-dashboard",
@@ -210,16 +208,17 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773545400000,
-        "lastRunAtMs": 1773459208930,
-        "lastStatus": "ok",
-        "lastDurationMs": 38662,
-        "consecutiveErrors": 0,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "nextRunAtMs": 1773631800000,
+        "lastRunAtMs": 1773545411525,
+        "lastStatus": "error",
+        "lastDurationMs": 60015,
+        "consecutiveErrors": 1,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "not-requested",
+        "lastError": "cron: job execution timed out",
+        "lastErrorReason": "timeout"
       },
-      "updatedAtMs": 1773459247592
+      "updatedAtMs": 1773545471540
     },
     {
       "id": "vault-gardening",
@@ -266,16 +265,15 @@
         "model": "local-small"
       },
       "state": {
-        "nextRunAtMs": 1773529200000,
+        "nextRunAtMs": 1773549000000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773527412762,
+        "lastRunAtMs": 1773547245009,
         "lastStatus": "ok",
-        "lastDurationMs": 13009,
+        "lastDurationMs": 20867,
         "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773529200018
+        "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773527425771
+      "updatedAtMs": 1773547265876
     },
     {
       "id": "finance-enrichment",
@@ -410,16 +408,17 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773545700000,
-        "lastStatus": "ok",
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1773459420566,
-        "lastRunStatus": "ok",
-        "lastDurationMs": 178938,
+        "nextRunAtMs": 1773632100000,
+        "lastStatus": "error",
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1773545700031,
+        "lastRunStatus": "error",
+        "lastDurationMs": 54835,
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDelivered": true,
+        "lastError": "⚠️ ✉️ Message failed"
       },
-      "updatedAtMs": 1773459599504
+      "updatedAtMs": 1773545754866
     },
     {
       "id": "watchdog",
@@ -441,14 +440,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773528900026,
+        "lastRunAtMs": 1773547265876,
         "lastRunStatus": "ok",
-        "lastDurationMs": 43713,
+        "lastDurationMs": 11444,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773529200000,
-        "runningAtMs": 1773529200018
+        "nextRunAtMs": 1773547500000
       },
-      "updatedAtMs": 1773528943739
+      "updatedAtMs": 1773547277320
     },
     {
       "id": "git-backup",
@@ -468,15 +466,15 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/jobs/git_backup.sh"
       },
       "state": {
-        "nextRunAtMs": 1773529219024,
+        "nextRunAtMs": 1773550819024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773525688183,
+        "lastRunAtMs": 1773547358478,
         "lastRunStatus": "ok",
-        "lastDurationMs": 48434,
+        "lastDurationMs": 2473,
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773525736617
+      "updatedAtMs": 1773547360951
     },
     {
       "id": "docker-arch-analyzer",
@@ -495,15 +493,15 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/jobs/docker-arch-analyzer.sh"
       },
       "state": {
-        "nextRunAtMs": 1773545100000,
+        "nextRunAtMs": 1773631500000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773459006308,
+        "lastRunAtMs": 1773545104617,
         "lastRunStatus": "ok",
-        "lastDurationMs": 96934,
+        "lastDurationMs": 11268,
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773459103242
+      "updatedAtMs": 1773545115885
     },
     {
       "id": "31eb68a9-4695-4749-996d-52f1e2e0a87b",
@@ -583,7 +581,7 @@
       "name": "morning-briefing",
       "enabled": true,
       "createdAtMs": 1772532782154,
-      "updatedAtMs": 1773457976235,
+      "updatedAtMs": 1773543997680,
       "schedule": {
         "expr": "5 3 * * *",
         "kind": "cron",
@@ -602,14 +600,15 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773543900000,
-        "lastRunAtMs": 1773457939842,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 36393,
+        "nextRunAtMs": 1773630300000,
+        "lastRunAtMs": 1773543918499,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 79181,
         "lastDeliveryStatus": "delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": true
+        "consecutiveErrors": 1,
+        "lastDelivered": true,
+        "lastError": "⚠️ ✉️ Message failed"
       }
     },
     {
@@ -634,16 +633,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773546000000,
-        "lastRunAtMs": 1773502803830,
+        "nextRunAtMs": 1773567600000,
+        "lastRunAtMs": 1773546009734,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 11497,
+        "lastDurationMs": 7992,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773502815327
+      "updatedAtMs": 1773546017726
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
@@ -652,7 +651,7 @@
       "name": "Crypto Daily Report",
       "enabled": true,
       "createdAtMs": 1772607679973,
-      "updatedAtMs": 1773458859594,
+      "updatedAtMs": 1773544556273,
       "schedule": {
         "kind": "cron",
         "expr": "15 8 * * *",
@@ -668,14 +667,15 @@
         "model": "litellm/claw-cron-fast"
       },
       "state": {
-        "nextRunAtMs": 1773544500000,
-        "lastRunAtMs": 1773458821242,
-        "lastRunStatus": "ok",
-        "lastStatus": "ok",
-        "lastDurationMs": 38352,
+        "nextRunAtMs": 1773630900000,
+        "lastRunAtMs": 1773544508654,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 47619,
         "lastDeliveryStatus": "delivered",
-        "consecutiveErrors": 0,
-        "lastDelivered": true
+        "consecutiveErrors": 1,
+        "lastDelivered": true,
+        "lastError": "⚠️ ✉️ Message failed"
       },
       "delivery": {
         "mode": "announce",
@@ -723,7 +723,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773527519426,
+      "updatedAtMs": 1773547310474,
       "schedule": {
         "kind": "cron",
         "expr": "*/30 * * * *",
@@ -742,15 +742,14 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773529200000,
-        "lastRunAtMs": 1773527483142,
+        "nextRunAtMs": 1773549000000,
+        "lastRunAtMs": 1773547277320,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 36284,
+        "lastDurationMs": 33154,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
-        "lastDelivered": false,
-        "runningAtMs": 1773529200018
+        "lastDelivered": false
       }
     },
     {
@@ -851,16 +850,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773547200000,
-        "lastRunAtMs": 1773493346312,
+        "nextRunAtMs": 1773558000000,
+        "lastRunAtMs": 1773547310474,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 45041,
+        "lastDurationMs": 25763,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773493391353
+      "updatedAtMs": 1773547336237
     },
     {
       "id": "8c767997-87cb-4374-8468-b7fd3e8c2b4d",
@@ -1034,7 +1033,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773528350467,
+      "updatedAtMs": 1773546352566,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -1052,11 +1051,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773530100000,
-        "lastRunAtMs": 1773528316338,
+        "nextRunAtMs": 1773548100000,
+        "lastRunAtMs": 1773546303631,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 34129,
+        "lastDurationMs": 48935,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1107,15 +1106,15 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773529620000,
-        "lastRunAtMs": 1773443245367,
+        "nextRunAtMs": 1773616020000,
+        "lastRunAtMs": 1773529620028,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 27371,
+        "lastDurationMs": 118964,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773443272738
+      "updatedAtMs": 1773529738992
     },
     {
       "id": "evolution-memory",
@@ -1141,15 +1140,15 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773530100000,
-        "lastRunAtMs": 1773443804887,
+        "nextRunAtMs": 1773616500000,
+        "lastRunAtMs": 1773530134363,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 16815,
+        "lastDurationMs": 15924,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1773443821702
+      "updatedAtMs": 1773530150287
     },
     {
       "id": "ollama-keepalive",
@@ -1169,15 +1168,15 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773529200000,
-        "lastRunAtMs": 1773528960028,
+        "nextRunAtMs": 1773547440000,
+        "lastRunAtMs": 1773547336237,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 18584,
+        "lastDurationMs": 19967,
         "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773529200018
+        "runningAtMs": 1773547440019
       },
-      "updatedAtMs": 1773528978612
+      "updatedAtMs": 1773547356204
     },
     {
       "id": "lcm-db-vacuum",
