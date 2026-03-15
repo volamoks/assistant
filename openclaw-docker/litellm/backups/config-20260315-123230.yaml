@@ -1,6 +1,6 @@
 # AUTO-GENERATED MODEL CONFIG
-# Generated at: 2026-03-15T12:32:30.907460
-# main: claw-main, coder: claw-main, thinking: kilo-deepseek-chat
+# Generated at: 2026-03-15T12:31:01.478332
+# main: claw-main, coder: claw-main, thinking: claw-thinking
 # cron_fast: kilo-deepseek-chat, cron_smart: kilo-deepseek-chat, fallback: kilo-deepseek-chat
 
 model_list:
@@ -18,23 +18,16 @@ model_list:
       api_base: https://api.minimax.io/v1
       api_key: os.environ/MINIMAX_API_KEY
 
-  # === CLAW-THINKING (Deep reasoning - MiniMax with KiloCode fallback) ===
+  # === CLAW-THINKING (Deep reasoning - claw-thinking) ===
   - model_name: claw-thinking
     litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
+      model: openai/deepseek/deepseek-reasoner
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
 
   - model_name: claw-architect
     litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
-
-  # === KILOCODE MODELS (Fallback) ===
-  - model_name: kilo-deepseek-chat
-    litellm_params:
-      model: openai/deepseek/deepseek-chat
+      model: openai/deepseek/deepseek-reasoner
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
 
@@ -99,20 +92,17 @@ litellm_settings:
 
 router_settings:
   fallbacks:
-    # Main models: MiniMax → KiloCode DeepSeek (NO local - too stupid)
-    - claw-main: ["kilo-deepseek-chat"]
-    - claw-coder: ["kilo-deepseek-chat"]
-    - claw-thinking: ["kilo-deepseek-chat"]
-    - claw-architect: ["kilo-deepseek-chat"]
-    - claw-researcher: ["kilo-deepseek-chat"]
-    - claw-vision: ["kilo-deepseek-chat"]
-    - claw-summarizer: ["kilo-deepseek-chat"]
-    # Cron models: KiloCode only (no local fallback)
-    - claw-cron-fast: ["kilo-deepseek-chat"]
-    - claw-cron-smart: ["kilo-deepseek-chat"]
-    # Free models: KiloCode only
-    - claw-free-fast: ["kilo-deepseek-chat"]
-    - claw-free-smart: ["kilo-deepseek-chat"]
+    - claw-main: ["claw-free-fast", "claw-cron-smart"]
+    - claw-coder: ["claw-free-fast", "claw-cron-smart"]
+    - claw-architect: ["claw-thinking", "claw-main"]
+    - claw-thinking: ["claw-main", "claw-free-fast"]
+    - claw-researcher: ["claw-free-fast"]
+    - claw-vision: ["claw-free-fast"]
+    - claw-summarizer: ["claw-free-fast"]
+    - claw-free-fast: ["local-medium", "local-small"]
+    - claw-free-smart: ["local-medium", "local-small"]
+    - claw-cron-fast: ["local-small", "kilo-deepseek-chat"]
+    - claw-cron-smart: ["local-medium", "kilo-deepseek-chat"]
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY

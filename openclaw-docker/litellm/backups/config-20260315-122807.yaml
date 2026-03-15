@@ -1,0 +1,178 @@
+middleware:
+  - path: ./middleware.py
+    class: middleware.AgentSignatureMiddleware
+
+model_list:
+  # =========================================================
+  # === OpenClaw canonical aliases - USING MINIMAX CODING SUBSCRIPTION ===
+  # =========================================================
+
+  # --- claw-main: Primary model (MiniMax coding subscription) ---
+  - model_name: claw-main
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-coder: Code-specific tasks ---
+  - model_name: claw-coder
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-architect / claw-thinking: Deep reasoning ---
+  - model_name: claw-architect
+    litellm_params:
+      model: openai/deepseek/deepseek-reasoner
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  - model_name: claw-thinking
+    litellm_params:
+      model: openai/deepseek/deepseek-reasoner
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  # --- claw-researcher: Exploration ---
+  - model_name: claw-researcher
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-vision: Image processing ---
+  - model_name: claw-vision
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # --- claw-summarizer: Context compaction ---
+  - model_name: claw-summarizer
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+
+  # ==========================================
+  # === FREE MODEL POOLS (via KiloCode) ===
+  # ==========================================
+
+  # --- claw-free-fast: Low-latency free ---
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  # --- claw-free-smart: Smart free models ---
+  - model_name: claw-free-smart
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  # ==========================================
+  # Cron Agents - KiloCode (pay per token, cheap) + MiniMax (free but limited requests)
+  # ==========================================
+
+  # cron-fast: Quick/simple tasks → KiloCode (cheap, no request limit)
+  - model_name: claw-cron-fast
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 30
+
+  # cron-smart: Complex tasks → MiniMax (free, save for important tasks)
+  - model_name: claw-cron-smart
+    litellm_params:
+      model: openai/MiniMax-M2.5
+      api_key: os.environ/MINIMAX_API_KEY
+      api_base: https://api.minimax.io/v1
+      timeout: 60
+
+  # ==========================================
+  # === LOCAL MODELS (KiloCode - pay per token, cheap) ===
+  # ==========================================
+
+  # local-small: Quick tasks → KiloCode DeepSeek
+  - model_name: local-small
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 30
+
+  # local-medium: More complex → KiloCode DeepSeek
+  - model_name: local-medium
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  # ==========================================
+  # === KILOCODE FALLBACK MODELS ===
+  # ==========================================
+
+  - model_name: kilo-deepseek-chat
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+
+litellm_settings:
+  cache: true
+  cache_params:
+    type: redis
+    host: redis-cache
+    port: 6379
+  cache_key_params:
+    - model
+    - messages
+    - temperature
+    - max_tokens
+  drop_params: true
+  request_timeout: 300
+  num_retries: 2
+  log_level: DEBUG
+  log_requests: true
+  log_cache_stats: true
+  forward_client_headers_to_llm_api: false
+
+router_settings:
+  fallbacks:
+    # --- Primary Aliases ---
+    - claw-main: ["claw-free-smart", "kilo-deepseek-chat", "local-medium"]
+    - claw-coder: ["claw-free-smart", "kilo-deepseek-chat", "local-medium"]
+    - claw-architect: ["claw-thinking", "claw-main"]
+    - claw-researcher: ["claw-free-smart", "kilo-deepseek-chat"]
+    - claw-thinking: ["claw-main"]
+    - claw-vision: ["claw-free-smart", "local-medium"]
+    - claw-summarizer: ["claw-free-fast", "local-medium"]
+    - claw-free-fast: ["kilo-deepseek-chat", "local-medium"]
+    - claw-free-smart: ["kilo-deepseek-chat", "local-medium"]
+
+    # --- Cron Agents ---
+    - claw-cron-fast: ["kilo-deepseek-chat", "local-small"]
+    - claw-cron-smart: ["claw-main", "kilo-deepseek-chat"]
+
+  retry_policy:
+    RateLimitError: 2
+    ServiceUnavailableError: 2
+    GatewayTimeoutError: 2
+    ConnectionError: 2
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  model_health_check: false
+  health_check_interval: 0
+  disable_background_health_checks: true

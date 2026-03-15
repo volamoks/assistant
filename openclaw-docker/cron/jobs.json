@@ -19,16 +19,15 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/cleanup_memory.sh"
       },
       "state": {
-        "nextRunAtMs": 1773558136899,
-        "lastRunAtMs": 1773536536935,
+        "nextRunAtMs": 1773579736899,
+        "lastRunAtMs": 1773558412018,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 4780,
+        "lastDurationMs": 50235,
         "lastDeliveryStatus": "not-requested",
-        "consecutiveErrors": 0,
-        "runningAtMs": 1773558412011
+        "consecutiveErrors": 0
       },
-      "updatedAtMs": 1773536541715
+      "updatedAtMs": 1773558462253
     },
     {
       "id": "morning-digest",
@@ -145,16 +144,16 @@
         "timeoutSeconds": 360
       },
       "state": {
-        "nextRunAtMs": 1773559800000,
+        "nextRunAtMs": 1773563400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773558009265,
+        "lastRunAtMs": 1773561600020,
         "lastStatus": "ok",
-        "lastDurationMs": 16607,
+        "lastDurationMs": 22896,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773558025872,
+      "updatedAtMs": 1773561622916,
       "delivery": {
         "mode": "none"
       }
@@ -266,15 +265,15 @@
         "model": "local-small"
       },
       "state": {
-        "nextRunAtMs": 1773559800000,
+        "nextRunAtMs": 1773563400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773558025872,
+        "lastRunAtMs": 1773561622916,
         "lastStatus": "ok",
-        "lastDurationMs": 17139,
+        "lastDurationMs": 15648,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773558043011
+      "updatedAtMs": 1773561638564
     },
     {
       "id": "finance-enrichment",
@@ -441,13 +440,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773558043011,
+        "lastRunAtMs": 1773561638564,
         "lastRunStatus": "ok",
-        "lastDurationMs": 286479,
+        "lastDurationMs": 14242,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773558600000
+        "nextRunAtMs": 1773561900000
       },
-      "updatedAtMs": 1773558329490
+      "updatedAtMs": 1773561652806
     },
     {
       "id": "git-backup",
@@ -467,16 +466,16 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/jobs/git_backup.sh"
       },
       "state": {
-        "nextRunAtMs": 1773558019024,
+        "nextRunAtMs": 1773561619024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773554541208,
+        "lastRunAtMs": 1773558462253,
         "lastRunStatus": "ok",
-        "lastDurationMs": 11188,
+        "lastDurationMs": 17623,
         "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773558412011
+        "runningAtMs": 1773561706549
       },
-      "updatedAtMs": 1773554552396
+      "updatedAtMs": 1773558479876
     },
     {
       "id": "docker-arch-analyzer",
@@ -725,7 +724,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773558371275,
+      "updatedAtMs": 1773561688725,
       "schedule": {
         "kind": "cron",
         "expr": "*/30 * * * *",
@@ -744,11 +743,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773559800000,
-        "lastRunAtMs": 1773558329490,
+        "nextRunAtMs": 1773563400000,
+        "lastRunAtMs": 1773561652806,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 41785,
+        "lastDurationMs": 35919,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1035,7 +1034,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773557159726,
+      "updatedAtMs": 1773560784424,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -1053,11 +1052,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773558900000,
-        "lastRunAtMs": 1773557115125,
+        "nextRunAtMs": 1773562500000,
+        "lastRunAtMs": 1773560712579,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 44601,
+        "lastDurationMs": 71845,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1170,15 +1169,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773558240000,
-        "lastRunAtMs": 1773557760025,
+        "nextRunAtMs": 1773561840000,
+        "lastRunAtMs": 1773561688725,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 246847,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773558412011
+        "lastDurationMs": 15801,
+        "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773558006872
+      "updatedAtMs": 1773561704526
     },
     {
       "id": "lcm-db-vacuum",

@@ -1,0 +1,95 @@
+# AUTO-GENERATED MODEL CONFIG
+# Generated at: 2026-03-15T12:28:07.753710
+# main: kilo-deepseek-chat, cron_fast: kilo-deepseek-chat, cron_smart: kilo-deepseek-chat
+
+model_list:
+  # === CLAW-MAIN (Primary conversation) ===
+  - model_name: claw-main
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === CLAW-CODER (Coding tasks) ===
+  - model_name: claw-coder
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === CLAW-THINKING (Deep reasoning) ===
+  - model_name: claw-thinking
+    litellm_params:
+      model: openai/deepseek/deepseek-reasoner
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  - model_name: claw-architect
+    litellm_params:
+      model: openai/deepseek/deepseek-reasoner
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === CLAW-FREE (Fallback/quick tasks) ===
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  - model_name: claw-free-smart
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === CRON FAST (Quick checks) ===
+  - model_name: claw-cron-fast
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === CRON SMART (Complex tasks) ===
+  - model_name: claw-cron-smart
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+
+  # === LOCAL MODELS (Ollama) ===
+  - model_name: local-small
+    litellm_params:
+      model: ollama_chat/qwen3.5:0.8b
+      api_base: os.environ/OLLAMA_HOST
+
+  - model_name: local-medium
+    litellm_params:
+      model: ollama_chat/qwen3.5:9b
+      api_base: os.environ/OLLAMA_HOST
+
+litellm_settings:
+  cache: true
+  cache_params:
+    type: redis
+    host: redis-cache
+  request_timeout: 300
+
+router_settings:
+  fallbacks:
+    - claw-main: ["claw-free-fast", "claw-cron-smart"]
+    - claw-coder: ["claw-free-fast", "claw-cron-smart"]
+    - claw-architect: ["claw-thinking", "claw-main"]
+    - claw-thinking: ["claw-main", "claw-free-fast"]
+    - claw-researcher: ["claw-free-fast"]
+    - claw-vision: ["claw-free-fast"]
+    - claw-summarizer: ["claw-free-fast"]
+    - claw-free-fast: ["local-medium", "local-small"]
+    - claw-free-smart: ["local-medium", "local-small"]
+    - claw-cron-fast: ["local-small", "kilo-deepseek-chat"]
+    - claw-cron-smart: ["local-medium", "kilo-deepseek-chat"]
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  model_health_check: false
+  health_check_interval: 0
