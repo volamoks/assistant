@@ -4,17 +4,17 @@ middleware:
 
 model_list:
   # =========================================================
-  # === OpenClaw canonical aliases — THE ONLY MODELS THE BOT SEES ===
+  # === OpenClaw canonical aliases - USING MINIMAX CODING SUBSCRIPTION ===
   # =========================================================
 
-  # --- claw-main: Primary model for conversations + orchestration ---
+  # --- claw-main: Primary model (MiniMax coding subscription) ---
   - model_name: claw-main
     litellm_params:
       model: openai/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
       api_base: https://api.minimax.io/v1
 
-  # --- claw-coder: Specialized for implementation ---
+  # --- claw-coder: Code-specific tasks ---
   - model_name: claw-coder
     litellm_params:
       model: openai/MiniMax-M2.5
@@ -36,7 +36,7 @@ model_list:
       api_key: os.environ/KILOCODE_API_KEY
       timeout: 60
 
-  # --- claw-researcher: Exploration and analysis ---
+  # --- claw-researcher: Exploration ---
   - model_name: claw-researcher
     litellm_params:
       model: openai/MiniMax-M2.5
@@ -53,119 +53,74 @@ model_list:
   # --- claw-summarizer: Context compaction ---
   - model_name: claw-summarizer
     litellm_params:
-      model: openai/MiniMax-M2.5-highspeed
+      model: openai/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
       api_base: https://api.minimax.io/v1
 
   # ==========================================
-  # === FREE MODEL POOLS (Rotation & Failover) ===
+  # === FREE MODEL POOLS (via KiloCode) ===
   # ==========================================
 
-  # --- claw-free-fast: Low-latency, free tasks ---
-  # FIX: kilo-auto/free alpha ended, using working alternatives
+  # --- claw-free-fast: Low-latency free ---
   - model_name: claw-free-fast
     litellm_params:
       model: openai/deepseek/deepseek-chat
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
       timeout: 60
-  - model_name: claw-free-fast
-    litellm_params:
-      model: openai/Qwen/Qwen2.5-7B-Instruct
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
 
-  # --- claw-free-smart: Intelligent, free tasks ---
+  # --- claw-free-smart: Smart free models ---
   - model_name: claw-free-smart
     litellm_params:
-      model: openai/moonshotai/kimi-k2.5:free
+      model: openai/deepseek/deepseek-chat
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
-  - model_name: claw-free-smart
-    litellm_params:
-      model: openai/z-ai/glm-4.7:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-  - model_name: claw-free-smart
-    litellm_params:
-      model: openai/arcee-ai/trinity-large-preview:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
 
   # ==========================================
-  # Cron Agents - ALL LOCAL (FREE)
+  # Cron Agents - KiloCode (pay per token, cheap) + MiniMax (free but limited requests)
   # ==========================================
 
+  # cron-fast: Quick/simple tasks → KiloCode (cheap, no request limit)
   - model_name: claw-cron-fast
     litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
       timeout: 30
-      stream: false
 
+  # cron-smart: Complex tasks → MiniMax (free, save for important tasks)
   - model_name: claw-cron-smart
-    litellm_params:
-      model: ollama_chat/qwen3.5:9b
-      api_base: os.environ/OLLAMA_HOST
-      timeout: 60
-      stream: false
-
-  # ==========================================
-  # === LOCAL MODELS (Ollama) & ALIASES ===
-  # ==========================================
-
-  - model_name: local-small
-    litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
-      timeout: 30
-      stream: false
-
-  - model_name: local-medium
-    litellm_params:
-      model: ollama_chat/qwen3.5:9b
-      api_base: os.environ/OLLAMA_HOST
-      timeout: 60
-      stream: false
-
-  - model_name: ollama/qwen3.5:0.8b
-    litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
-
-  - model_name: ollama/qwen3.5:9b
-    litellm_params:
-      model: ollama_chat/qwen3.5:9b
-      api_base: os.environ/OLLAMA_HOST
-
-  - model_name: ollama/llama3.2:1b
-    litellm_params:
-      model: ollama_chat/llama3.2:1b
-      api_base: os.environ/OLLAMA_HOST
-
-
-  # === Qwen Vision-Language (VL) models ===
-  - model_name: qwen3-vl-plus
-    litellm_params:
-      model: openai/qwen3-vl-plus
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
-
-  # Vision alias for OpenClaw image processing
-  - model_name: vision
     litellm_params:
       model: openai/MiniMax-M2.5
       api_key: os.environ/MINIMAX_API_KEY
       api_base: https://api.minimax.io/v1
+      timeout: 60
 
-  # Qwen3-Max with vision support
-  - model_name: qwen3-max
+  # ==========================================
+  # === LOCAL MODELS (KiloCode - pay per token, cheap) ===
+  # ==========================================
+
+  # local-small: Quick tasks → KiloCode DeepSeek
+  - model_name: local-small
     litellm_params:
-      model: openai/qwen3-max-2026-01-23
-      api_base: os.environ/DASHSCOPE_API_BASE
-      api_key: os.environ/DASHSCOPE_API_KEY
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 30
 
-  # KiloCode Stable Fallbacks
+  # local-medium: More complex → KiloCode DeepSeek
+  - model_name: local-medium
+    litellm_params:
+      model: openai/deepseek/deepseek-chat
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+      timeout: 60
+
+  # ==========================================
+  # === KILOCODE FALLBACK MODELS ===
+  # ==========================================
+
   - model_name: kilo-deepseek-chat
     litellm_params:
       model: openai/deepseek/deepseek-chat
@@ -186,12 +141,11 @@ litellm_settings:
     - temperature
     - max_tokens
   drop_params: true
-  request_timeout: 300   # ← увеличено до 300 сек для DeepSeek
+  request_timeout: 300
   num_retries: 2
   log_level: DEBUG
   log_requests: true
   log_cache_stats: true
-  # Drop any headers from incoming requests that could identify the client app
   forward_client_headers_to_llm_api: false
 
 router_settings:
@@ -204,25 +158,19 @@ router_settings:
     - claw-thinking: ["claw-main"]
     - claw-vision: ["claw-free-smart", "local-medium"]
     - claw-summarizer: ["claw-free-fast", "local-medium"]
+    - claw-free-fast: ["kilo-deepseek-chat", "local-medium"]
+    - claw-free-smart: ["kilo-deepseek-chat", "local-medium"]
 
     # --- Cron Agents ---
-    - claw-cron-fast: ["ollama/qwen3.5:0.8b", "ollama/llama3.2:1b"]
-    - claw-cron-smart: ["ollama/qwen3.5:9b"]
+    - claw-cron-fast: ["kilo-deepseek-chat", "local-small"]
+    - claw-cron-smart: ["claw-main", "kilo-deepseek-chat"]
 
-    # --- Legacy/Specific Fallbacks ---
-    - nemotron-super: ["claw-free-smart"]
-    - qwen3.5-plus: ["claw-free-smart"]
-    - qwen3-max: ["claw-free-smart"]
-    - kimi-k2.5: ["claw-free-smart"]
   retry_policy:
     RateLimitError: 2
     ServiceUnavailableError: 2
     GatewayTimeoutError: 2
     ConnectionError: 2
-    AuthenticationError: 2
-    UnauthorizedError: 2
 
-# LiteLLM master key for authentication
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   model_health_check: false
