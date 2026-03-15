@@ -62,16 +62,19 @@ model_list:
   # ==========================================
 
   # --- claw-free-fast: Low-latency, free tasks ---
-  # FIX: kilo-auto/free alpha ended, using working alternatives
   - model_name: claw-free-fast
     litellm_params:
-      model: openai/deepseek/deepseek-chat
+      model: openai/kilo-auto/free
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
-      timeout: 60
   - model_name: claw-free-fast
     litellm_params:
-      model: openai/Qwen/Qwen2.5-7B-Instruct
+      model: openai/minimax/minimax-m2.1:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+  - model_name: claw-free-fast
+    litellm_params:
+      model: openai/giga-potato
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
 
