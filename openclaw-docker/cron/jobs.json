@@ -45,7 +45,7 @@
         "kind": "agentTurn",
         "message": "Run the morning digest script and output the result:\nbash: /data/bot/openclaw-docker/scripts/cron/morning_digest.sh",
         "timeoutSeconds": 120,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "announce",
@@ -108,7 +108,7 @@
         "message": "EVOLUTION APPLY — SILENT. Применяй конкретные авто-фиксы из recommendations файла.\n\n## ШАГ 1: Читай рекомендации\n```bash\ncat /data/obsidian/vault/Bot/evolution-recommendations.md 2>/dev/null | tail -100\ncat /tmp/night_issues.json 2>/dev/null\n```\n\n## ШАГ 2: Применяй ТОЛЬКО 🔴 Критичные авто-фиксы\nИспользуй Python для безопасного патча jobs.json:\n```python\nimport json, shutil\np = '/data/bot/openclaw-docker/cron/jobs.json'\nshutil.copy(p, p + '.bak')\nwith open(p) as f: data = json.load(f)\n# Применяй фиксы из recommendations:\n# - Timeout fix: data[\"jobs\"][i][\"payload\"][\"timeoutSeconds\"] = new_value\n# - Delivery fix: data[\"jobs\"][i][\"delivery\"][\"to\"] = \"telegram:6053956251\"\nwith open(p, 'w') as f: json.dump(data, f, indent=2, ensure_ascii=False)\nprint(\"Patched jobs.json\")\n```\n\n## ШАГ 3: Git commit\n```bash\ncd /data/bot/openclaw-docker && git add cron/jobs.json && git commit -m \"auto-evolution: $(date +%Y-%m-%d) cron fixes\" 2>/dev/null || true\n```\n\n## ШАГ 4: Вывод\nВыведи только: \"Evolution Apply: N fixes applied\"\nНе отправляй Telegram.",
         "thinking": "low",
         "timeoutSeconds": 420,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -144,16 +144,16 @@
         "timeoutSeconds": 360
       },
       "state": {
-        "nextRunAtMs": 1773563400000,
+        "nextRunAtMs": 1773565200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773561600020,
+        "lastRunAtMs": 1773563527337,
         "lastStatus": "ok",
-        "lastDurationMs": 22896,
+        "lastDurationMs": 13664,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773561622916,
+      "updatedAtMs": 1773563541001,
       "delivery": {
         "mode": "none"
       }
@@ -202,7 +202,7 @@
         "message": "🖥️ MORNING SYSTEM STATUS — 08:30 Tashkent.\n\n## ШАГ 1: Проверь систему\n```bash\ndocker ps --format 'table {.Names}\\t{.Status}'\ndocker system df\n```\n\n## ШАГ 2: Запиши в vault\n/data/obsidian/vault/Bot/DailyReports/system-status.md:\n- Дата/время проверки\n- Статус всех контейнеров (✅/⚠️/❌)\n- Docker disk usage\n- Проблемы (если есть)\n\n## ШАГ 3: Отправь статус\n3-5 строк: общий статус, проблемы (если есть), кнопка:\n{\"text\": \"🖥️ Подробности\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/system-status\"}}\n\nИспользуй: bash, message.",
         "thinking": "low",
         "timeoutSeconds": 60,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -265,15 +265,15 @@
         "model": "local-small"
       },
       "state": {
-        "nextRunAtMs": 1773563400000,
+        "nextRunAtMs": 1773565200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773561622916,
+        "lastRunAtMs": 1773563541001,
         "lastStatus": "ok",
-        "lastDurationMs": 15648,
+        "lastDurationMs": 16760,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773561638564
+      "updatedAtMs": 1773563557761
     },
     {
       "id": "finance-enrichment",
@@ -400,7 +400,7 @@
         "message": "📱 TELEGRAM CHANNEL MONITOR — 08:35 Tashkent.\n\n## ШАГ 1: Сканируй каналы\nЗапусти: python3 ~/.openclaw/skills/telegram_monitor/scan.py --days=1\n\n## ШАГ 2: Запиши дайджест в vault\nЗапиши в /data/obsidian/vault/Bot/DailyReports/telegram-digest.md:\n- Дата\n- Ключевые сообщения из каналов (3-5 важных)\n- Ссылки на важные посты\n- Тренды/темы дня\nВАЖНО: ЗАМЕНИ файл полностью.\n\n## ШАГ 3: Отправь краткий дайджест\n1-2 абзаца с главным + кнопка:\n{\"text\": \"📱 Полный дайджест\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/telegram-digest\"}}\n\nИспользуй: bash, message.",
         "thinking": "low",
         "timeoutSeconds": 300,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "announce",
@@ -440,13 +440,13 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773561638564,
+        "lastRunAtMs": 1773564900030,
         "lastRunStatus": "ok",
-        "lastDurationMs": 14242,
+        "lastDurationMs": 20742,
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773561900000
+        "nextRunAtMs": 1773565200000
       },
-      "updatedAtMs": 1773561652806
+      "updatedAtMs": 1773564920772
     },
     {
       "id": "git-backup",
@@ -466,16 +466,15 @@
         "text": "SILENT. bash: bash /data/bot/openclaw-docker/scripts/jobs/git_backup.sh"
       },
       "state": {
-        "nextRunAtMs": 1773561619024,
+        "nextRunAtMs": 1773565219024,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773558462253,
+        "lastRunAtMs": 1773561706551,
         "lastRunStatus": "ok",
-        "lastDurationMs": 17623,
-        "lastDeliveryStatus": "not-requested",
-        "runningAtMs": 1773561706549
+        "lastDurationMs": 14034,
+        "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773558479876
+      "updatedAtMs": 1773561720585
     },
     {
       "id": "docker-arch-analyzer",
@@ -523,7 +522,7 @@
         "message": "NIGHTLY ANALYSIS — анализ сессий за последние 24ч. Создаёт задачи в Vikunja.\n\n## ШАГ 1: Получи сессии\nCall sessions_list: activeMinutes=1440, limit=20\n\n## ШАГ 2: Анализируй каждую сессию\nДля каждой (не более 20, бери последние):\n- Call sessions_history: sessionKey, limit=100, includeTools=true\n- Ищи:\n  🔴 ОШИБКИ: \"error\", \"failed\", \"timeout\", \"❌\", \"EACCES\", \"SIGTERM\", \"consecutiveErrors\"\n  🟡 МЕДЛЕННО: tool calls >30s, ответы >60s\n  🟡 ПОВТОРЫ: одна и та же ошибка несколько раз\n  💡 УЛУЧШЕНИЯ: жалобы юзера, \"почему так медленно\", \"fix this\"\n\n## ШАГ 3: Создай задачи в Vikunja\nДля каждой найденной проблемы создай задачу через bash скрипт:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-bug \"[Краткий заголовок ошибки]\" \"Описание: что, в какой сессии, сколько раз\\n\\nСессия: {sessionKey}\\nВремя: {timestamp}\" \"YYYY-MM-DD\"\n```\n\nДля улучшений (priority=2):\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-improvement \"[Заголовок улучшения]\" \"Описание проблемы\\n\\nРекомендация: [конкретный fix]\" \"YYYY-MM-DD\"\n```\n\n## ШАГ 4: Проверь повторяющиеся ошибки\nCall vikunja.sh list-by-status undone — прочитай задачи с [BUG] в названии.\nЕсли одна и та же ошибка встречается ≥2 раз (похожие заголовки):\n- Это КРИТИЧНО — обнови задачу с highest priority:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh update <task_id> \"[CRITICAL] Заголовок\" \"Описание + повторения N раз\"\n```\n- Отправь Telegram Abror:\n  «⚠️ Повторяющаяся ошибка (N раз за 7 дней):\n  [описание]\n  Задача в Vikunja: #<task_id>\n  Отвечай: \"разберись с [проблема]\"»\n\n## ШАГ 5: Экспорт для pipeline\nСохрани сводку в `/tmp/night_issues.json` — её читают следующие ночные задачи:\n```bash\npython3 -c \"\nimport json, sys\ndata = {\n  'date': __import__('datetime').date.today().isoformat(),\n  'bugs': ['список заголовков созданных bug tasks'],\n  'improvements': ['список заголовков improvement tasks'],\n  'session_count': 0,\n  'critical': ['повторяющиеся критичные проблемы если есть']\n}\nwith open('/tmp/night_issues.json', 'w') as f:\n  json.dump(data, f, ensure_ascii=False, indent=2)\nprint('Exported night_issues.json')\n\"\n```\n(Замени placeholders реальными данными из ШАГ 3)\n\n## ШАГ 6: ClawVault observe\nЗапусти наблюдение за активными сессиями:\n```bash\nexport CLAWVAULT_PATH=/data/obsidian/vault/Bot/AgentMemory\nclawvault observe --cron -v $CLAWVAULT_PATH 2>&1 | tail -5 || true\n```\n\n## ШАГ 7: Вывод\nПечатай только: «Analyzed N sessions, created X Vikunja tasks (Y bugs, Z improvements)»\nTelegram НЕ отправляй кроме случая из Шага 4.",
         "thinking": "low",
         "timeoutSeconds": 600,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none",
@@ -556,7 +555,7 @@
         "kind": "agentTurn",
         "message": "Run the weekly review and output the result for Telegram announcement:\nbash: /data/bot/openclaw-docker/scripts/cron/weekly_review.sh",
         "timeoutSeconds": 240,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "announce",
@@ -594,7 +593,7 @@
         "kind": "agentTurn",
         "message": "🌅 MORNING BRIEFING — 08:05 Tashkent.\n\n## ШАГ 1: Собери контекст\nПроанализируй текущее состояние:\n- Посмотри ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/ — новые заметки за последние 24ч\n- Проверь статус системы через docker ps и logs\n- Посмотри календарь на сегодня\n\n## ШАГ 2: Запиши отчёт в vault\nЗапиши сводку в /data/obsidian/vault/Bot/DailyReports/morning-briefing.md\nФормат:\n- Дата: YYYY-MM-DD\n- Ключевые события за вчера\n- Приоритеты на сегодня\n- Статус системы\n- Важные заметки для просмотра\nВАЖНО: ЗАМЕНИ файл полностью.\n\n## ШАГ 3: Отправь краткий бриф + кнопки\nОтправь сообщение (1-2 абзаца) с:\n- Главные 3 задачи на сегодня\n- Статус системы (✅/⚠️)\n- Кнопки WebApp:\n  {\"text\": \"📋 Полный бриф\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/morning-briefing\"}}\n  {\"text\": \"📊 Крипто\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/crypto-report\"}}\n  {\"text\": \"🖥️ Статус\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/system-status\"}}\n\nИспользуй tools: bash, message.",
         "timeoutSeconds": 120,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "announce",
@@ -627,7 +626,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: python3 /data/bot/openclaw-docker/scripts/jobs/inbox_router.py",
-        "model": "litellm/claw-cron-fast",
+        "model": "local-small",
         "timeoutSeconds": 300
       },
       "delivery": {
@@ -665,7 +664,7 @@
         "message": "CRYPTO DAILY REPORT — 08:15 Tashkent.\n\n## ШАГ 1: Собери данные\n```bash\npython3 ~/.openclaw/skills/crypto_assistant/bybit_read.py --json\npython3 ~/.openclaw/skills/crypto_assistant/reddit_scan.py --signals --json\n```\n\n## ШАГ 2: Запиши полный отчёт в vault\nЗапиши детальный отчёт в /data/obsidian/vault/Bot/DailyReports/crypto-report.md\nФормат: заголовок с датой, портфель, рыночные данные, сигналы Reddit, выводы.\nВАЖНО: ЗАМЕНИ файл полностью (не дописывай).\n\n## ШАГ 3: Отправь краткий бриф в Telegram\nОтправь сообщение через Telegram (2-4 строки):\n- Портфель: общий баланс, главное изменение за сутки\n- BTC/ETH: цена и направление\n- Главный сигнал/вывод\n- Кнопка WebApp: {\"text\": \"📊 Полный отчёт\", \"web_app\": {\"url\": \"https://vault.volamoks.store/report/crypto-report\"}}\n\nИспользуй tools: bash, message.",
         "thinking": "low",
         "timeoutSeconds": 360,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "state": {
         "nextRunAtMs": 1773630900000,
@@ -701,7 +700,7 @@
         "message": "WEEKLY DISCOVERY — SILENT. Найди новые идеи через SearXNG, создай задачи в Vikunja. Telegram НЕ отправляй — это сделает Weekly Review в субботу в 12:00.\n\n## ЧТО УЖЕ ЕСТЬ (пропускай)\nSearXNG, ChromaDB, Ollama, LiteLLM, Crawl4AI, n8n, Vikunja, Ryot, Plaud, Bybit/crypto monitor, Gmail/Calendar, Obsidian RAG, Actual Budget, Telegram бот, vault gardening, inbox router, crash analyzer, watchdog, docker arch analyzer\n\n## ШАГ 1: ПОИСК через SearXNG (выполни все 8 запросов через exec bash)\n\nНЕ используй web_search tool — он платный. Используй ТОЛЬКО SearXNG curl.\n\nШаблон команды:\n```bash\ncurl -s 'http://searxng:8080/search?q=QUERY&format=json&categories=general&language=en' | python3 -c \"import json,sys; results=json.load(sys.stdin).get('results',[]); [print(r['title']+'\\n'+r['url']+'\\n'+r.get('content','')[:250]+'\\n---') for r in results[:4]]\"\n```\n\nЗапросы (подставляй в QUERY, пробелы = +):\n1. self-hosted+automation+tools+2026\n2. AI+agent+productivity+local+LLM+2026\n3. openclaw+clawhub+skills+new\n4. obsidian+plugin+automation+workflow+2026\n5. telegram+bot+self-hosted+2026\n6. crypto+portfolio+open+source+2026\n7. hacker+news+AI+productivity+tools+2026\n8. personal+finance+automation+open+source+2026\n\n## ШАГ 2: ФИЛЬТРАЦИЯ\nИз результатов берём только:\n- Self-hosted / open source / бесплатное\n- Касается: продуктивность PM, FinTech, крипто, Obsidian, AI агенты, home server\n- Реализуемо как: скил / cron / агент / интеграция\n- НЕ берём SaaS с подпиской, НЕ берём то что уже есть\n\n## ШАГ 3: СОЗДАНИЕ ЗАДАЧ VIKUNJA\nДля каждой найденной идеи (не более 5 лучших) создай задачу в Vikunja:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-discovery \"[Название идеи]\" \"Что: [одна строка]\\nОткуда: [url]\\nЗачем: [польза для Abror]\\nРеализация: [скил|cron|агент|интеграция]\\nСложность: [Low/Med/High]\" \"YYYY-MM-DD\"\n```\n\nПриоритеты по сложности:\n- Low → priority 1 (низкий)\n- Med → priority 2 (средний)\n- High → priority 1 (низкий, для ручного рассмотрения)\n\n## ШАГ 4: ЗАПИСЬ (опционально)\nСоздай или дозапиши в /data/obsidian/vault/Bot/discovery-proposals.md краткий список для истории:\n\n```\n## YYYY-MM-DD\n- [Название] → Vikunja task #<id>\n- [Название] → Vikunja task #<id>\n```\n\nВывод: только «Discovery готов: N задач создано в Vikunja». Больше ничего.",
         "thinking": "low",
         "timeoutSeconds": 300,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -724,7 +723,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773561688725,
+      "updatedAtMs": 1773563591318,
       "schedule": {
         "kind": "cron",
         "expr": "*/30 * * * *",
@@ -743,11 +742,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773563400000,
-        "lastRunAtMs": 1773561652806,
+        "nextRunAtMs": 1773565200000,
+        "lastRunAtMs": 1773563557761,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 35919,
+        "lastDurationMs": 33557,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -771,7 +770,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Проверь Telegram-канал @parfbarr (https://t.me/s/parfbarr) на новые распивы ароматов. \n\nФИЛЬТР для Abror (профиль Bang + Encre Noire + J'ose + Bois Impérial):\n✅ ИСКАТЬ: сухие, пряные, древесные, табачные, ветиверные, ладанные, смолистые, перцовые, кожаные, мускусные, молекулярные\n❌ ИГНОРИРОВАТЬ: сладкие гурманские, фруктово-цветочные, женские, ванильно-карамельные, «компоты»\n\nЕсли найдешь 1-3 релевантных аромата:\n1. Кратко опиши (название, бренд, объем, цена, почему подходит)\n2. Отправь в Telegram пользователю 6053956251\n\nЕсли ничего подходящего нет — НЕ отправляй ничего (просто заверши задачу).\n\nКонтекст: пользователь любит Marc Jacobs Bang, Lalique Encre Noire, Eisenberg J'ose, Bois Impérial, Montale Red Vetiver. Ищет сухость, текстуру, глубину без сладости.",
-        "model": "litellm/claw-cron-fast",
+        "model": "local-small",
         "thinking": "off",
         "timeoutSeconds": 300
       },
@@ -808,7 +807,7 @@
         "message": "NIGHTLY ARCHITECT — сканирование кодовой базы.\n\n## ШАГ 0: Читай контекст от nightly-analysis\nПрочитай если файл существует:\n```bash\ncat /tmp/night_issues.json 2>/dev/null\n```\nЕсли файл есть — используй найденные баги и проблемы как ФОКУС для анализа ниже. Что именно сломалось — ищи причины в коде.\n\nПроанализируй текущую архитектуру в `/data/bot/openclaw-docker/skills/`, `/data/bot/openclaw-docker/prompts/`, `/data/bot/openclaw-docker/cron/jobs.json`.\nНайди узкие места производительности, дублирование кода, или неоптимальное потребление токенов LLM.\nСформируй отчет о найденных проблемах архитектуры и предложи конкретные шаги рефакторинга.\nПроверь переменную окружения `USER_VAULT_PATH` (по умолчанию `/data/obsidian/vault`) и сохрани результат в `$USER_VAULT_PATH/Bot/architect-report.md`.\nНе отправляй Telegram.",
         "thinking": "high",
         "timeoutSeconds": 900,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -841,7 +840,7 @@
         "kind": "agentTurn",
         "message": "SILENT TASK. Run the Plaud monitor script:\nbash: python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py\n\nIf the script successfully processes new recordings, send the brief summary result to Telegram using:\n```bash\npython3 /data/bot/openclaw-docker/skills/telegram/notify.py \"[summary from plaud_monitor.py]\"\n```\n\nIf the output is empty or says 'No files found', output nothing.",
         "thinking": "low",
-        "model": "litellm/claw-cron-fast",
+        "model": "local-small",
         "timeoutSeconds": 360,
         "env": {
           "OLLAMA_API_KEY": "ollama-local"
@@ -880,7 +879,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "Отправь напоминание в Telegram: \"⏰ Напоминание: отправить 66 000 за обед\"",
-        "model": "litellm/claw-cron-smart",
+        "model": "local-medium",
         "timeoutSeconds": 60
       },
       "delivery": {
@@ -916,7 +915,7 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK. Run this script and output nothing:\nbash: /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh",
-        "model": "litellm/claw-cron-fast",
+        "model": "local-small",
         "timeoutSeconds": 300,
         "env": {
           "OLLAMA_API_KEY": "ollama-local"
@@ -1034,7 +1033,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773560784424,
+      "updatedAtMs": 1773564370707,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -1045,18 +1044,18 @@
       "payload": {
         "kind": "agentTurn",
         "message": "SILENT TASK — логирование ошибок и варнингов бота.\n\n## ШАГ 1: Проверь логи Gateway\n```bash\ncat /home/node/.openclaw/gateway.log 2>/dev/null | tail -200\n```\nИщи:\n- **ERROR** → критичные ошибки\n- **WARN** → предупреждения\n- **onnxruntime warning** → варнинги моделей\n- **timeout** → таймауты\n- **deprecated** → устаревшие API\n\n## ШАГ 2: Проверь сессии на ошибки\nCall sessions_list: activeMinutes=60, limit=10\nДля каждой сессии запиши:\n- sessionKey\n- lastError / lastStatus\n- consecutiveErrors\n- contextTokens (если >100k — варнинг)\n\n## ШАГ 3: Проверь cron warnings\nCall cron list — найди jobs с:\n- consecutiveErrors > 0\n- lastDurationMs > 300000 (5 мин — медленно)\n- timeoutSeconds < lastDurationMs (риск таймаута)\n\n## ШАГ 4: Запиши в error-log.md\nДобавь запись в `/data/obsidian/vault/Bot/error-log.md`:\n\n```markdown\n## YYYY-MM-DD HH:MM\n\n### 🔴 Errors\n[если есть]\n\n### 🟡 Warnings\n[если есть — onnxruntime, deprecated, slow queries, high context]\n\n### 🟠 Cron Risks\n[кроны с риском таймаута или повторяющимися ошибками]\n\n---\n```\n\nЕсли ошибок и варнингов нет — не пиши ничего, выйди тихо.\n\nНе отправляй Telegram.",
-        "model": "litellm/claw-cron-fast",
+        "model": "local-small",
         "timeoutSeconds": 360
       },
       "delivery": {
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773562500000,
-        "lastRunAtMs": 1773560712579,
+        "nextRunAtMs": 1773566100000,
+        "lastRunAtMs": 1773564313767,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 71845,
+        "lastDurationMs": 56940,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1100,7 +1099,7 @@
         "message": "EVOLUTION VIKUNJA — SILENT. Создай задачи Vikunja из ночных рекомендаций.\n\n## ШАГ 1: Читай данные\n```bash\ncat /data/obsidian/vault/Bot/evolution-recommendations.md 2>/dev/null | tail -80\ncat /tmp/night_issues.json 2>/dev/null\n```\n\n## ШАГ 2: Создай задачи Vikunja (максимум 5, без дублей)\nДля каждой проблемы из 🔴/🟡/🟠 секций:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh list-by-status undone\n# Если похожая задача уже есть — пропусти\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-bug \"[заголовок]\" \"[описание]\" \"$(date +%Y-%m-%d)\"\n```\n\n## ШАГ 3: Вывод\nВыведи только: \"Vikunja: N tasks created\"\nНе отправляй Telegram.",
         "thinking": "low",
         "timeoutSeconds": 300,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -1134,7 +1133,7 @@
         "message": "EVOLUTION MEMORY — SILENT. Обнови MEMORY.md ключевыми инсайтами дня.\n\n## ШАГ 1: Читай контекст\n```bash\ncat /data/obsidian/vault/Bot/evolution-recommendations.md 2>/dev/null | tail -60\ncat /data/obsidian/vault/Bot/today-session.md 2>/dev/null\n```\n\n## ШАГ 2: Обнови MEMORY.md\nПрочитай /home/node/.openclaw/workspace/MEMORY.md.\nДобавь только НОВЫЕ инсайты (не дублируй существующее):\n- Что сломалось и как пофиксили\n- Новые паттерны\n- Ключевые изменения конфига\n\n## ШАГ 3: Вывод\nВыведи только: \"Memory updated: N insights added\"\nНе отправляй Telegram.",
         "thinking": "low",
         "timeoutSeconds": 120,
-        "model": "litellm/claw-cron-fast"
+        "model": "local-small"
       },
       "delivery": {
         "mode": "none"
@@ -1169,14 +1168,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773561840000,
-        "lastRunAtMs": 1773561688725,
+        "nextRunAtMs": 1773565200000,
+        "lastRunAtMs": 1773564960063,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 15801,
+        "lastDurationMs": 14730,
         "lastDeliveryStatus": "not-requested"
       },
-      "updatedAtMs": 1773561704526
+      "updatedAtMs": 1773564974793
     },
     {
       "id": "lcm-db-vacuum",
