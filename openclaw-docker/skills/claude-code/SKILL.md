@@ -1,6 +1,6 @@
 ---
 name: claude-code
-description: "Invoke Claude Code CLI (Anthropic Claude) for complex tasks that require deep reasoning, large context analysis, or architectural decisions beyond Nemotron/MiniMax capabilities. Use sparingly — consumes Claude subscription quota. Best for: multi-file codebase analysis, complex refactoring plans, architecture reviews, hard debugging sessions."
+description: "Invoke Claude (full Claude Code on host Mac) for complex tasks requiring deep reasoning, large context analysis, or architectural decisions. Uses claude-bridge HTTP proxy. Use sparingly — consumes Claude subscription quota. Best for: multi-file codebase analysis, hard debugging, architecture reviews."
 triggers:
   - claude code
   - вызови клода
@@ -10,12 +10,13 @@ triggers:
   - complex architecture
   - hard task claude
   - claude review
+  - claude думай
 ---
 
-# Claude Code CLI Skill
+# Claude Code Skill (via Bridge)
 
-Invokes Claude Code CLI (`claude`) as a powerful sub-agent for tasks requiring
-deep reasoning or large context. Uses the user's Claude subscription (no API key needed).
+Invokes full Claude Code CLI on the host Mac via HTTP bridge at `host.docker.internal:18791`.
+Uses the user's Claude subscription — no API key needed.
 
 ---
 
@@ -23,97 +24,99 @@ deep reasoning or large context. Uses the user's Claude subscription (no API key
 
 - Codebase analysis spanning **5+ files** or **complex interdependencies**
 - Architecture decisions with significant **trade-offs and risks**
-- Debugging a **hard bug** that Nemotron/MiniMax failed to solve after 2 attempts
-- Code review of a **full feature** (not single file)
+- Debugging a **hard bug** that Nemotron/MiniMax failed after 2 attempts
+- Code review of a **full feature** (not a single file)
 - Tasks requiring **100k+ token context**
+- User explicitly says "спроси клода" / "claude analyze"
 
 ## When NOT to use
 
-- Routine coding tasks → use coder agent (MiniMax)
-- Simple research → use researcher agent (Nemotron)
-- Config changes → use coder agent directly
-- Anything that fits in a single agent turn
+- Routine coding → coder agent (MiniMax)
+- Simple research → researcher (Nemotron)
+- Config changes → coder directly
+- Anything that fits in a normal agent turn
 
 ---
 
 ## Usage
 
-### Basic task
+### Basic call
 ```bash
-claude -p "TASK DESCRIPTION" --output-format text
-```
-
-### Analyze a file or directory
-```bash
-claude -p "Analyze this codebase and identify the top 3 architectural risks: $(find /data/bot/openclaw-docker -name '*.py' | head -20 | xargs ls -la)" \
-  --output-format text
+curl -s http://host.docker.internal:18791/claude \
+  -H "Authorization: Bearer claude-bridge-local-token" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "YOUR TASK HERE", "timeout": 120}' \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['result'] if d['ok'] else 'ERROR: '+d['error'])"
 ```
 
 ### With file context
 ```bash
-claude -p "$(cat << 'EOF'
-Review this code for security issues and performance problems:
+PROMPT=$(python3 -c "
+import json, sys
+content = open('/data/bot/openclaw-docker/skills/crypto_assistant/bybit_read.py').read()
+task = f'''Review this Python file for security issues and bugs:
 
-$(cat /data/bot/openclaw-docker/skills/crypto_assistant/bybit_read.py)
+{content}
 
-Be specific, list exact line numbers.
+List issues with line numbers. Be specific.'''
+print(json.dumps({'prompt': task, 'timeout': 120}))
+")
+
+curl -s http://host.docker.internal:18791/claude \
+  -H "Authorization: Bearer claude-bridge-local-token" \
+  -H "Content-Type: application/json" \
+  -d "$PROMPT" \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('result','ERROR: '+d.get('error','?')))"
+```
+
+### Multi-file analysis
+```bash
+python3 << 'EOF'
+import json, subprocess, os
+
+files = {}
+for f in ['/data/bot/openclaw-docker/core/openclaw.json',
+          '/data/bot/openclaw-docker/litellm/config.yaml']:
+    if os.path.exists(f):
+        files[f] = open(f).read()[:3000]  # truncate large files
+
+task = "Analyze these config files and identify risks:\n\n"
+for path, content in files.items():
+    task += f"=== {path} ===\n{content}\n\n"
+
+payload = json.dumps({"prompt": task, "timeout": 120})
+result = subprocess.run(
+    ['curl', '-s', 'http://host.docker.internal:18791/claude',
+     '-H', 'Authorization: Bearer claude-bridge-local-token',
+     '-H', 'Content-Type: application/json',
+     '-d', payload],
+    capture_output=True, text=True, timeout=130
+)
+d = json.loads(result.stdout)
+print(d.get('result', 'ERROR: ' + d.get('error', '?')))
 EOF
-)" --output-format text
 ```
 
-### Complex multi-file analysis
+---
+
+## Health check
 ```bash
-# Pass file contents inline for full context
-claude -p "$(echo 'Analyze these files and create a refactoring plan:'; \
-  for f in /data/bot/openclaw-docker/core/agents/*.json; do \
-    echo "=== $f ==="; cat "$f"; echo; \
-  done)" --output-format text
+curl -s http://host.docker.internal:18791/health
+# → {"ok": true, "version": "2.1.47 (Claude Code)"}
 ```
 
 ---
 
-## Check auth status
-```bash
-claude auth status
+## Optional: specify model
+```json
+{"prompt": "...", "model": "claude-opus-4-5", "timeout": 180}
 ```
-
-If not logged in:
-```bash
-claude auth login
-# Follow the OAuth flow in browser
-```
+Default: whatever `claude --print` uses (Sonnet by default).
 
 ---
 
-## Output formats
-
-| Flag | Use when |
-|------|----------|
-| `--output-format text` | Default — plain text response |
-| `--output-format json` | Structured output needed |
-| `--output-format stream-json` | Streaming (not needed for one-shot) |
-
----
-
-## Limits & best practices
-
-- **One task per call** — don't chain multiple questions in one prompt
-- **Be specific** — the more context in the prompt, the better the result
-- **Check auth first** — `claude auth status` before running
-- **Timeout**: complex analysis can take 60-120s — that's normal
-- **Quota**: each call uses your Claude subscription. Use for genuinely hard problems only.
-
----
-
-## Integration with agent workflow
-
-The main agent or architect should call this skill via `exec` tool:
-
-```
-[Agent decides Claude is needed]
-→ exec: claude -p "task" --output-format text
-→ Receives result
-→ Formats and returns to user
-```
-
-Do NOT spawn a sub-agent just to run Claude CLI — call it directly with exec.
+## Limits
+- Each call uses Claude subscription quota
+- Timeout default: 120s (complex tasks can take 60-90s)
+- Bridge runs on Mac port 18791, auto-starts on login
+- Log: `tail -f /tmp/claude-bridge.log`
