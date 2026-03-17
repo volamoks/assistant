@@ -202,6 +202,9 @@ function inferApiFromProvider(provider: string): string {
     "google-antigravity": "google-gemini-cli",
     "google-vertex": "google-vertex",
     "amazon-bedrock": "bedrock-converse-stream",
+    ollama: "openai-completions",
+    litellm: "openai-completions",
+    groq: "openai-completions",
   };
   return map[normalized] ?? "openai-responses";
 }
