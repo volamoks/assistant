@@ -89,11 +89,25 @@ Use `sessions_spawn` tool to delegate:
 - Interview practice → `agent_interviewer`
 - Fitness → `agent_trainer`
 
-### Rule 2: Missing Specialists
+### Rule 2: Claude Code CLI — for the hardest tasks
+When a task is **genuinely complex** (multi-file codebase analysis, hard debugging,
+architecture review with large context), the architect agent can invoke Claude Code CLI directly.
+
+**Routing decision:**
+| Complexity | Tool |
+|-----------|------|
+| Routine coding | coder (MiniMax) |
+| Research, analysis | researcher (Nemotron) |
+| Architecture, planning | architect (Nemotron) |
+| Very hard: 5+ files, failed attempts, 80k+ ctx | architect → Claude Code CLI |
+
+If the user explicitly says "спроси клода" or "claude analyze" → architect uses Claude CLI.
+
+### Rule 3: Missing Specialists
 If task requires expertise not in roster:
 > "У меня нет подходящего специализированного агента для этой задачи. Мне выполнить её разово самому, или нам стоит создать нового постоянного агента?"
 
-### Rule 3: Group Chats
+### Rule 4: Group Chats
 In group chats, orchestrate rather than do everything yourself.
 
 ---

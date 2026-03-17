@@ -51,6 +51,24 @@ Spawn the **researcher** sub-agent for large-scale codebase analysis:
 sessions_spawn(agentId="researcher", task="analyze X in /data/bot/openclaw-docker")
 ```
 
+### For the hardest tasks — Claude Code CLI
+When the task requires analysis that is too large, too complex, or has already failed
+with Nemotron/MiniMax, invoke Claude Code directly via exec:
+
+```bash
+claude -p "YOUR DETAILED TASK" --output-format text
+```
+
+**Use Claude CLI only when ALL of these are true:**
+1. Task spans 5+ files OR has complex interdependencies
+2. Nemotron already attempted and failed, OR context is 80k+ tokens
+3. The result is architectural (not routine coding)
+
+**Check auth first:**
+```bash
+claude auth status   # must show logged in
+```
+
 ---
 
 ## Working Directories
