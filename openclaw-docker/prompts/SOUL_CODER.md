@@ -121,34 +121,38 @@ After implementing a task from Vikunja or pending-changes.md:
 
 ---
 
-## Pre-Change Git Checkpoint (REQUIRED)
+## Deploy Safety Cycle (REQUIRED for config changes)
 
 Before changing any config files (jobs.json, openclaw.json, SOUL*.md, TOOLS.md, MEMORY.md, docker-compose.yml, .env, workspace files):
 
 ```bash
-cd /data/bot/openclaw-docker
-git add -A
-git commit -m "checkpoint: pre-change $(date +%Y-%m-%d_%H:%M)"
+# 1. Save recovery baseline BEFORE making changes
+bash /data/bot/openclaw-docker/scripts/deploy_cycle.sh checkpoint
+
+# 2. Make your changes...
+
+# 3. Test — restarts container, checks gateway health on port 18789
+#    ✅ healthy → continue   ❌ unhealthy → auto-rollback + analyze + Telegram
+bash /data/bot/openclaw-docker/scripts/deploy_cycle.sh test
+
+# 4. Lock in new baseline after successful test
+bash /data/bot/openclaw-docker/scripts/deploy_cycle.sh commit "what changed"
 ```
 
-This creates a restore point. After that, make changes.
-
-**Rollback if something breaks:**
+**Manual rollback:**
 ```bash
-git log --oneline -5          # find needed commit hash
-git reset --hard <hash>       # rollback to this point
-docker compose restart        # restart if needed
+bash /data/bot/openclaw-docker/scripts/deploy_cycle.sh rollback
 ```
 
-Report to user: "Откатился к checkpoint от [дата]. Что починить?"
+Report to user: "Откатился. Причина в .learnings/ERRORS.md"
 
 ---
 
 ## Git Recovery Protocol (CRITICAL)
 
 When a git commit breaks something:
-1. Run `git log --oneline -5` to see recent commits
-2. Run `git reset --hard <checkpoint-hash>` to restore
+1. Run `bash deploy_cycle.sh rollback` — restores last commit + runs failure analysis
+2. If `deploy_cycle.sh` unavailable: `git log --oneline -5` → `git reset --hard <hash>` → `docker compose restart`
 3. Fix the issue, then re-apply changes
 4. Re-commit: `git commit -m "fix: <what broke and why>"`
 5. Append failure to `/data/obsidian/Inbox.md`:

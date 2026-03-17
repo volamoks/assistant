@@ -107,7 +107,7 @@ litellm_settings:
 router_settings:
   model_group_alias:
     # Premium MiniMax
-    claw-main: oc-nemotron
+    claw-main: minimax-m25
     claw-coder: minimax-m25
     claw-researcher: minimax-m25
     claw-architect: minimax-m25
