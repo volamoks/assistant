@@ -32,9 +32,9 @@ except ImportError:
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-LITELLM_BASE = os.environ.get("LITELLM_BASE", "http://litellm-proxy:4000")
+LITELLM_BASE = os.environ.get("LITELLM_BASE", "http://litellm:4000")
 LITELLM_KEY  = os.environ.get("LITELLM_MASTER_KEY", "")
-DEFAULT_MODEL = "qwen3.5-plus"  # Coding Plan (Bailian) compatible
+DEFAULT_MODEL = "claw-main"
 OUTPUT_DIR = Path("/home/node/.openclaw/workspace-main/skills/debate-agents")
 
 # ── LLM call ──────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ def call_llm(model: str, system: str, user: str, temperature: float = 0.7) -> st
 
 # ── Summarizer ────────────────────────────────────────────────────────────────
 
-SUMMARY_MODEL = "qwen3.5-plus"  # Cheap/fast model for summarization
+SUMMARY_MODEL = "local-small"
 
 def summarize(text: str) -> str:
     """Compress a debate response to ~150 tokens (3-5 bullet key points).

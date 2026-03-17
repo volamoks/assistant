@@ -1,6 +1,6 @@
 ---
 name: session-restore
-description: "Restores session context from Obsidian daily diaries after /new. Reads recent Дневник_*.md files and injects key context."
+description: "Restores session context from Obsidian after /new. Reads recent memory files and injects key context."
 triggers:
   - /restore
   - restore context
@@ -10,21 +10,20 @@ triggers:
 
 # Session Restore — Cross-Session Context
 
-Restores context from previous sessions by reading Obsidian daily diaries.
+Restores context from previous sessions by reading Obsidian daily memories.
 Use at session start (after /new) to recover continuity.
 
 ## Steps
 
-### 1. Find recent diaries
+### 1. Find recent memory files
 Search for files matching:
-- `/data/obsidian/Inbox/Дневник_YYYY-MM-DD.md`
-- `/data/obsidian/vault/Daily/Дневник_YYYY-MM-DD.md`
-- `/data/obsidian/vault/Bot/Дневник_YYYY-MM-DD.md`
+- `/data/obsidian/Claw/Memory/YYYY-MM-DD.md`
+- `/data/obsidian/Claw/Bot/AgentMemory/**/*.md`
 
-Get last 1-2 days (today + yesterday if available).
+Get last 2-3 days (today + yesterday + day before if available).
 
-### 2. Read diary content
-Use `read` tool to fetch each diary file.
+### 2. Read memory content
+Use `read` tool to fetch each memory file.
 
 ### 3. Extract key context
 Parse markdown sections:
@@ -57,13 +56,13 @@ Output in Russian:
 ```
 
 ### 5. Optional: Save to session memory
-If workspace has `MEMORY.md` or `memory/YYYY-MM-DD.md`, append key context there.
+If workspace has `MEMORY.md` or memory files, append key context there.
 
 ## Edge Cases
 
-- **No diaries found**: "❌ Дневники не найдены — контекст не восстановлен"
-- **Empty diaries**: "⚠️ Дневники пустые — нет контекста для восстановления"
-- **Old diaries only (>7 days)**: Warn that context may be stale
+- **No memories found**: "❌ Память не найдена — контекст не восстановлен"
+- **Empty memories**: "⚠️ Память пустая — нет контекста для восстановления"
+- **Old memories only (>7 days)**: Warn that context may be stale
 
 ## Notes
 
@@ -76,6 +75,5 @@ If workspace has `MEMORY.md` or `memory/YYYY-MM-DD.md`, append key context there
 **Enabled:**
 - ✅ AGENTS.md: Runs at every session start
 - ✅ HEARTBEAT.md: Runs on first heartbeat of day
-- ✅ Cron: Daily at 05:00 UTC (`8d395650-cb86-4336-b074-7351b01209ba`)
 
 **Manual triggers:** `/restore`, `restore context`, `session restore`, `load context`

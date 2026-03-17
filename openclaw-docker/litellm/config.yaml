@@ -1,156 +1,95 @@
-# AUTO-GENERATED MODEL CONFIG
-# Updated: 2026-03-15
-# Local models for cron, cloud for user messages
+# LITELLM MODEL CONFIG
+# Providers:
+#   minimax.io      — premium subscription
+#   kilo.ai         — KILOCODE_API_KEY
+#   opencode.ai/zen — OPENCODE_API_KEY (faster routing for Nemotron)
+#   ollama          — local
 
 model_list:
-  # === CLAW-MAIN (Primary conversation - user messages) ===
-  - model_name: claw-main
+
+  # ── minimax.io premium ─────────────────────────────────────────────────────
+  - model_name: minimax-m25
     litellm_params:
       model: openai/MiniMax-M2.5
       api_base: https://api.minimax.io/v1
       api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
-    metadata:
-      user_tag: "telegram-user"
-      purpose: "user_conversation"
+    model_info:
+      supports_vision: true
 
-  # === CLAW-CODER (Coding tasks) ===
-  - model_name: claw-coder
+  # ── kilo.ai (KILOCODE_API_KEY) ─────────────────────────────────────────────
+  - model_name: kilo-minimax
     litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
-    metadata:
-      user_tag: "telegram-user"
-      purpose: "coding"
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+    model_info:
+      supports_vision: true
 
-  # === CLAW-THINKING (Deep reasoning) ===
-  - model_name: claw-thinking
+  - model_name: kilo-nemotron
     litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
-    metadata:
-      user_tag: "telegram-user"
-      purpose: "reasoning"
+      model: openai/nvidia/nemotron-3-super-120b-a12b:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+    model_info:
+      supports_reasoning: true
 
-  - model_name: claw-architect
-    litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
-    metadata:
-      user_tag: "telegram-user"
-      purpose: "architecture"
-
-  # === CRON MODELS (Local Ollama - fast & free) ===
-  - model_name: claw-cron-fast
-    litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
-      extra_headers:
-        x-litellm-source: "cron"
-        x-litellm-user: "local-cron"
-    metadata:
-      user_tag: "local-cron"
-      purpose: "cron_fast"
-
-  - model_name: claw-cron-smart
-    litellm_params:
-      model: ollama_chat/qwen3.5:9b
-      api_base: os.environ/OLLAMA_HOST
-      extra_headers:
-        x-litellm-source: "cron"
-        x-litellm-user: "local-cron"
-    metadata:
-      user_tag: "local-cron"
-      purpose: "cron_smart"
-
-  # === LOCAL MODELS (Direct Ollama access) ===
-  - model_name: local-small
-    litellm_params:
-      model: ollama_chat/qwen3.5:0.8b
-      api_base: os.environ/OLLAMA_HOST
-      extra_headers:
-        x-litellm-source: "cron"
-        x-litellm-user: "local-cron"
-    metadata:
-      user_tag: "local-cron"
-      purpose: "local_cron"
-
-  - model_name: local-medium
-    litellm_params:
-      model: ollama_chat/qwen3.5:9b
-      api_base: os.environ/OLLAMA_HOST
-      extra_headers:
-        x-litellm-source: "cron"
-        x-litellm-user: "local-cron"
-    metadata:
-      user_tag: "local-cron"
-      purpose: "local_cron"
-
-  # === KILOCODE MODELS (Fallback when Ollama fails) ===
-  - model_name: kilo-deepseek-chat
+  - model_name: kilo-deepseek
     litellm_params:
       model: openai/deepseek/deepseek-chat
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
-      extra_headers:
-        x-litellm-source: "fallback"
-        x-litellm-user: "fallback-agent"
-    metadata:
-      user_tag: "fallback-agent"
-      purpose: "fallback"
 
-  # === CLAW-RESEARCHER ===
-  - model_name: claw-researcher
+  - model_name: kilo-deepseek-terminus
     litellm_params:
-      model: openai/MiniMax-M2.5
-      api_base: https://api.minimax.io/v1
-      api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
+      model: openai/deepseek/deepseek-v3.1-terminus
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
 
-  # === CLAW-VISION ===
+  # ── opencode.ai quota via kilo.ai gateway (OPENCODE_API_KEY — separate account, faster)
+  - model_name: oc-minimax
+    litellm_params:
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      supports_vision: true
+
+  - model_name: oc-nemotron
+    litellm_params:
+      model: openai/nvidia/nemotron-3-super-120b-a12b:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      supports_reasoning: true
+
+  # ── local Ollama ───────────────────────────────────────────────────────────
+  - model_name: local-small
+    litellm_params:
+      model: ollama/qwen2.5-coder:3b
+      api_base: os.environ/OLLAMA_HOST
+      temperature: 0.1
+
+  - model_name: local-medium
+    litellm_params:
+      model: ollama/qwen3.5:9b
+      api_base: os.environ/OLLAMA_HOST
+      temperature: 0.1
+
+  # ── explicit entry so openclaw finds claw-vision in /v1/models ─────────────
   - model_name: claw-vision
     litellm_params:
       model: openai/MiniMax-M2.5
       api_base: https://api.minimax.io/v1
       api_key: os.environ/MINIMAX_API_KEY
-      extra_headers:
-        x-litellm-source: "telegram"
-        x-litellm-user: "telegram-user"
+    model_info:
+      supports_vision: true
 
-  # === CLAW-FREE (KiloCode fallback) ===
-  - model_name: claw-free-fast
+  # ── embeddings ─────────────────────────────────────────────────────────────
+  - model_name: nomic-embed-text
     litellm_params:
-      model: openai/deepseek/deepseek-chat
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-      extra_headers:
-        x-litellm-source: "fallback"
-        x-litellm-user: "fallback-agent"
-
-  - model_name: claw-free-smart
-    litellm_params:
-      model: openai/deepseek/deepseek-chat
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/KILOCODE_API_KEY
-      extra_headers:
-        x-litellm-source: "fallback"
-        x-litellm-user: "fallback-agent"
+      model: ollama/nomic-embed-text
+      api_base: http://host.docker.internal:11434
+      drop_params: true
 
 litellm_settings:
   cache: true
@@ -161,40 +100,47 @@ litellm_settings:
   json_logs: true
   success_callback: ["prometheus"]
   failure_callback: ["prometheus"]
-  additional_params:
-    - "x-litellm-source"
-    - "x-litellm-user"
-    - "x-litellm-session-id"
-    - "x-litellm-agent-type"
-  metadata:
-    source: "openclaw"
-    bot_name: "OpenClaw"
-    environment: "production"
-  ui_access_mode: "admin"
   master_key: os.environ/LITELLM_MASTER_KEY
   store_prompts_in_spend_logs: true
   pass_through_headers: true
 
 router_settings:
+  model_group_alias:
+    # Premium MiniMax
+    claw-main: oc-nemotron
+    claw-coder: minimax-m25
+    claw-researcher: minimax-m25
+    claw-architect: minimax-m25
+    claw-thinking: minimax-m25
+    claw-vision: minimax-m25
+    # Free MiniMax — kilo.ai quota
+    claw-free-fast: kilo-minimax
+    # Free MiniMax — opencode.ai quota
+    claw-opencode: oc-minimax
+    claw-free-smart: oc-minimax
+    # Nemotron — opencode.ai (fast), kilo.ai fallback
+    claw-reasoning: oc-nemotron
+    nemotron-free: oc-nemotron
+    # Cheap DeepSeek
+    claw-cheap: kilo-deepseek
+    # Local
+    claw-cron-fast: local-small
+    claw-cron-smart: local-medium
+
   fallbacks:
-    # Cron models: KiloCode fallback (when Ollama fails)
-    - claw-cron-fast: ["kilo-deepseek-chat"]
-    - claw-cron-smart: ["kilo-deepseek-chat"]
-    - local-small: ["kilo-deepseek-chat"]
-    - local-medium: ["kilo-deepseek-chat"]
-    # Main models: MiniMax → KiloCode
-    - claw-main: ["kilo-deepseek-chat"]
-    - claw-coder: ["kilo-deepseek-chat"]
-    - claw-thinking: ["kilo-deepseek-chat"]
-    - claw-architect: ["kilo-deepseek-chat"]
-    - claw-researcher: ["kilo-deepseek-chat"]
-    - claw-vision: ["kilo-deepseek-chat"]
-    - claw-summarizer: ["kilo-deepseek-chat"]
-    # Free models: KiloCode only
-    - claw-free-fast: ["kilo-deepseek-chat"]
-    - claw-free-smart: ["kilo-deepseek-chat"]
+    - minimax-m25:          ["oc-minimax", "kilo-minimax", "local-medium"]
+    - oc-minimax:           ["kilo-minimax", "local-medium"]
+    - kilo-minimax:         ["oc-minimax", "local-medium"]
+    - oc-nemotron:          ["kilo-nemotron", "oc-minimax", "kilo-minimax"]
+    - kilo-nemotron:        ["oc-nemotron", "oc-minimax", "kilo-minimax"]
+    - kilo-deepseek:        ["oc-minimax", "kilo-minimax"]
+    - kilo-deepseek-terminus: ["kilo-deepseek", "oc-minimax"]
+    - local-small:          ["oc-minimax", "kilo-minimax"]
+    - local-medium:         ["oc-minimax", "kilo-minimax"]
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   model_health_check: false
   health_check_interval: 0
+  store_model_in_db: true
+  store_prompts_in_spend_logs: true

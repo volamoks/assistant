@@ -1,20 +1,37 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "http://litellm:4000/v1",
+        "apiKey": "sk-litellm-openclaw-proxy"
+      },
+      "models": {
+        "claw-opencode": { "name": "OpenCode Free (MiniMax M2.5)" },
+        "kilo-minimax-free": { "name": "KiloCode Free (MiniMax M2.5)" },
+        "claw-main": { "name": "Premium (MiniMax M2.5)" },
+        "local-medium": { "name": "Local (Qwen3.5:9b)" }
+      }
+    }
+  },
+  "model": "litellm/claw-opencode",
   "agent": {
     "coder": {
-      "description": "Coding agent powered by KiloCode",
-      "model": "kilocode/deepseek-chat",
-      "prompt": "You are an expert coder. Use the provided model to write, debug, and refactor code.",
+      "description": "Full-stack coding agent. Reads, writes, edits files, runs bash commands.",
+      "model": "litellm/claw-opencode",
       "tools": {
-        "websearch": true,
-        "codesearch": true,
-        "read": true
+        "bash": true,
+        "read": true,
+        "write": true,
+        "edit": true,
+        "codesearch": true
       }
     },
     "researcher": {
-      "description": "Research agent powered by KiloCode",
-      "model": "kilocode/minimax-m2.5-free",
-      "prompt": "You are an expert researcher. Use the provided model to analyze information and provide deep insights.",
+      "description": "Research and analysis agent with web search.",
+      "model": "litellm/kilo-minimax-free",
       "tools": {
         "websearch": true,
         "codesearch": true,
@@ -22,17 +39,5 @@
       }
     }
   },
-  "default_agent": "coder",
-  "provider": {
-    "openai": {
-      "name": "KiloCode",
-      "url": "https://api.kilo.ai/api/gateway/",
-      "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnYiOiJwcm9kdWN0aW9uIiwia2lsbFVzZXJJZCI6ImFjMDNkMDQyLWU1YTYtNGE5My05Yzc0LTZkYTYzZDQ2MTNjNiIsImFwaVRva2VuUGVwcGVyIjpudWxsLCJ2ZXJzaW9uIjozLCJpYXQiOjE3NzIzNTU0NDAsImV4cCI6MTkzMDAzNTQ0MH0.H7JFN2I55e8oKlPvZJKNH3pgVFVW-XJ73Q2rBjFRH1Q",
-      "models": [
-        "kilocode/deepseek-chat",
-        "kilocode/nemotron-super",
-        "kilocode/minimax-m2.5-free"
-      ]
-    }
-  }
+  "default_agent": "coder"
 }

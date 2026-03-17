@@ -110,7 +110,12 @@ Config restored to last commit." --chat-id "$CHAT_ID" 2>/dev/null || true
     # Step 5: Reset failure count (before restart — /tmp is lost anyway)
     reset_failure_count
 
-    # Step 6: Restart container (this kills our script — that's OK, config is already fixed)
+    # Step 6: Run failure analysis + write lesson (before restart kills us)
+    log "🧠 Running failure analysis..."
+    bash /data/bot/openclaw-docker/scripts/analyze_failure.sh "$CRASH_FILE" "watchdog" 2>&1 | tee -a $LOG || \
+        log "⚠️ analyze_failure.sh failed — continuing anyway"
+
+    # Step 7: Restart container (this kills our script — that's OK, config is already fixed)
     log "🔄 Restarting container (script will be killed — that's expected)..."
     docker restart openclaw-latest 2>&1 | tee -a $LOG
 }
