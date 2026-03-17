@@ -211,27 +211,23 @@ def format_alert(condition_type: str, details: Dict, portfolio: Dict) -> str:
     return alert
 
 
+CHAT_ID = "6053956251"
+NOTIFY_SCRIPT = "/data/bot/openclaw-docker/skills/telegram/notify.py"
+
+
 def send_telegram_alert(message: str) -> bool:
-    """Send alert via Telegram using OpenClaw message tool"""
+    """Send alert via Telegram using notify.py"""
     try:
-        # Get Telegram config from environment or config file
-        telegram_config_path = os.path.expanduser('~/.openclaw/config/telegram.json')
-        if os.path.exists(telegram_config_path):
-            with open(telegram_config_path) as f:
-                config = json.load(f)
-                # Use the configured default channel
-                channel = config.get('defaultChannel', 'telegram')
-        else:
-            channel = 'telegram'
-        
-        # Write alert to a file that can be picked up by the cron system
-        # Or use subprocess to call the message tool
-        alert_file = os.path.expanduser('~/.openclaw/workspace-main/.crypto_alert')
-        with open(alert_file, 'w') as f:
-            f.write(message)
-        
-        # Also print to stdout for logging
-        print(message)
+        result = subprocess.run(
+            ['python3', NOTIFY_SCRIPT, message, '--chat-id', CHAT_ID],
+            capture_output=True,
+            text=True,
+            timeout=15
+        )
+        if result.returncode != 0:
+            print(f"notify.py error: {result.stderr}", file=sys.stderr)
+            return False
+        print(f"[proactive_monitor] Alert sent: {message[:80]}...")
         return True
     except Exception as e:
         print(f"Error sending alert: {e}", file=sys.stderr)
