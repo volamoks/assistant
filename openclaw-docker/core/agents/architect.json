@@ -1,8 +1,7 @@
 {
-    "id": "agent_architect",
+    "id": "architect",
     "name": "Specialist (Architect)",
     "description": "Software Architecture Expert. Plans, designs, and writes blueprints BEFORE implementation. Cannot write code directly.",
-    "model": "litellm/claw-architect",
     "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ARCHITECT.md",
     "contextFiles": [
         "/home/node/.openclaw/prompts/AGENTS.md",

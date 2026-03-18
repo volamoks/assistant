@@ -29,7 +29,8 @@ import requests
 # ── Config ────────────────────────────────────────────────────────────────────
 
 CHROMA_HOST = os.environ.get("CHROMA_HOST", "http://chromadb:8000")
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://host.docker.internal:11434")
+LITELLM_HOST = os.environ.get("LITELLM_HOST", "http://litellm:4000")
+LITELLM_API_KEY = os.environ.get("LITELLM_API_KEY", "sk-litellm-openclaw-proxy")
 EMBEDDING_MODEL = "nomic-embed-text"
 COLLECTION_NAME = "agent_memories"
 
@@ -86,15 +87,16 @@ class Memory:
             print(f"[Memory] Warning: Could not create collection: {e}")
     
     def _get_embedding(self, text: str) -> List[float]:
-        """Generate embedding via Ollama."""
+        """Generate embedding via LiteLLM."""
         try:
             resp = requests.post(
-                f"{OLLAMA_HOST}/api/embeddings",
-                json={"model": EMBEDDING_MODEL, "prompt": text},
+                f"{LITELLM_HOST}/v1/embeddings",
+                json={"model": EMBEDDING_MODEL, "input": text},
+                headers={"Authorization": f"Bearer {LITELLM_API_KEY}"},
                 timeout=10
             )
             resp.raise_for_status()
-            return resp.json()["embedding"]
+            return resp.json()["data"][0]["embedding"]
         except Exception as e:
             print(f"[Memory] Embedding error: {e}")
             # Return zero embedding as fallback

@@ -1,9 +1,8 @@
 {
-    "id": "agent_interviewer",
+    "id": "interviewer",
     "name": "Interviewer",
-    "description": "Bar Raiser mock interviewer for tech companies (Agoda, FAANG). Handles System Design, Behavioral (STAR), Product Sense. Also coaches pitch and communication clarity for speech training.",
-    "model": "minimax-portal/MiniMax-M2.5",
-    "systemPromptPath": "prompts/SOUL_INTERVIEWER.md",
+    "description": "Bar Raiser mock interviewer for tech companies (Agoda, FAANG). Handles System Design, Behavioral (STAR), Product Sense. Also coaches pitch and communication clarity.",
+    "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_INTERVIEWER.md",
     "tools": [
         "exec",
         "read"

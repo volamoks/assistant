@@ -1,7 +1,8 @@
 {
-  "id": "coder",
-  "name": "Specialist (Coder)",
-  "description": "DevOps & Backend Engineer. Writes files, runs commands, manages git. Pure executor.",
+  "id": "agent_coder",
+  "name": "Coder",
+  "description": "DevOps & Backend Engineer powered by MiniMax M2.5",
+  "model": "litellm/claw-coder",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CODER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",

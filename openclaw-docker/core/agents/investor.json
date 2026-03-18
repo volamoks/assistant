@@ -1,14 +1,13 @@
 {
-    "id": "agent_investor",
+    "id": "investor",
     "name": "Investor",
     "description": "AI финансовый консультант. Анализ портфеля, управление рисками, инвестиционные стратегии, крипто и банковские продукты Узбекистана.",
-    "model": "minimax-portal/MiniMax-M2.5",
-    "systemPromptPath": "prompts/SOUL_INVESTOR.md",
+    "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_INVESTOR.md",
     "tools": [
         "exec",
         "read",
         "write",
-        "web_search",
+        "web.search",
         "web_fetch"
     ],
     "tags": [

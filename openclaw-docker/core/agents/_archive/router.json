@@ -2,7 +2,7 @@
   "id": "agent_router",
   "name": "Orchestrator (PM)",
   "description": "Project Manager and Pipeline Orchestrator. Analyzes intent, coordinates task execution across Architect, Coder, and other specialists.",
-  "model": "minimax-portal/MiniMax-M2.5",
+  "model": "litellm/claw-premium",
   "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_ROUTER.md",
   "contextFiles": [
     "/home/node/.openclaw/prompts/AGENTS.md",

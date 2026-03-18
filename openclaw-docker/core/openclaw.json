@@ -56,70 +56,27 @@
           }
         ]
       },
-      "minimax": {
-        "baseUrl": "https://api.minimax.chat/v1",
-        "apiKey": "env:MINIMAX_API_KEY",
-        "api": "openai-completions",
-        "models": [
-          {
-            "id": "MiniMax-Text-01",
-            "name": "MiniMax Text 01"
-          },
-          {
-            "id": "abab6.5s-chat",
-            "name": "Abab 6.5s Chat"
-          }
-        ]
-      },
       "litellm": {
         "baseUrl": "http://host.docker.internal:18788",
         "apiKey": "sk-litellm-openclaw-proxy",
         "api": "openai-completions",
         "models": [
-          {
-            "id": "claw-main",
-            "name": "Claw Main"
-          },
-          {
-            "id": "claw-coder",
-            "name": "Claw Coder"
-          },
-          {
-            "id": "claw-researcher",
-            "name": "Claw Researcher"
-          },
-          {
-            "id": "claw-architect",
-            "name": "Claw Architect"
-          },
-          {
-            "id": "claw-thinking",
-            "name": "Claw Thinking"
-          },
-          {
-            "id": "claw-free-fast",
-            "name": "Claw Free Fast"
-          },
-          {
-            "id": "claw-free-smart",
-            "name": "Claw Free Smart"
-          },
-          {
-            "id": "local-small",
-            "name": "Local Small (Ollama)"
-          },
-          {
-            "id": "local-medium",
-            "name": "Local Medium (Ollama)"
-          },
-          {
-            "id": "nomic-embed-text",
-            "name": "Nomic Embed Text (local)"
-          },
-          {
-            "id": "claw-vision",
-            "name": "Claw Vision (MiniMax)"
-          }
+          {"id": "kilo-minimax",    "name": "MiniMax Free (kilo.ai)"},
+          {"id": "claw-premium",    "name": "MiniMax M2.5 Premium"},
+          {"id": "claw-main",       "name": "Claw Main (Nemotron)"},
+          {"id": "claw-coder",      "name": "Claw Coder (Nemotron)"},
+          {"id": "claw-researcher", "name": "Claw Researcher (Nemotron)"},
+          {"id": "claw-architect",  "name": "Claw Architect (Nemotron)"},
+          {"id": "claw-thinking",   "name": "Claw Thinking (Nemotron)"},
+          {"id": "claw-reasoner",   "name": "Claw Reasoner (Nemotron)"},
+          {"id": "claw-free-fast",  "name": "Claw Free Fast"},
+          {"id": "claw-free-smart", "name": "Claw Free Smart"},
+          {"id": "claw-vision",     "name": "Claw Vision (MiniMax)"},
+          {"id": "claw-deepseek",          "name": "Claw DeepSeek v3"},
+          {"id": "claw-deepseek-terminus", "name": "Claw DeepSeek v3.1 Terminus"},
+          {"id": "local-small",     "name": "Local Small (Ollama)"},
+          {"id": "local-medium",    "name": "Local Medium (Ollama)"},
+          {"id": "nomic-embed-text","name": "Nomic Embed Text (local)"}
         ]
       }
     }
@@ -127,33 +84,27 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "litellm/claw-main"
+        "primary": "litellm/claw-free-fast"
       },
       "imageModel": {
         "primary": "litellm/claw-vision"
       },
       "models": {
-        "litellm/claw-main": {
-          "streaming": true
-        },
-        "litellm/claw-coder": {
-          "streaming": true
-        },
-        "litellm/claw-researcher": {
-          "streaming": true
-        },
-        "litellm/claw-architect": {
-          "streaming": true
-        },
-        "litellm/claw-free-fast": {
-          "streaming": true
-        },
-        "litellm/claw-free-smart": {
-          "streaming": true
-        },
-        "litellm/local-small": {},
-        "litellm/local-medium": {},
-        "litellm/claw-cron-fast": {},
+        "litellm/kilo-minimax":    {"streaming": true},
+        "litellm/claw-premium":    {"streaming": true},
+        "litellm/claw-main":       {"streaming": true},
+        "litellm/claw-coder":      {"streaming": true},
+        "litellm/claw-researcher": {"streaming": true},
+        "litellm/claw-architect":  {"streaming": true},
+        "litellm/claw-thinking":   {"streaming": true},
+        "litellm/claw-reasoner":   {"streaming": true},
+        "litellm/claw-free-fast":  {"streaming": true},
+        "litellm/claw-free-smart": {"streaming": true},
+        "litellm/claw-deepseek":          {"streaming": true},
+        "litellm/claw-deepseek-terminus": {"streaming": true},
+        "litellm/local-small":            {},
+        "litellm/local-medium":           {},
+        "litellm/claw-cron-fast":  {},
         "litellm/claw-cron-smart": {}
       },
       "workspace": "/home/node/.openclaw/workspace",
@@ -184,16 +135,14 @@
         "maxConcurrent": 8,
         "maxSpawnDepth": 2
       },
-      "bootstrapMaxChars": 5000,
-      "bootstrapTotalMaxChars": 10000
+      "bootstrapMaxChars": 12000,
+      "bootstrapTotalMaxChars": 25000
     },
     "list": [
       {
         "id": "main",
         "workspace": "/home/node/.openclaw/workspace-main",
-        "model": {
-          "primary": "litellm/claw-main"
-        },
+        "model": {"primary": "litellm/claw-main"},
         "subagents": {
           "allowAgents": [
             "coder",
@@ -205,8 +154,7 @@
             "investor",
             "work",
             "architect",
-            "tester",
-            "opencode"
+            "tester"
           ]
         }
       },
@@ -215,75 +163,70 @@
         "name": "coder",
         "workspace": "/home/node/.openclaw/workspace-coder",
         "agentDir": "/home/node/.openclaw/agents/coder/agent",
-        "model": {
-          "primary": "litellm/claw-main"
-        }
+        "model": {"primary": "litellm/kilo-minimax"}
       },
       {
         "id": "researcher",
         "name": "researcher",
         "workspace": "/home/node/.openclaw/workspace-researcher",
         "agentDir": "/home/node/.openclaw/agents/researcher/agent",
-        "model": {
-          "primary": "litellm/claw-main"
-        }
+        "model": {"primary": "litellm/claw-researcher"}
       },
       {
         "id": "analyst",
         "name": "analyst",
         "workspace": "/home/node/.openclaw/workspace-analyst",
         "agentDir": "/home/node/.openclaw/agents/analyst/agent",
-        "model": {
-          "primary": "litellm/claw-main"
-        }
+        "model": {"primary": "litellm/claw-free-smart"}
       },
       {
         "id": "career",
         "name": "career",
         "workspace": "/home/node/.openclaw/workspace-career",
-        "agentDir": "/home/node/.openclaw/agents/career/agent"
+        "agentDir": "/home/node/.openclaw/agents/career/agent",
+        "model": {"primary": "litellm/claw-reasoner"}
       },
       {
         "id": "interviewer",
         "name": "interviewer",
         "workspace": "/home/node/.openclaw/workspace-interviewer",
-        "agentDir": "/home/node/.openclaw/agents/interviewer/agent"
+        "agentDir": "/home/node/.openclaw/agents/interviewer/agent",
+        "model": {"primary": "litellm/claw-main"}
       },
       {
         "id": "trainer",
         "name": "trainer",
         "workspace": "/home/node/.openclaw/workspace-trainer",
-        "agentDir": "/home/node/.openclaw/agents/trainer/agent"
+        "agentDir": "/home/node/.openclaw/agents/trainer/agent",
+        "model": {"primary": "litellm/claw-main"}
       },
       {
         "id": "work",
         "name": "Work",
         "workspace": "/home/node/.openclaw/workspace-work",
-        "agentDir": "/home/node/.openclaw/agents/work/agent"
+        "agentDir": "/home/node/.openclaw/agents/work/agent",
+        "model": {"primary": "litellm/claw-main"}
       },
       {
         "id": "investor",
         "name": "Investor",
         "workspace": "/home/node/.openclaw/workspace-investor",
-        "agentDir": "/home/node/.openclaw/agents/investor/agent"
+        "agentDir": "/home/node/.openclaw/agents/investor/agent",
+        "model": {"primary": "litellm/claw-reasoner"}
       },
       {
         "id": "architect",
         "name": "architect",
         "workspace": "/home/node/.openclaw/workspace-architect",
         "agentDir": "/home/node/.openclaw/agents/architect/agent",
-        "model": {
-          "primary": "litellm/claw-main"
-        }
+        "model": {"primary": "litellm/claw-reasoner"}
       },
       {
         "id": "tester",
         "name": "tester",
         "workspace": "/home/node/.openclaw/workspace",
         "agentDir": "/home/node/.openclaw/agents/tester/agent",
-        "model": {
-          "primary": "litellm/claw-main"
-        }
+        "model": {"primary": "litellm/claw-reasoner"}
       }
     ]
   },
@@ -331,7 +274,7 @@
             "vaultPath": "/data/obsidian/vault/Bot/AgentMemory",
             "autoCheckpoint": true,
             "contextProfile": "auto",
-            "maxContextResults": 4,
+            "maxContextResults": 8,
             "observeOnHeartbeat": true,
             "weeklyReflection": true
           }
@@ -431,11 +374,11 @@
       "lossless-claw": {
         "enabled": true,
         "config": {
-          "freshTailCount": 8,
-          "contextThreshold": 0.5,
+          "freshTailCount": 32,
+          "contextThreshold": 0.75,
           "incrementalMaxDepth": -1,
-          "summaryModel": "qwen3.5:9b",
-          "summaryProvider": "ollama"
+          "summaryModel": "minimax-m25",
+          "summaryProvider": "litellm"
         }
       },
       "acpx": {

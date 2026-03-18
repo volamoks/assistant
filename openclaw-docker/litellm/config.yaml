@@ -27,11 +27,19 @@ model_list:
 
   - model_name: kilo-nemotron
     litellm_params:
-      model: openai/nvidia/nemotron-3-super-120b-a12b:free
+      model: openai/nvidia/nemotron-3-super-120b-a12b-20230311:free
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
     model_info:
       supports_reasoning: true
+
+  - model_name: kilo-minimax2
+    litellm_params:
+      model: openai/minimax/minimax-m2.5:free
+      api_base: https://api.kilo.ai/api/gateway/
+      api_key: os.environ/KILOCODE_API_KEY
+    model_info:
+      supports_vision: true
 
   - model_name: kilo-deepseek
     litellm_params:
@@ -45,22 +53,68 @@ model_list:
       api_base: https://api.kilo.ai/api/gateway/
       api_key: os.environ/KILOCODE_API_KEY
 
-  # ── opencode.ai quota via kilo.ai gateway (OPENCODE_API_KEY — separate account, faster)
+  # ── opencode.ai (OPENCODE_API_KEY — opencode.ai/zen endpoint, Nemotron only)
+  - model_name: oc-nemotron
+    litellm_params:
+      model: openai/nemotron-3-super-free
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+      timeout: 60
+      stream_timeout: 60
+    model_info:
+      supports_reasoning: true
+
+  # ── MiniMax via kilo.ai (oc-minimax = second quota slot, same backend as kilo-minimax)
   - model_name: oc-minimax
     litellm_params:
       model: openai/minimax/minimax-m2.5:free
       api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/OPENCODE_API_KEY
+      api_key: os.environ/KILOCODE_API_KEY
     model_info:
       supports_vision: true
 
-  - model_name: oc-nemotron
+  # ── Alibaba Bailian free quota (DASHSCOPE_FREE_API_KEY, 1M tokens/model, exp 2026-06-01) ──
+  - model_name: qwen-max
     litellm_params:
-      model: openai/nvidia/nemotron-3-super-120b-a12b:free
-      api_base: https://api.kilo.ai/api/gateway/
-      api_key: os.environ/OPENCODE_API_KEY
+      model: openai/qwen3-max
+      api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/DASHSCOPE_FREE_API_KEY
+      extra_body:
+        enable_thinking: false   # disable thinking mode → fast non-reasoning responses
+
+  - model_name: qwen-plus
+    litellm_params:
+      model: openai/qwen-plus-2025-07-28
+      api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/DASHSCOPE_FREE_API_KEY
+      extra_body:
+        enable_thinking: false   # was 45s with thinking on
+
+  - model_name: qwen-vl-max
+    litellm_params:
+      model: openai/qwen-vl-max-2025-04-08
+      api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/DASHSCOPE_FREE_API_KEY
+      extra_body:
+        enable_thinking: false
     model_info:
-      supports_reasoning: true
+      supports_vision: true
+
+  - model_name: qwen-vl-plus
+    litellm_params:
+      model: openai/qwen-vl-plus-2025-05-07
+      api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/DASHSCOPE_FREE_API_KEY
+    model_info:
+      supports_vision: true
+
+  - model_name: qwen-vl-72b
+    litellm_params:
+      model: openai/qwen2.5-vl-72b-instruct
+      api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/DASHSCOPE_FREE_API_KEY
+    model_info:
+      supports_vision: true
 
   # ── local Ollama ───────────────────────────────────────────────────────────
   - model_name: local-small
@@ -96,51 +150,72 @@ litellm_settings:
   cache_params:
     type: redis
     host: redis-cache
-  request_timeout: 300
+  request_timeout: 60
   json_logs: true
   success_callback: ["prometheus"]
   failure_callback: ["prometheus"]
   master_key: os.environ/LITELLM_MASTER_KEY
-  store_prompts_in_spend_logs: true
   pass_through_headers: true
 
 router_settings:
   model_group_alias:
-    # Premium MiniMax
-    claw-main: minimax-m25
-    claw-coder: minimax-m25
-    claw-researcher: minimax-m25
-    claw-architect: minimax-m25
-    claw-thinking: minimax-m25
-    claw-vision: minimax-m25
-    # Free MiniMax — kilo.ai quota
-    claw-free-fast: kilo-minimax
-    # Free MiniMax — opencode.ai quota
-    claw-opencode: oc-minimax
-    claw-free-smart: oc-minimax
-    # Nemotron — opencode.ai (fast), kilo.ai fallback
-    claw-reasoning: oc-nemotron
-    nemotron-free: oc-nemotron
-    # Cheap DeepSeek
-    claw-cheap: kilo-deepseek
-    # Local
-    claw-cron-fast: local-small
-    claw-cron-smart: local-medium
+    # ── Premium paid (minimax.io subscription) ──────────────────────────────
+    claw-premium:    minimax-m25     # MiniMax M2.5 direct, paid, fast
+    claw-vision:     qwen-vl-plus   # Qwen VL Plus free, 0.75s (fallback: qwen-vl-max → minimax-m25)
+    # ── Qwen free primary (Bailian free quota, Free Quota Only = no charges) ─
+    claw-main:       qwen-max        # Qwen3-Max free, 1.58s
+    claw-coder:      qwen-max        # Qwen3-Max free
+    claw-researcher: qwen-max        # Qwen3-Max free
+    claw-architect:  qwen-max        # Qwen3-Max free
+    claw-thinking:   qwen-max        # Qwen3-Max free
+    claw-reasoner:   qwen-max        # Qwen3-Max free
+    # ── Fast Qwen ────────────────────────────────────────────────────────────
+    claw-free-fast:  qwen-plus       # Qwen-Plus free, 0.7s
+    claw-free-smart: qwen-max        # Qwen3-Max free, smarter
+    # ── Scheduled / budget ──────────────────────────────────────────────────
+    claw-cron-fast:  qwen-plus       # Qwen-Plus free, 0.7s
+    claw-cron-smart: qwen-max        # Qwen3-Max free
+    # ── DeepSeek (paid kilo credits, strong reasoning) ───────────────────────
+    claw-deepseek:          kilo-deepseek           # DeepSeek v3
+    claw-deepseek-terminus: kilo-deepseek-terminus  # DeepSeek v3.1 Terminus
 
   fallbacks:
-    - minimax-m25:          ["oc-minimax", "kilo-minimax", "local-medium"]
-    - oc-minimax:           ["kilo-minimax", "local-medium"]
-    - kilo-minimax:         ["oc-minimax", "local-medium"]
-    - oc-nemotron:          ["kilo-nemotron", "oc-minimax", "kilo-minimax"]
-    - kilo-nemotron:        ["oc-nemotron", "oc-minimax", "kilo-minimax"]
-    - kilo-deepseek:        ["oc-minimax", "kilo-minimax"]
-    - kilo-deepseek-terminus: ["kilo-deepseek", "oc-minimax"]
-    - local-small:          ["oc-minimax", "kilo-minimax"]
-    - local-medium:         ["oc-minimax", "kilo-minimax"]
+    # ── underlying model groups ───────────────────────────────────────────────
+    - minimax-m25:            ["oc-minimax", "kilo-minimax", "local-medium"]
+    - oc-minimax:             ["kilo-minimax", "kilo-minimax2", "qwen-plus", "local-medium"]
+    - kilo-minimax:           ["oc-minimax", "kilo-minimax2", "qwen-plus", "local-medium"]
+    - kilo-minimax2:          ["kilo-minimax", "oc-minimax", "local-medium"]
+    - kilo-nemotron:          ["oc-nemotron", "qwen-max", "minimax-m25"]
+    - oc-nemotron:            ["qwen-max", "minimax-m25", "oc-minimax"]
+    - qwen-max:               ["qwen-plus", "oc-nemotron", "oc-minimax"]
+    - qwen-plus:              ["qwen-max", "oc-minimax", "kilo-minimax"]
+    - kilo-deepseek:          ["kilo-deepseek-terminus", "qwen-max"]
+    - kilo-deepseek-terminus: ["kilo-deepseek", "qwen-max"]
+    - local-small:            ["qwen-plus", "oc-minimax"]
+    - local-medium:           ["qwen-max", "oc-minimax"]
+    # ── semantic alias fallbacks (LiteLLM uses alias name for lookup) ─────────
+    - claw-main:       ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-coder:      ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-researcher: ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-architect:  ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-thinking:   ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-reasoner:   ["kilo-nemotron", "oc-nemotron", "minimax-m25"]
+    - claw-vision:     ["qwen-vl-max", "qwen-vl-72b", "minimax-m25"]
+    - qwen-vl-max:    ["qwen-vl-plus", "qwen-vl-72b", "minimax-m25"]
+    - qwen-vl-plus:   ["qwen-vl-max", "qwen-vl-72b", "minimax-m25"]
+    - qwen-vl-72b:    ["qwen-vl-max", "qwen-vl-plus", "minimax-m25"]
+    - claw-premium:    ["qwen-max", "oc-minimax", "kilo-minimax"]
+    - claw-free-fast:  ["qwen-max", "kilo-minimax", "oc-minimax"]
+    - claw-free-smart: ["qwen-plus", "kilo-minimax", "oc-minimax"]
+    - claw-cron-fast:  ["qwen-max", "kilo-minimax", "oc-minimax"]
+    - claw-cron-smart: ["qwen-plus", "kilo-minimax", "oc-minimax"]
+    - claw-deepseek:          ["kilo-deepseek-terminus", "qwen-max"]
+    - claw-deepseek-terminus: ["kilo-deepseek", "qwen-max"]
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   model_health_check: false
   health_check_interval: 0
-  store_model_in_db: true
-  store_prompts_in_spend_logs: true
+  store_model_in_db: false
+  store_prompts_in_spend_logs: false
+  disable_spend_logs: true

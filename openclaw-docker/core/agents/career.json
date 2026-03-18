@@ -1,14 +1,13 @@
 {
-    "id": "agent_career",
+    "id": "career",
     "name": "Career",
-    "description": "Resume strategist, ATS optimizer, cover letter writer, job application tracker, salary negotiation coach. Routes deep mock interviews to agent_interviewer.",
-    "model": "minimax-portal/MiniMax-M2.5",
-    "systemPromptPath": "prompts/SOUL_CAREER.md",
+    "description": "Resume strategist, ATS optimizer, cover letter writer, job application tracker, salary negotiation coach. Routes deep mock interviews to interviewer.",
+    "systemPromptPath": "/home/node/.openclaw/prompts/SOUL_CAREER.md",
     "tools": [
         "exec",
         "read",
         "write",
-        "web_search"
+        "web.search"
     ],
     "tags": [
         "career",
