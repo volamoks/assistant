@@ -283,6 +283,26 @@ function resolveProviderApiFromRuntimeConfig(
   return typeof api === "string" && api.trim() ? api.trim() : undefined;
 }
 
+function resolveProviderBaseUrlFromRuntimeConfig(
+  runtimeConfig: unknown,
+  provider: string,
+): string | undefined {
+  if (!isRecord(runtimeConfig)) {
+    return undefined;
+  }
+  const providers = (runtimeConfig as { models?: { providers?: Record<string, unknown> } }).models
+    ?.providers;
+  if (!providers || !isRecord(providers)) {
+    return undefined;
+  }
+  const value = findProviderConfigValue(providers, provider);
+  if (!isRecord(value)) {
+    return undefined;
+  }
+  const baseUrl = value.baseUrl;
+  return typeof baseUrl === "string" && baseUrl.trim() ? baseUrl.trim() : undefined;
+}
+
 /** Parse auth-profiles JSON into a minimal store shape. */
 function parseAuthProfileStore(raw: string): AuthProfileStore | undefined {
   try {
@@ -689,6 +709,8 @@ function createLcmDependencies(api: OpenClawPluginApi): LcmDependencies {
           })() ||
           inferApiFromProvider(providerId);
 
+        const providerBaseUrl = resolveProviderBaseUrlFromRuntimeConfig(runtimeConfig, providerId);
+
         const resolvedModel =
           isRecord(knownModel) &&
             typeof knownModel.api === "string" &&
@@ -699,12 +721,16 @@ function createLcmDependencies(api: OpenClawPluginApi): LcmDependencies {
               id: knownModel.id,
               provider: knownModel.provider,
               api: knownModel.api,
+              baseUrl: typeof knownModel.baseUrl === "string" && knownModel.baseUrl.trim()
+                ? knownModel.baseUrl.trim()
+                : providerBaseUrl,
             }
             : {
               id: modelId,
               name: modelId,
               provider: providerId,
               api: fallbackApi,
+              baseUrl: providerBaseUrl,
               reasoning: false,
               input: ["text"],
               cost: {
