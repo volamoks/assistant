@@ -47,12 +47,4 @@
 - **Nightly Evolution**: Автоматический анализ задач работает, рекомендации добавлены
 
 ---
-# Session Log — 2026-03-04
-_Agent will append actions here throughout the day._
-
-- No significant session activity (empty today-session.md)
-
----
-# Archived Logs
-## 2026-03-01
-- No session activity logged
+*Session logs archived. Current session context in `/data/obsidian/vault/Bot/today-session.md`.*

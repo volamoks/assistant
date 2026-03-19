@@ -1,7 +1,7 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.3.12",
-    "lastTouchedAt": "2026-03-19T09:02:22.890Z"
+    "lastTouchedAt": "2026-03-19T10:20:31.689Z"
   },
   "wizard": {
     "lastRunAt": "2026-02-25T06:26:05.779Z",
@@ -243,7 +243,8 @@
             "investor",
             "work",
             "architect",
-            "tester"
+            "tester",
+            "cleaner"
           ]
         }
       },
@@ -335,6 +336,13 @@
         "agentDir": "/home/node/.openclaw/agents/tester/agent",
         "model": {
           "primary": "litellm/claw-main"
+        }
+      },
+      {
+        "id": "cleaner",
+        "workspace": "/home/node/.openclaw/workspace-cleaner",
+        "model": {
+          "primary": "litellm/local-small"
         }
       }
     ]

@@ -367,14 +367,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773914463362,
+        "lastRunAtMs": 1773915600025,
         "lastRunStatus": "ok",
-        "lastDurationMs": 15249,
+        "lastDurationMs": 22270,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773914700000,
+        "nextRunAtMs": 1773915900000,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773914478611,
+      "updatedAtMs": 1773915622295,
       "failureAlert": false,
       "delivery": {
         "mode": "none"
@@ -888,7 +888,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773913525953,
+      "updatedAtMs": 1773915325247,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -906,11 +906,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773915300000,
-        "lastRunAtMs": 1773913512736,
+        "nextRunAtMs": 1773917100000,
+        "lastRunAtMs": 1773915314014,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 13217,
+        "lastDurationMs": 11233,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -1141,6 +1141,64 @@
         "lastDurationMs": 14815,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "e5fa95ce-0786-48d1-8ae8-2fc4af4f3010",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "SOUL Linter — nightly validation",
+      "enabled": true,
+      "createdAtMs": 1773915168269,
+      "updatedAtMs": 1773915168269,
+      "schedule": {
+        "expr": "0 3 * * *",
+        "kind": "cron",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "bash /data/bot/openclaw-docker/scripts/jobs/soul_linter.sh 2>&1"
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "6053956251",
+        "channel": "telegram"
+      },
+      "state": {
+        "nextRunAtMs": 1773957600000
+      }
+    },
+    {
+      "id": "62412809-76ca-4870-a678-c8d79a456940",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "Nightly Cleaner Agent",
+      "enabled": true,
+      "createdAtMs": 1773915621463,
+      "updatedAtMs": 1773915621463,
+      "schedule": {
+        "expr": "0 4 * * *",
+        "kind": "cron",
+        "tz": "Asia/Tashkent"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "bash /data/bot/openclaw-docker/scripts/jobs/cleaner_master.sh 2>&1",
+        "model": "litellm/local-small",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "6053956251",
+        "channel": "telegram"
+      },
+      "state": {
+        "nextRunAtMs": 1773961200000
       }
     }
   ]

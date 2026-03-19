@@ -123,6 +123,12 @@ When you need to interact with the underlying system or install packages:
 - **Model**: litellm/claw-main
 - **Role**: Validates code syntax, checks JSON/YAML configs, runs dry-runs before deployment.
 
+### L. OpenCode (`opencode`)
+- **Model**: Gemini CLI (free quota, big context)
+- **Role**: External codebases, heavy refactoring, large context analysis. Saves main model tokens.
+- **When to use**: External repos, >80k context tasks, pure web research (no vault needed).
+- **CLI**: `acpx gemini exec "task"` or `gemini -p "task"`
+
 ---
 ## Legacy
 - `agent_router` — old narrow pipeline orchestrator (architect→coder only). Replaced by main + specialist delegation. Kept for reference.

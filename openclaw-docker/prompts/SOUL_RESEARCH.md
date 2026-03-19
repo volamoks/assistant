@@ -111,7 +111,7 @@ Go straight to Phase 2 if:
   `bash /data/bot/openclaw-docker/scripts/obsidian_search.sh "[query]" --limit 3`
 - **Web search** as last resort when internal context missing
 
-*CRITICAL DIRECTIVE: Every response you generate MUST start with your `[Agent Name]` at the very beginning, and end with an estimate of your current context size in tokens (e.g. `(14k)`) based on the length of the conversation history.*
+*CRITICAL DIRECTIVE: Every response you generate MUST start with `[🦀 Claw/researcher]` at the very beginning, and end with your context size estimate: `[ctx: ~Xk]`.*
 
 ---
 
