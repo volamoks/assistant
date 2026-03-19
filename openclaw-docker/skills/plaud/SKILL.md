@@ -1,6 +1,6 @@
 ---
 name: plaud
-description: "Sync, transcribe and analyze recordings from Plaud Note voice recorder. Lists recordings, downloads audio, transcribes via Groq Whisper, analyzes with LLM, creates Obsidian Tasks, saves notes to Obsidian vault."
+description: "Sync, transcribe and analyze recordings from Plaud Note voice recorder. Lists recordings, downloads audio, transcribes via Groq Whisper, analyzes with LLM, saves notes + tasks to Obsidian vault."
 triggers:
   - plaud
   - plaud recordings
@@ -13,8 +13,6 @@ triggers:
   - analyze recording
   - анализ записи
   - обработай записи plaud
-  - обработай записи Plaud
-  - транскрибируй Plaud
   - plaud monitor
 ---
 
@@ -23,8 +21,8 @@ triggers:
 Full pipeline for syncing, transcribing and analyzing voice recordings from Plaud Note.
 
 **Data destination:** Obsidian vault at `/data/obsidian/`  
-**Tasks:** Obsidian Tasks plugin format, written directly into each transcript note as checklist items  
-**Everything stays local — no external task APIs.**
+**Tasks:** Obsidian Tasks plugin format (`- [ ]`) embedded in the note itself  
+**No external task managers — everything stays local in Obsidian.**
 
 ---
 
@@ -37,7 +35,7 @@ Plaud API
        ├─ download_audio() ───────────────────────┐
        │                                         ↓
        │  Groq Whisper (whisper-large-v3)   ← PRIMARY TRANSCRIPTION
-       │   • Groq API → plain text          (always runs, regardless of is_trans)
+       │   • Groq API → plain text          (always runs)
        │   • Handles: ru, uz, en (auto-detect)
        │   • Chunks long audio (>25MB / >20min)
        │
@@ -52,12 +50,11 @@ Plaud API
 Groq Whisper text
   └─ extract_summary_and_tasks()      ← LLM analysis (Groq Llama 3.3 70B)
        │  • Chunks long transcripts automatically
-       │  • Returns: summary + action items
+       │  • Returns: summary + action items (formatted as '- [ ] Task: desc')
        │
-       └─ format_obsidian_note()       ← Obsidian Note
+       └─ format_obsidian_note()       ← Obsidian Note + embedded tasks
+            • Tasks parsed from LLM output → `- [ ]` checklist items with #tasks tag
             • Saved to /data/obsidian/Work/Transcripts/{Calls,Meetings,Ideas}/
-            • Sections: Summary, Tasks (#tasks), Native Transcript (bonus),
-              Plaud AI Summary (bonus), Full Whisper Transcript (collapsible)
 ```
 
 ---
@@ -72,8 +69,6 @@ Groq Whisper text
 - "Расшифруй последнюю запись с Plaud"
 - "Какие задачи обсудили на встрече? (запись plaud <ID>)"
 - "Analyze recording `<ID>`"
-- "обработай записи Plaud"
-- "транскрибируй Plaud"
 
 **Manual pipeline:**
 ```bash
@@ -124,7 +119,7 @@ bash /data/bot/openclaw-docker/skills/plaud/plaud.sh download <FILE_ID> /tmp/rec
    - **Transcribes via Groq Whisper** (primary — always, regardless of `is_trans`)
    - If `is_trans=True`: also fetches native Plaud transcript (bonus)
    - Analyzes with LLM (Groq Llama 3.3 70B) → summary + tasks
-   - Writes tasks as Obsidian checklist items (`- [ ]`) directly in the transcript note
+   - Parses task lines (`- [ ] ...`) from LLM output → embeds in note
    - Saves formatted note to `Work/Transcripts/{Calls,Meetings,Ideas}/`
 4. Updates state file
 
@@ -169,6 +164,7 @@ Tip: Open Plaud app and sync the recording first.
 | Output | Location |
 |--------|----------|
 | Obsidian notes | `/data/obsidian/Work/Transcripts/{Calls,Meetings,Ideas}/Plaud_YYYY-MM-DD_HHMM_<id>.md` |
+| Tasks | Embedded in the note as `- [ ]` checklist items with `#tasks` tag |
 | State | `/data/bot/openclaw-docker/data/plaud_state.json` |
 | Logs | `/tmp/plaud_monitor.log` |
 
@@ -185,24 +181,23 @@ Tip: Open Plaud app and sync the recording first.
 <LLM summary>
 
 ## Tasks
-
 - [ ] Task description #tasks
-- [ ] Another task #tasks
+- [ ] Another task: with details #tasks
 
 ## Native Plaud Transcript (bonus, N segments)  ← only if is_trans=True
 <transcript text>
 
-## Plaud AI Summary  ← only if is_summary=True  
+## Plaud AI Summary  ← only if available
 <summary>
 
-## Full Whisper Transcript
+## Full Transcript
 <details>
-<summary>Click to expand transcript</summary>
+<summary>Click to expand</summary>
 <transcribed text>
 </details>
 ```
 
-Tasks use Obsidian Tasks plugin format: `- [ ] Task description #tasks`
+Tasks in the note are automatically picked up by the **Obsidian Tasks plugin** and appear in task queries, filters, and the calendar view.
 
 ---
 
@@ -229,7 +224,7 @@ Optional:
 
 ```bash
 # Dry run — list what would be processed
-python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py --dry-run --log-level DEBUG
+python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py --dry-run --limit 5 --log-level DEBUG
 
 # Process only first 3 recordings
 python3 /data/bot/openclaw-docker/skills/plaud/scripts/plaud_monitor.py --limit 3

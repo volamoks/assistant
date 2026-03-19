@@ -11,7 +11,8 @@ VAULT_ROOT = Path(os.getenv(
 INBOX_DIR = VAULT_ROOT / "Inbox"
 TRANSCRIPTS_DIR = VAULT_ROOT / "Transcripts"
 
-def format_obsidian_note(file_id, filename, created_at, transcript, summary, native_links=None):
+def format_obsidian_note(file_id, filename, created_at, transcript, summary,
+                          tasks=None, native_links=None):
     dt = datetime.fromtimestamp(created_at).strftime("%Y-%m-%d %H:%M")
     
     note_content = f"""# Plaud: {filename}
@@ -21,10 +22,13 @@ def format_obsidian_note(file_id, filename, created_at, transcript, summary, nat
 - **ID**: {file_id}
 - **Source**: Plaud Note
 
-## Summary & Tasks
+## Summary
 {summary}
 
 """
+    if tasks:
+        note_content += f"## Tasks\n{tasks}\n"
+
     if native_links:
         note_content += "## Plaud App Links\n"
         for link in native_links:
