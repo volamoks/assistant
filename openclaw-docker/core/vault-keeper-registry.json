@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "last_full_scan": "2026-03-19T10:47:03.221059+00:00",
+  "last_inbox_scan": "2026-03-19T10:47:03.221059+00:00",
+  "files": {},
+  "unclassified": [
+    {
+      "filename": "Plaud_2026-03-10_0707_f125903c.md",
+      "key": "inbox/Plaud_2026-03-10_0707_f125903c.md",
+      "reason": "LLM classification failed",
+      "detected_at": "2026-03-19T10:47:03.221059+00:00"
+    },
+    {
+      "filename": "Plaud_2026-03-10_0707_f125903c.md",
+      "key": "inbox/Plaud_2026-03-10_0707_f125903c.md",
+      "reason": "not in LLM response",
+      "detected_at": "2026-03-19T10:47:03.221059+00:00"
+    }
+  ],
+  "chroma_index": {
+    "last_check": "2026-03-19T10:47:03.288272+00:00",
+    "status": "ok"
+  }
+}
