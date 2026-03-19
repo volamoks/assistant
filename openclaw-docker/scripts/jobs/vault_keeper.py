@@ -671,30 +671,34 @@ def main():
 
         if not classifications:
             log.warning("LLM classification failed for %d files", len(all_new))
-            # Register as unclassified
+            # Register as unclassified (no duplicates)
+            existing_keys = {u.get("key") for u in reg["unclassified"]}
             for f in all_new:
                 key = f"inbox/{f.name}" if INBOX_DIR in f.parents else f"stray/{f.name}"
+                if key not in existing_keys:
+                    reg["unclassified"].append({
+                        "filename": f.name, "key": key,
+                        "reason": "LLM classification failed", "detected_at": now_iso,
+                    })
+                    stats["unclassified"] += 1
+                    stats["unclassified_files"].append(f.name)
+
+    # 4. Process each classified file
+    processed_keys = set()
+    existing_unclassified_keys = {u.get("key") for u in reg["unclassified"]}
+    lookup = {c.get("filename"): c for c in classifications}
+    for f in all_new:
+        key = f"inbox/{f.name}" if INBOX_DIR in f.parents else f"stray/{f.name}"
+        info = lookup.get(f.name)
+        if not info:
+            if key not in processed_keys and key not in existing_unclassified_keys:
                 reg["unclassified"].append({
-                    "filename": f.name,
-                    "key": key,
-                    "reason": "LLM classification failed",
-                    "detected_at": now_iso,
+                    "filename": f.name, "key": key,
+                    "reason": "not in LLM response", "detected_at": now_iso,
                 })
                 stats["unclassified"] += 1
                 stats["unclassified_files"].append(f.name)
-
-    # 4. Process each classified file
-    lookup = {c.get("filename"): c for c in classifications}
-    for f in all_new:
-        info = lookup.get(f.name)
-        if not info:
-            key = f"inbox/{f.name}" if INBOX_DIR in f.parents else f"stray/{f.name}"
-            reg["unclassified"].append({
-                "filename": f.name, "key": key,
-                "reason": "not in LLM response", "detected_at": now_iso,
-            })
-            stats["unclassified"] += 1
-            stats["unclassified_files"].append(f.name)
+            processed_keys.add(key)
             continue
 
         result = process_file(f, info, reg)
@@ -704,6 +708,7 @@ def main():
             stats["tagged"] += 1
         if result.get("error"):
             stats["issues"].append(f"{f.name}: {result['error']}")
+        processed_keys.add(key)
 
     reg["last_inbox_scan"] = now_iso
 
