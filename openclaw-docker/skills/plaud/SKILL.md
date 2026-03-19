@@ -21,8 +21,8 @@ triggers:
 Full pipeline for syncing, transcribing and analyzing voice recordings from Plaud Note.
 
 **Data destination:** Obsidian vault at `/data/obsidian/`  
-**Tasks:** Obsidian Tasks (`Bot/Tasks/bot-tasks.md`)  
-**No Viking, no remote task API — everything stays local.**
+**Tasks:** Obsidian Tasks (`Bot/Tasks/bot-tasks.md`) via `plaud_vikunja.py`  
+**No remote task API — everything stays local.**
 
 ---
 
