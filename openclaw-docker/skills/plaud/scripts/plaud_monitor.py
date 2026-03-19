@@ -9,7 +9,7 @@ Strategy:
      b. Transcribe via Groq Whisper (PRIMARY path — always, regardless of is_trans)
      c. If native transcript is available (is_trans=True), add it as a bonus section
   3. Analyze with LLM → extract summary + tasks
-  4. Push tasks to Obsidian Tasks (bot-tasks.md)
+  4. Write tasks as Obsidian checklist items directly in the transcript note
   5. Save formatted note to Obsidian vault
 
 Working hours: 9:00–20:00 Tashkent time
@@ -72,7 +72,7 @@ if not PLAUD_TOKEN:
 # ── Imports ─────────────────────────────────────────────────────────────────
 from plaud_client import PlaudClient
 from plaud_analyze import extract_summary_and_tasks
-from plaud_vikunja import push_tasks_to_vikunja
+
 from plaud_obsidian import format_obsidian_note
 
 
@@ -555,21 +555,25 @@ def main(dry_run: bool = False, limit: int = None, log_level: str = "INFO", heal
                 analysis = f"Error generating summary: {e}"
                 run_errors.append(f"{file_id[:8]} analysis: {e}")
 
-            # ── STEP 5: Push tasks to Obsidian Tasks ──────────────────────────
-            vikunja_success = False
-            tasks_added = 0
-            try:
-                tasks_added = push_tasks_to_vikunja(analysis, filename, dry_run=False)
-                if tasks_added and tasks_added > 0:
-                    vikunja_success = True
-                    logger.info(f"  → Pushed {tasks_added} tasks to Obsidian Tasks ✓")
-                elif tasks_added == 0:
-                    logger.info(f"  → No tasks to push")
-                else:
-                    logger.warning(f"  → Vikunja returned unexpected: {tasks_added}")
-            except Exception as e:
-                logger.error(f"  → Obsidian Tasks error: {e}")
-                run_errors.append(f"{file_id[:8]} tasks: {e}")
+            # ── STEP 5: Extract tasks from LLM analysis ────────────────────────
+            # Parse '- [ ] Task Title: description' lines from LLM output
+            # and format as Obsidian Tasks plugin items
+            import re
+            task_lines = re.findall(
+                r"^\s*-\s*\[\s*\]\s*(.+)$",
+                analysis,
+                re.MULTILINE
+            )
+            tasks_text = ""
+            tasks_count = 0
+            if task_lines:
+                for t in task_lines:
+                    clean = re.sub(r"^\s*\*\*(.+?)\*\*\s*:?\s*", r"\1:", t).strip()
+                    tasks_text += f"- [ ] {clean} #tasks\n"
+                    tasks_count += 1
+                logger.info(f"  → Extracted {tasks_count} tasks → embedded in Obsidian note")
+            else:
+                logger.info(f"  → No tasks found in analysis")
 
             # ── STEP 6: Save Obsidian note ────────────────────────────────────
             created_dt = datetime.fromtimestamp(edit_time)
@@ -580,7 +584,8 @@ def main(dry_run: bool = False, limit: int = None, log_level: str = "INFO", heal
 
             content_list = (client.list_files() and []) or []
             note_content = format_obsidian_note(
-                file_id, filename, edit_time, transcript_text, analysis, content_list
+                file_id, filename, edit_time, transcript_text, analysis,
+                tasks=tasks_text, native_links=content_list if content_list else None
             )
 
             # Append native transcript comparison if available
@@ -623,7 +628,7 @@ def main(dry_run: bool = False, limit: int = None, log_level: str = "INFO", heal
                     "has_native_transcript": bool(native_text.strip()),
                     "has_ai_summary": "Plaud AI Summary" in note_content,
                     "transcript_length": len(transcript_text),
-                    "tasks_created": tasks_added if vikunja_success else 0,
+                    "tasks_created": tasks_count,
                 }
                 save_state(state)
                 processed_count += 1
