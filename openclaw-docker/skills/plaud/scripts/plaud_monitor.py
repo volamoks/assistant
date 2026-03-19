@@ -208,7 +208,6 @@ def ensure_mp3(audio_path: str) -> str:
     Convert audio to MP3 if needed using pydub/ffmpeg.
     Returns path to the MP3 file (may be the original if already MP3).
     """
-    from pydub import AudioSegment
     import shutil
 
     ext = Path(audio_path).suffix.lower()
@@ -218,21 +217,34 @@ def ensure_mp3(audio_path: str) -> str:
     base = Path(audio_path).stem
     mp3_path = str(Path(tempfile.gettempdir()) / f"{base}.mp3")
 
+    # Try pydub first
     try:
+        from pydub import AudioSegment
         seg = AudioSegment.from_file(audio_path)
         seg.export(mp3_path, format="mp3")
         logger.info(f"  → Converted to MP3: {mp3_path}")
         return mp3_path
+    except ImportError:
+        logger.info(f"  → pydub not available, trying ffmpeg directly...")
     except Exception as e:
         logger.warning(f"  → AudioSegment conversion failed ({e}), trying ffmpeg directly...")
+
+    # Fallback: ffmpeg subprocess
+    try:
         result = subprocess.run(
             ["ffmpeg", "-y", "-i", audio_path, "-acodec", "libmp3lame", "-ab", "128k", mp3_path],
             capture_output=True, text=True, timeout=300
         )
         if result.returncode == 0 and Path(mp3_path).exists():
+            logger.info(f"  → Converted to MP3: {mp3_path}")
             return mp3_path
         logger.error(f"  → ffmpeg conversion failed: {result.stderr[:200]}")
-        return audio_path  # return original as fallback
+    except FileNotFoundError:
+        logger.warning(f"  → ffmpeg not found, returning original file")
+    except Exception as e:
+        logger.warning(f"  → ffmpeg conversion error: {e}")
+
+    return audio_path  # return original as fallback
 
 
 # ── Groq Whisper Transcription ────────────────────────────────────────────────
