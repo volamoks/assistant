@@ -152,10 +152,12 @@ class TelegramNotifier:
         thread_id: Optional[int] = None,
         silent: bool = False,
         broadcast: bool = False,
+        webapp_url: Optional[str] = None,
+        webapp_text: Optional[str] = None,
         **kwargs
     ) -> Dict[str, Any]:
         """
-        Send a text message with optional inline keyboard.
+        Send a text message with optional inline keyboard or WebApp button.
 
         Args:
             text: Message text (Markdown supported).
@@ -164,6 +166,8 @@ class TelegramNotifier:
             thread_id: Override default thread/topic ID.
             silent: Send without notification (silent).
             broadcast: If True, send to all chat IDs in comma-separated list.
+            webapp_url: URL for a WebApp button.
+            webapp_text: Text for the WebApp button.
             **kwargs: Additional arguments for sendMessage API.
 
         Returns:
@@ -204,6 +208,12 @@ class TelegramNotifier:
             keyboard = self._parse_buttons(buttons)
             if keyboard:
                 payload_base["reply_markup"] = {"inline_keyboard": keyboard}
+        # Add WebApp button if URL provided (takes precedence over buttons)
+        elif webapp_url:
+            btn_text = webapp_text or "Open"
+            payload_base["reply_markup"] = {
+                "inline_keyboard": [[{"text": btn_text, "web_app": {"url": webapp_url}}]]
+            }
 
         # Send to each chat
         results = []
@@ -383,6 +393,8 @@ Button Format:
 
     parser.add_argument("text", nargs="?", default="", help="Message text")
     parser.add_argument("--buttons", "-b", help="Inline keyboard buttons (format: 'Btn1:cb1,Btn2:cb2|Row2:cb3')")
+    parser.add_argument("--webapp-url", help="WebApp URL for a single button (format: 'URL')")
+    parser.add_argument("--webapp-text", default="Open", help="Text for WebApp button")
     parser.add_argument("--chat-id", "-c", help="Chat ID (overrides env)")
     parser.add_argument("--thread-id", "-t", type=int, help="Thread/Topic ID (overrides env)")
     parser.add_argument("--silent", "-s", action="store_true", help="Send silently")
@@ -456,7 +468,9 @@ Button Format:
         args.text,
         buttons=args.buttons,
         silent=args.silent,
-        broadcast=True  # Enable broadcast to all chat IDs
+        broadcast=True,  # Enable broadcast to all chat IDs
+        webapp_url=args.webapp_url,
+        webapp_text=args.webapp_text,
     )
 
     if result and result.get("ok"):

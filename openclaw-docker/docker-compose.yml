@@ -48,6 +48,7 @@ services:
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - KILOCODE_API_KEY=${KILOCODE_API_KEY}
+      - OPENCODE_API_KEY=${OPENCODE_API_KEY}
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
       - DASHSCOPE_API_BASE=${DASHSCOPE_API_BASE}
       - OLLAMA_HOST=http://host.docker.internal:11434
@@ -131,21 +132,20 @@ services:
         max-file: "3"
 
   openclaw:
-    build:
-      context: ..
-      dockerfile: openclaw-docker/openclaw.Dockerfile
+    image: ghcr.io/openclaw/openclaw:2026.3.12
     container_name: openclaw-latest
     restart: unless-stopped
     stop_grace_period: 30s
-    # healthcheck disabled - causing container to restart unexpectedly
-    # healthcheck:
-    #   test: [ "CMD-SHELL", "node -e \"require('http').get('http://localhost:18790/', (res) => process.exit(0)).on('error', () => process.exit(1))\"" ]
-    #   interval: 30s
-    #   timeout: 20s
-    #   retries: 5
-    #   start_period: 300s
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:18789/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 180s
     user: "501:20" # Run as host user for correct file ownership
-    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; sudo chmod a+rx /root /root/.bun /root/.bun/bin /root/.bun/bin/bun 2>/dev/null || true; mkdir -p /home/node/.npm /app/extensions 2>/dev/null || true; sudo chown -R 501:20 /home/node /app/extensions 2>/dev/null || true; python3 -m pip install --user google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || python3 -c \"import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py'); exec(open('/tmp/get-pip.py').read())\" 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
+    group_add:
+      - "0" # root group — needed for docker.sock access inside container
+    command: [ "sh", "-c", "sudo chmod 666 /var/run/docker.sock 2>/dev/null || true; sudo chmod a+rx /root /root/.bun /root/.bun/bin /root/.bun/bin/bun 2>/dev/null || true; mkdir -p /home/node/.npm /app/extensions /opt/runtime-pip 2>/dev/null || true; sudo chown -R 501:20 /home/node /app/extensions 2>/dev/null || true; python3 -m pip install --break-system-packages google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>/dev/null || true; python3 -c 'import cocoindex' 2>/dev/null || pip3 install --target=/opt/runtime-pip cocoindex 2>/dev/null || true; exec node openclaw.mjs gateway --allow-unconfigured --bind lan" ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -153,6 +153,7 @@ services:
       - "18790:18790"
     depends_on:
       - litellm
+      - cocoindex-db
     volumes:
       - ./core:/home/node/.openclaw
       - ./prompts:/home/node/.openclaw/prompts
@@ -163,6 +164,8 @@ services:
       - ./canvas:/home/node/.openclaw/canvas
       - ./cron:/home/node/.openclaw/cron
       - ./telegram:/home/node/.openclaw/telegram
+      # Docker CLI binary (static linux arm64 binary — no install needed)
+      - ./tools/docker:/usr/local/bin/docker:ro
       # Gemini CLI credentials — persisted across container rebuilds
       - ./core/gemini-config:/home/node/.gemini
       # Technical System Vault (My Docs - configs, logs, metadata)
@@ -173,12 +176,16 @@ services:
       - /Users/abror_mac_mini/Projects/bot:/data/bot
       # Docker socket so coder can restart containers
       - /var/run/docker.sock:/var/run/docker.sock
-      # OpenCode CLI configuration and switcher script
-      - /Users/abror_mac_mini/.config/opencode:/home/node/.config/opencode
+      # OpenCode for container — separate from host ~/.config/opencode
+      # Host ~/.config/opencode uses localhost:18788; container uses litellm:4000
+      - ./opencode:/home/node/.config/opencode
+      - ./opencode-acpx:/home/node/.acpx
       - /Users/abror_mac_mini/.local/share/opencode:/home/node/.local/share/opencode
       - ./switch_opencode.sh:/usr/local/bin/switch_opencode.sh:ro
       # Pip packages for Google API access
       - ./pip:/opt/pip-packages:ro
+      # Runtime pip packages (cocoindex etc) — persisted across restarts
+      - runtime_pip:/opt/runtime-pip
     environment:
       - NODE_ENV=production
       - HOME=/home/node
@@ -206,6 +213,7 @@ services:
       - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - KILOCODE_API_KEY=${KILOCODE_API_KEY}
       - OPENCODE_API_KEY=${OPENCODE_API_KEY}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
       - BYBIT_API=${BYBIT_API}
       - BYBIT_API_SECRET=${BYBIT_API_SECRET}
       - RYOT_URL=http://ryot:8000/backend/graphql
@@ -220,7 +228,11 @@ services:
       - EMAIL_PASS_MAILRU=${EMAIL_PASS_MAILRU}
       - EMAIL_PASS_YANDEX=${EMAIL_PASS_YANDEX}
       - EMAIL_PASS_YAHOO=${EMAIL_PASS_YAHOO}
-      - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages
+      - PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/pip-packages/local/lib/python3.11/dist-packages:/opt/pip-packages/local/lib/python3.11/site-packages:/opt/runtime-pip
+      - CHROMA_HOST=http://chromadb:8000
+      - COCOINDEX_DATABASE_URL=postgresql://cocoindex:cocoindex@cocoindex-db:5432/cocoindex
+      - VIKING_HOST=http://viking-bridge:8100
+      - VIKING_API_KEY=viking-local-key-12345
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       # Note: Setting GEMINI_API_KEY means gemini CLI uses API key instead of OAuth
       # This is needed for LCM (Lossless Context Management) to create summaries
@@ -368,6 +380,97 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # ── Sure PFM (personal finance, replaces Actual Budget) ─────────────────────
+  sure:
+    image: ghcr.io/we-promise/sure:stable
+    container_name: sure
+    restart: unless-stopped
+    ports:
+      - "3020:3000"
+    volumes:
+      - sure-storage:/rails/storage
+    environment:
+      POSTGRES_USER: sure
+      POSTGRES_PASSWORD: ${SURE_DB_PASSWORD:-sure_password}
+      POSTGRES_DB: sure_production
+      SECRET_KEY_BASE: ${SURE_SECRET_KEY:-b3c97a4f2e1d8c5b6a9f0e3d7c2b1a4f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c}
+      SELF_HOSTED: "true"
+      RAILS_FORCE_SSL: "false"
+      RAILS_ASSUME_SSL: "false"
+      DB_HOST: sure-db
+      DB_PORT: 5432
+      REDIS_URL: redis://redis-cache:6379/2
+      OPENAI_BASE_URL: http://litellm:4000/v1
+      OPENAI_ACCESS_TOKEN: ${LITELLM_MASTER_KEY:-sk-litellm-openclaw-proxy}
+    depends_on:
+      sure-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - default
+      - jarvis_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:3000/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  sure-worker:
+    image: ghcr.io/we-promise/sure:stable
+    container_name: sure-worker
+    command: bundle exec sidekiq
+    restart: unless-stopped
+    volumes:
+      - sure-storage:/rails/storage
+    environment:
+      POSTGRES_USER: sure
+      POSTGRES_PASSWORD: ${SURE_DB_PASSWORD:-sure_password}
+      POSTGRES_DB: sure_production
+      SECRET_KEY_BASE: ${SURE_SECRET_KEY:-b3c97a4f2e1d8c5b6a9f0e3d7c2b1a4f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c}
+      SELF_HOSTED: "true"
+      DB_HOST: sure-db
+      DB_PORT: 5432
+      REDIS_URL: redis://redis-cache:6379/2
+    depends_on:
+      sure-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - default
+      - jarvis_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  sure-db:
+    image: postgres:16-alpine
+    container_name: sure-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sure
+      POSTGRES_PASSWORD: ${SURE_DB_PASSWORD:-sure_password}
+      POSTGRES_DB: sure_production
+    volumes:
+      - sure_data:/var/lib/postgresql/data
+    networks:
+      - default
+      - jarvis_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sure"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   pinchtab:
     image: pinchtab/pinchtab
     container_name: pinchtab
@@ -444,6 +547,7 @@ services:
       - VAULT_PATH=/data/obsidian/vault
     volumes:
       - "${SYSTEM_VAULT_PATH:-/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs}:/data/obsidian:ro"
+      - "./core:/home/node/.openclaw:ro"
     deploy:
       resources:
         limits:
@@ -465,22 +569,16 @@ services:
         max-file: "2"
 
   a2ui-webapp:
-    image: nginx:alpine
+    build:
+      context: ./core/workspace-main/a2ui
+      dockerfile: ../a2ui-webapp.Dockerfile
     container_name: a2ui-webapp
     restart: unless-stopped
     ports:
       - "7090:80"
-    volumes:
-      - "${OPENCLAW_WORKSPACE:-/Users/abror_mac_mini/Projects/bot/openclaw-docker/core/workspace-main}/a2ui:/usr/share/nginx/html/a2ui:ro"
-      - "./a2ui-nginx.conf:/etc/nginx/conf.d/default.conf:ro"
     networks:
       - default
       - jarvis_net
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost/health || exit 1" ]
-      interval: 30s
-      timeout: 5s
-      retries: 3
     logging:
       driver: "json-file"
       options:
@@ -495,6 +593,12 @@ services:
       - "8100:8100"
     volumes:
       - ./memory/viking:/data/viking
+    environment:
+      - LITELLM_BASE_URL=http://litellm:4000
+      - LITELLM_API_KEY=sk-litellm-openclaw-proxy
+      - EMBEDDING_MODEL=nomic-embed-text
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:
@@ -504,7 +608,7 @@ services:
       - default
       - jarvis_net
     healthcheck:
-      test: [ "CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:8100/health', timeout=10); exit(0)\"" ]
+      test: ["CMD-SHELL", "curl -f http://localhost:8100/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -514,9 +618,34 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  cocoindex-db:
+    image: pgvector/pgvector:pg17
+    container_name: cocoindex-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=cocoindex
+      - POSTGRES_PASSWORD=cocoindex
+      - POSTGRES_DB=cocoindex
+    ports:
+      - "15432:5432"
+    volumes:
+      - cocoindex_data:/var/lib/postgresql/data
+    networks:
+      - default
+      - jarvis_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cocoindex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   litellm_data:
   beszel_data:
+  cocoindex_data:
+  runtime_pip:
+  sure_data:
+  sure-storage:
 
 
 networks:

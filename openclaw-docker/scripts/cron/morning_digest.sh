@@ -17,4 +17,5 @@ if [ $EXIT_CODE -ne 0 ]; then
 $OUTPUT" --chat-id "6053956251" 2>/dev/null || true
 fi
 
-exit 0
+# Exit with the actual error code so the system reflects the failure
+exit $EXIT_CODE

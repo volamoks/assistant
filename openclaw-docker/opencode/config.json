@@ -1,0 +1,78 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "http://litellm:4000/v1",
+        "apiKey": "sk-litellm-openclaw-proxy"
+      },
+      "models": {
+        "claw-opencode": {
+          "name": "OpenCode Free (MiniMax M2.5)"
+        },
+        "claw-main": {
+          "name": "Premium (MiniMax M2.5)"
+        },
+        "local-medium": {
+          "name": "Local (Qwen3.5:9b)"
+        },
+        "oc-nemotron": {
+          "name": "Nemotron 120B Free (NVIDIA via kilo.ai)"
+        },
+        "kilo-minimax": {
+          "name": "KiloCode Free (MiniMax M2.5)"
+        }
+      }
+    },
+    "opencode-zen": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/v1",
+        "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnYiOiJwcm9kdWN0aW9uIiwia2lsb1VzZXJJZCI6ImFjMDNkMDQyLWU1YTYtNGE5My05Yzc0LTZkYTYzZDQ2MTNjNiIsImFwaVRva2VuUGVwcGVyIjpudWxsLCJ2ZXJzaW9uIjozLCJpYXQiOjE3NzM0ODMzNTEsImV4cCI6MTkzMTE2MzM1MX0.pU6c_h5qOcaSUeLigeHahVG6vyBautBzkoGZQE26pzg",
+        "headers": {
+          "x-api-key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnYiOiJwcm9kdWN0aW9uIiwia2lsb1VzZXJJZCI6ImFjMDNkMDQyLWU1YTYtNGE5My05Yzc0LTZkYTYzZDQ2MTNjNiIsImFwaVRva2VuUGVwcGVyIjpudWxsLCJ2ZXJzaW9uIjozLCJpYXQiOjE3NzM0ODMzNTEsImV4cCI6MTkzMTE2MzM1MX0.pU6c_h5qOcaSUeLigeHahVG6vyBautBzkoGZQE26pzg"
+        }
+      },
+      "models": {
+        "nemotron-3-super-free": {
+          "name": "Nemotron 120B Free (opencode.ai)"
+        },
+        "minimax-m2.5-free": {
+          "name": "MiniMax M2.5 Free (opencode.ai)"
+        },
+        "minimax-m2.5": {
+          "name": "MiniMax M2.5 (opencode.ai)"
+        },
+        "kimi-k2.5": {
+          "name": "Kimi K2.5 (opencode.ai)"
+        }
+      }
+    }
+  },
+  "model": "litellm/claw-opencode",
+  "agent": {
+    "coder": {
+      "description": "Full-stack coding agent. Reads, writes, edits files, runs bash commands.",
+      "model": "litellm/claw-opencode",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "write": true,
+        "edit": true,
+        "codesearch": true
+      }
+    },
+    "researcher": {
+      "description": "Research and analysis agent with web search.",
+      "model": "litellm/kilo-minimax-free",
+      "tools": {
+        "websearch": true,
+        "codesearch": true,
+        "read": true
+      }
+    }
+  },
+  "default_agent": "coder"
+}

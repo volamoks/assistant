@@ -50,7 +50,10 @@ type ReadCronRunLogAllPageOptions = Omit<ReadCronRunLogPageOptions, "jobId"> & {
   jobNameById?: Record<string, string>;
 };
 
-function assertSafeCronRunLogJobId(jobId: string): string {
+function assertSafeCronRunLogJobId(jobId: string | undefined | null): string {
+  if (!jobId || typeof jobId !== "string") {
+    throw new Error("invalid cron run log job id");
+  }
   const trimmed = jobId.trim();
   if (!trimmed) {
     throw new Error("invalid cron run log job id");
@@ -61,11 +64,11 @@ function assertSafeCronRunLogJobId(jobId: string): string {
   return trimmed;
 }
 
-export function resolveCronRunLogPath(params: { storePath: string; jobId: string }) {
+export function resolveCronRunLogPath(params: { storePath: string; jobId?: string | null }) {
   const storePath = path.resolve(params.storePath);
   const dir = path.dirname(storePath);
   const runsDir = path.resolve(dir, "runs");
-  const safeJobId = assertSafeCronRunLogJobId(params.jobId);
+  const safeJobId = assertSafeCronRunLogJobId(params.jobId ?? "");
   const resolvedPath = path.resolve(runsDir, `${safeJobId}.jsonl`);
   if (!resolvedPath.startsWith(`${runsDir}${path.sep}`)) {
     throw new Error("invalid cron run log job id");

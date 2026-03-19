@@ -1,6 +1,6 @@
 ---
 name: obsidian_search
-description: "Semantic search in the local Obsidian vault using RAG (ChromaDB + nomic-embed-text). Use when you need user preferences, historical context, past decisions, or personal notes. Understands meaning — not just keywords."
+description: "Semantic search in the local Obsidian vault using RAG (ChromaDB + nomic-embed-text via LiteLLM). Use when you need user preferences, historical context, past decisions, or personal notes. Understands meaning — not just keywords."
 triggers:
   - search obsidian
   - find in obsidian
@@ -12,33 +12,28 @@ triggers:
 
 # Obsidian Semantic Search (RAG)
 
-Searches the Obsidian vault semantically via ChromaDB + Ollama embeddings.
-Vault: `/data/obsidian/vault` | 106 indexed chunks | Re-indexed nightly.
+Searches the Obsidian vault semantically via ChromaDB + LiteLLM embeddings (nomic-embed-text).
+Vault: `/data/obsidian/vault` | Re-indexed nightly.
 
 ## Usage
 
-```bash
-bash /data/bot/openclaw-docker/scripts/obsidian_rag_search.sh "your query here" 3
+This skill is invoked automatically as a tool (index.mjs). Simply call it with a query:
+
+```
+obsidian_search({ query: "your query here", limit: 3 })
 ```
 
-Replace `3` with desired number of results (default: 3).
+Or trigger manually via tool call with the query parameter.
 
 ## Examples
 
-```bash
-# Find user preferences
-bash /data/bot/openclaw-docker/scripts/obsidian_rag_search.sh "user preferences coding style" 3
-
-# Find project context
-bash /data/bot/openclaw-docker/scripts/obsidian_rag_search.sh "OpenClaw architecture decisions" 5
-
-# Find personal notes
-bash /data/bot/openclaw-docker/scripts/obsidian_rag_search.sh "budget finance expenses" 3
-```
+- `obsidian_search({ query: "user preferences coding style", limit: 3 })`
+- `obsidian_search({ query: "OpenClaw architecture decisions", limit: 5 })`
+- `obsidian_search({ query: "budget finance expenses", limit: 3 })`
 
 ## Notes
 
 - Results are **semantic** — finds related content even without exact keyword match
 - Each result shows the **source file** and a relevant excerpt (up to 800 chars)
 - If results seem irrelevant, the vault may need reindexing: `bash /data/bot/openclaw-docker/scripts/jobs/obsidian_reindex.sh`
-- Depends on: ChromaDB at `http://chromadb:8000`, Ollama `nomic-embed-text` at `http://host.docker.internal:11434`
+- Depends on: ChromaDB at `http://chromadb:8000`, LiteLLM `nomic-embed-text` at `http://litellm:4000`

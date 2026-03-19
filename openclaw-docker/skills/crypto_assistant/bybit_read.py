@@ -18,10 +18,20 @@ try:
     from bybit_integration.src.client import BybitClient
 except ImportError:
     # Fallback to absolute path search
-    skills_path = os.path.expanduser('~/Projects/bot/openclaw-docker/skills')
-    if skills_path not in sys.path:
-        sys.path.insert(0, skills_path)
-    from bybit_integration.src.client import BybitClient
+    likely_paths = [
+        os.path.expanduser('~/.openclaw/skills'),
+        '/data/bot/openclaw-docker/skills',
+        os.path.expanduser('~/Projects/bot/openclaw-docker/skills')
+    ]
+    for p in likely_paths:
+        if p not in sys.path and os.path.exists(p):
+            sys.path.insert(0, p)
+    try:
+        from bybit_integration.src.client import BybitClient
+    except ImportError:
+        # If still failing, try one more relative level
+        sys.path.insert(0, os.path.dirname(BASE_DIR))
+        from bybit_integration.src.client import BybitClient
 
 
 def get_portfolio_summary():

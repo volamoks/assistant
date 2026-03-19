@@ -1,0 +1,7 @@
+{
+  "agents": {
+    "opencode": {
+      "command": "/home/node/.openclaw/tools/opencode-acp.sh"
+    }
+  }
+}

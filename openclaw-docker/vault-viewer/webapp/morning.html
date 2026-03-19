@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{FORM_TITLE}}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1117;color:#e0e0e0;font-family:-apple-system,system-ui,sans-serif;padding:12px;max-width:480px;margin:0 auto}
+.header{text-align:center;padding:16px 0 12px;border-bottom:1px solid #222}
+.greeting{font-size:0.85em;color:#888;margin-bottom:4px}
+.date{font-size:1.1em;font-weight:700;color:#fff}
+.section{margin:14px 0;padding:0}
+.section-title{font-size:0.72em;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding-left:2px}
+.card{background:#1a1d28;border:1px solid #252a3a;border-radius:12px;overflow:hidden}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+.row+.row{border-top:1px solid #1e2230}
+.coin-row{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.coin-row+.coin-row{border-top:1px solid #1e2230}
+.coin-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;font-weight:700}
+.btc{background:linear-gradient(135deg,#f7931a,#e87a10)}
+.eth{background:linear-gradient(135deg,#627eea,#4a62d4)}
+.sol{background:linear-gradient(135deg,#00d1a0,#00b389)}
+.coin-name{font-weight:600;font-size:0.95em;color:#fff}
+.coin-sym{font-size:0.75em;color:#555}
+.coin-data{margin-left:auto;text-align:right}
+.coin-price{font-weight:600;font-size:0.95em;color:#fff}
+.coin-chg{font-size:0.78em;margin-top:1px}
+.positive{color:#3ecf8e}
+.negative{color:#f3606a}
+.portfolio-card{background:linear-gradient(135deg,#1a1d28,#1e2235)}
+.total-label{font-size:0.78em;color:#555}
+.total-value{font-size:1.5em;font-weight:700;color:#fff;margin-top:2px}
+.pnl{font-size:0.85em;color:#3ecf8e}
+.actions{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:600;font-size:0.88em;text-align:center;text-decoration:none}
+.btn-primary{background:rgba(62,207,142,0.15);color:#3ecf8e;border:1px solid rgba(62,207,142,0.3)}
+.btn-secondary{background:rgba(255,255,255,0.05);color:#888;border:1px solid #252a3a}
+.footer{text-align:center;color:#333;font-size:0.72em;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="greeting">{{GREETING}}</div>
+  <div class="date">{{DATE}}</div>
+</div>
+
+<!-- Crypto Prices -->
+<div class="section">
+  <div class="section-title">🪙 Crypto</div>
+  <div class="card">
+    {{CRYPTO_ROWS}}
+  </div>
+</div>
+
+<!-- Portfolio -->
+<div class="section">
+  <div class="section-title">💼 Portfolio</div>
+  <div class="card">
+    <div class="row" style="display:block;padding:14px">
+      <div class="total-label">Total Portfolio Value</div>
+      <div class="total-value">{{TOTAL_VALUE}}</div>
+      <div class="pnl">{{PNL}}</div>
+    </div>
+    {{POSITION_ROWS}}
+  </div>
+</div>
+
+<!-- Actions -->
+<div class="actions">
+  <a href="https://www.bybit.com" class="btn btn-primary" target="_blank">📊 Bybit</a>
+  <a href="bybit://home" class="btn btn-secondary">📱 Open App</a>
+</div>
+
+<div class="footer">Updated {{UPDATED}} · Bybit data</div>
+</body></html>

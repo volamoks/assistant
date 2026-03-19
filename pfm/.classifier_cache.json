@@ -26,5 +26,89 @@
     "reason": "Сообщение содержит информацию о балансе карты без операций",
     "amount": 250000,
     "currency": "UZS"
+  },
+  "Your verification code is '108414', Merchant: OPENROUTER, INC, Amount: 10.8 USD": {
+    "class": "transaction",
+    "confidence": 0.95,
+    "reason": "Содержит сумму (10.8 USD) и указание мерчанта (OPENROUTER, INC), что указывает на операцию оплаты/списания средств",
+    "amount": 10.8,
+    "currency": "USD"
+  },
+  "Your verification code is '204578', Merchant: HOTELUX, Amount: 0 SGD": {
+    "class": "informational",
+    "confidence": 0.9,
+    "reason": "Сообщение содержит верификационный код для подтверждения операции, сумма равна 0 (не фактическая транзакция), это информационное уведомление о попытке/запросе верификации",
+    "amount": null,
+    "currency": null
+  },
+  "<#> Kod oplati v Milliy na summu 10500000 UZS. code: cpr693 Nikomu ne soobshayte etot kod. TpDQot1ZOLB": {
+    "class": "transaction",
+    "confidence": 0.95,
+    "reason": "SMS содержит сумму 10500000 UZS и упоминание оплаты ('oplati') в сервисе Milliy, что указывает на расходную операцию",
+    "amount": 10500000,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 29.05.25 08:32, karta 514379******9445. summa: 25 900.00 UZS, balans: 22.78 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, номера карты и остатка баланса - классическая транзакция расхода",
+    "amount": 25900.0,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 05.06.25 07:12, karta 514379******9445. summa: 20 370.00 UZS, balans: 8.28 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, карты и баланса — классическая транзакция расхода",
+    "amount": 20370.0,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 02.06.25 09:03, karta 514379******9445. summa: 19 600.00 UZS, balans: 15.37 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, карты и баланса — классическая транзакция расхода",
+    "amount": 19600.0,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 10.06.25 08:56, karta 514379******9445. summa: 25 900.00 UZS, balans: 76.21 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Содержит ключевые слова 'Pokupka' (покупка), сумма операции 25 900.00 UZS, указана дата и время, номер карты и остаток баланса — классическая транзакция оплаты услуги такси",
+    "amount": 25900,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 30.05.25 20:57, karta 514379******9445. summa: 24 500.00 UZS, balans: 18.83 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, карты и баланса - классическая транзакция расхода",
+    "amount": 24500.0,
+    "currency": "UZS"
+  },
+  "Popolnenie, 07.06.25 09:26, karta 514379******9445. summa: 78.00 USD, balans: 81.47 USD": {
+    "class": "transaction",
+    "confidence": 0.95,
+    "reason": "Пополнение карты с указанием суммы и баланса - операция пополнения счета (доход)",
+    "amount": 78.0,
+    "currency": "USD"
+  },
+  "Pokupka, My taxi L 31.05.25 08:57, karta 514379******9445. summa: 23 800.00 UZS, balans: 16.93 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Содержит ключевые слова покупки (Pokupka), сумму операции, номер карты и баланс. Это типичная SMS о списании средств за услугу такси.",
+    "amount": 23800.0,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 27.05.25 08:40, karta 514379******9445. summa: 27 090.00 UZS, balans: 11.38 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, номера карты и баланса — классическая транзакция расхода",
+    "amount": 27090.0,
+    "currency": "UZS"
+  },
+  "Pokupka, My taxi L 06.06.25 12:09, karta 514379******9445. summa: 13 720.00 UZS, balans: 7.19 USD": {
+    "class": "transaction",
+    "confidence": 0.98,
+    "reason": "Покупка (Pokupka) с указанием суммы, даты, времени, карты и баланса — классическая транзакция расхода",
+    "amount": 13720.0,
+    "currency": "UZS"
   }
 }

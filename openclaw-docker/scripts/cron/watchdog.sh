@@ -19,5 +19,9 @@ if echo "$OUTPUT" | grep -qiE "restarting|failure|failed|error|unhealthy"; then
 $OUTPUT" --chat-id "6053956251" 2>/dev/null || true
 fi
 
-# Exit silently (cron expects no output for healthy state)
+# Exit with error code if issues were detected, so cron reports failure
+if echo "$OUTPUT" | grep -qiE "restarting|failure|failed|error|unhealthy"; then
+    exit 1
+fi
+
 exit 0

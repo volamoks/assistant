@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Daily Report — collects context from memory files + Vikunja tasks,
+Daily Report — collects context from memory files + Obsidian Tasks,
 makes ONE LLM call to generate summary, sends to Telegram.
 Target: ~20-30s vs 939s (agent reading files one by one).
 """
@@ -19,7 +19,6 @@ CLAW_MODEL = os.getenv("CLAW_MODEL", "litellm/claw-cron-smart")  # 9b model
 
 VAULT_PATH = Path(os.getenv("USER_VAULT_PATH", "/data/obsidian"))
 MEMORY_FILE = Path("/home/node/.openclaw/prompts/MEMORY.md")
-VIKUNJA_SH = Path("/data/bot/openclaw-docker/skills/vikunja/vikunja.sh")
 NOTIFY_PY = Path("/data/bot/openclaw-docker/skills/telegram/notify.py")
 TELEGRAM_USER = "6053956251"
 
@@ -57,11 +56,15 @@ def collect_context() -> str:
             sections.append(f"## Today's Diary\n{read_file_safe(diary_file)}")
             break
 
-    # 3. Recent Vikunja tasks (undone)
-    if VIKUNJA_SH.exists():
-        vikunja_out = run_cmd(["bash", str(VIKUNJA_SH), "list-by-status", "undone"], timeout=15)
-        if vikunja_out and "error" not in vikunja_out.lower()[:50]:
-            sections.append(f"## Open Vikunja Tasks\n{vikunja_out[:MAX_SECTION_CHARS]}")
+    # 3. Obsidian Tasks (undone) — replaces Vikunja
+    OBSIDIAN_TASKS_PY = Path("/data/bot/openclaw-docker/skills/obsidian_tasks/obsidian_tasks.py")
+    if OBSIDIAN_TASKS_PY.exists():
+        tasks_out = run_cmd(["python3", str(OBSIDIAN_TASKS_PY), "list-by-status", "undone"], timeout=15)
+        if tasks_out and tasks_out not in ("", "[]"):
+            sections.append(f"## Open Tasks (Obsidian)\n{tasks_out[:MAX_SECTION_CHARS]}")
+        count_out = run_cmd(["python3", str(OBSIDIAN_TASKS_PY), "count-by-folder"], timeout=10)
+        if count_out:
+            sections.append(f"## Task Summary\n{count_out}")
 
     # 4. HEARTBEAT.md (cron job statuses)
     heartbeat = VAULT_PATH.parent / "openclaw-docker/workspace/HEARTBEAT.md"
@@ -108,11 +111,11 @@ def generate_summary(context: str) -> str:
                     "Контекст:\n"
                     f"{context}\n\n"
                     "Структура отчёта:\n"
-                    "📋 Открытых задач: N (из Vikunja)\n"
+                    "📋 Открытых задач: N (из Obsidian)\n"
                     "🔴 Критичных: (если есть [CRITICAL] задачи)\n"
                     "✅ Система работает: (статус крон-джобов из heartbeat)\n"
                     "⚠️ Проблемы: (если есть ошибки)\n"
-                    "💡 На завтра: (топ-2 задачи из Vikunja)\n\n"
+                    "💡 На завтра: (топ-2 задачи из Obsidian)\n\n"
                     "Не повторяй контекст дословно — только суть."
                 ),
             },
@@ -153,15 +156,25 @@ def send_telegram(text: str):
 
 
 def main():
-    print(f"[{datetime.now()}] Collecting context...")
-    context = collect_context()
-    print(f"  Context: {len(context)} chars")
+    try:
+        print(f"[{datetime.now()}] Collecting context...")
+        context = collect_context()
+        print(f"  Context: {len(context)} chars")
 
-    print(f"[{datetime.now()}] Generating summary (1 LLM call)...")
-    summary = generate_summary(context)
-    print(f"  Summary: {len(summary)} chars")
+        print(f"[{datetime.now()}] Generating summary (1 LLM call)...")
+        summary = generate_summary(context)
+        print(f"  Summary: {len(summary)} chars")
 
-    send_telegram(summary)
+        send_telegram(summary)
+    except Exception as e:
+        print(f"FATAL ERROR in daily_report.py: {e}", file=sys.stderr)
+        # Attempt to notify via Telegram about the crash
+        try:
+            if NOTIFY_PY.exists():
+                subprocess.run(["python3", str(NOTIFY_PY), f"❌ Daily Report System Crash: {str(e)[:200]}"], timeout=10)
+        except:
+            pass
+        sys.exit(1)
 
 
 if __name__ == "__main__":

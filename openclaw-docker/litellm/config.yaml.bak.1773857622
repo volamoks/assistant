@@ -1,0 +1,327 @@
+model_list:
+- model_name: minimax-m25
+  litellm_params:
+    model: openai/MiniMax-M2.5
+    api_base: https://api.minimax.io/v1
+    api_key: os.environ/MINIMAX_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: kilo-minimax
+  litellm_params:
+    model: openai/minimax/minimax-m2.5:free
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: kilo-nemotron
+  litellm_params:
+    model: openai/nvidia/nemotron-3-super-120b-a12b-20230311:free
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+  model_info:
+    supports_reasoning: true
+- model_name: kilo-minimax2
+  litellm_params:
+    model: openai/minimax/minimax-m2.5:free
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: kilo-deepseek
+  litellm_params:
+    model: openai/deepseek/deepseek-chat
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+- model_name: kilo-deepseek-terminus
+  litellm_params:
+    model: openai/deepseek/deepseek-v3.1-terminus
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+- model_name: oc-nemotron
+  litellm_params:
+    model: openai/nemotron-3-super-free
+    api_base: https://opencode.ai/zen/v1
+    api_key: os.environ/OPENCODE_API_KEY
+    timeout: 60
+    stream_timeout: 60
+  model_info:
+    supports_reasoning: true
+- model_name: oc-minimax
+  litellm_params:
+    model: openai/minimax/minimax-m2.5:free
+    api_base: https://api.kilo.ai/api/gateway/
+    api_key: os.environ/KILOCODE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: qwen-max
+  litellm_params:
+    model: openai/qwen3-max
+    api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    api_key: os.environ/DASHSCOPE_FREE_API_KEY
+    extra_body:
+      enable_thinking: false
+- model_name: qwen-plus
+  litellm_params:
+    model: openai/qwen-plus-2025-07-28
+    api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    api_key: os.environ/DASHSCOPE_FREE_API_KEY
+    extra_body:
+      enable_thinking: false
+- model_name: qwen-vl-max
+  litellm_params:
+    model: openai/qwen-vl-max-2025-04-08
+    api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    api_key: os.environ/DASHSCOPE_FREE_API_KEY
+    extra_body:
+      enable_thinking: false
+  model_info:
+    supports_vision: true
+- model_name: qwen-vl-plus
+  litellm_params:
+    model: openai/qwen-vl-plus-2025-05-07
+    api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    api_key: os.environ/DASHSCOPE_FREE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: qwen-vl-72b
+  litellm_params:
+    model: openai/qwen2.5-vl-72b-instruct
+    api_base: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    api_key: os.environ/DASHSCOPE_FREE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: local-small
+  litellm_params:
+    model: ollama/qwen2.5-coder:3b
+    api_base: os.environ/OLLAMA_HOST
+    temperature: 0.1
+- model_name: local-medium
+  litellm_params:
+    model: ollama/qwen3.5:9b
+    api_base: os.environ/OLLAMA_HOST
+    temperature: 0.1
+- model_name: claw-vision
+  litellm_params:
+    model: openai/MiniMax-M2.5
+    api_base: https://api.minimax.io/v1
+    api_key: os.environ/MINIMAX_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: nomic-embed-text
+  litellm_params:
+    model: ollama/nomic-embed-text
+    api_base: http://host.docker.internal:11434
+    drop_params: true
+- model_name: minimax-m27
+  litellm_params:
+    model: openai/MiniMax-M2.7
+    api_base: https://api.minimax.io/v1
+    api_key: os.environ/MINIMAX_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: coding-minimax-m25
+  litellm_params:
+    model: openai/MiniMax-M2.5
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: coding-qwen-3.5-plus
+  litellm_params:
+    model: openai/qwen3.5-plus
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: coding-kimi-k25
+  litellm_params:
+    model: openai/kimi-k2.5
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+  model_info:
+    supports_vision: true
+- model_name: coding-qwen3-coder-plus
+  litellm_params:
+    model: openai/qwen3-coder-plus
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+- model_name: coding-glm-5
+  litellm_params:
+    model: openai/glm-5
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+- model_name: coding-glm-4.7
+  litellm_params:
+    model: openai/glm-4.7
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+- model_name: coding-qwen3-max
+  litellm_params:
+    model: openai/qwen3-max-2026-01-23
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+- model_name: coding-qwen3-coder-next
+  litellm_params:
+    model: openai/qwen3-coder-next
+    api_base: https://coding-intl.dashscope.aliyuncs.com/v1
+    api_key: os.environ/DASHSCOPE_API_KEY
+- model_name: litellm/claw-main
+  litellm_params:
+    model: openai/MiniMax-M2.7
+    api_base: https://api.minimax.io/v1
+    api_key: os.environ/MINIMAX_API_KEY
+  model_info:
+    supports_vision: true
+litellm_settings:
+  cache: true
+  cache_params:
+    type: redis
+    host: redis-cache
+  request_timeout: 60
+  json_logs: true
+  success_callback:
+  - prometheus
+  failure_callback:
+  - prometheus
+  master_key: os.environ/LITELLM_MASTER_KEY
+  pass_through_headers: true
+router_settings:
+  model_group_alias:
+    claw-premium: coding-minimax-m25
+    claw-vision: coding-qwen-3.5-plus
+    claw-main: minimax-m27
+    claw-coder: coding-qwen3-coder-plus
+    claw-researcher: coding-qwen-3.5-plus
+    claw-architect: coding-qwen-3.5-plus
+    claw-thinking: coding-qwen3-max
+    claw-reasoner: coding-qwen3-max
+    claw-free-fast: coding-kimi-k25
+    claw-free-smart: coding-qwen-3.5-plus
+    claw-cron-fast: coding-kimi-k25
+    claw-cron-smart: coding-qwen-3.5-plus
+    claw-deepseek: kilo-deepseek
+    claw-deepseek-terminus: kilo-deepseek-terminus
+    coding-qwen-3.5-plus: coding-qwen-3.5-plus
+    coding-kimi-k25: coding-kimi-k25
+    coding-minimax-m25: coding-minimax-m25
+    coding-qwen3-coder-plus: coding-qwen3-coder-plus
+  fallbacks:
+  - minimax-m25:
+    - oc-minimax
+    - kilo-minimax
+    - local-medium
+  - oc-minimax:
+    - kilo-minimax
+    - kilo-minimax2
+    - qwen-plus
+    - local-medium
+  - kilo-minimax:
+    - oc-minimax
+    - kilo-minimax2
+    - qwen-plus
+    - local-medium
+  - kilo-minimax2:
+    - kilo-minimax
+    - oc-minimax
+    - local-medium
+  - kilo-nemotron:
+    - oc-nemotron
+    - qwen-max
+    - minimax-m25
+  - oc-nemotron:
+    - qwen-max
+    - minimax-m25
+    - oc-minimax
+  - qwen-max:
+    - qwen-plus
+    - oc-nemotron
+    - oc-minimax
+  - qwen-plus:
+    - qwen-max
+    - oc-minimax
+    - kilo-minimax
+  - kilo-deepseek:
+    - kilo-deepseek-terminus
+    - qwen-max
+  - kilo-deepseek-terminus:
+    - kilo-deepseek
+    - qwen-max
+  - local-small:
+    - qwen-plus
+    - oc-minimax
+  - local-medium:
+    - qwen-max
+    - oc-minimax
+  - claw-main:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-coder:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-researcher:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-architect:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-thinking:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-reasoner:
+    - kilo-nemotron
+    - oc-nemotron
+    - minimax-m25
+  - claw-vision:
+    - qwen-vl-max
+    - qwen-vl-72b
+    - minimax-m25
+  - qwen-vl-max:
+    - qwen-vl-plus
+    - qwen-vl-72b
+    - minimax-m25
+  - qwen-vl-plus:
+    - qwen-vl-max
+    - qwen-vl-72b
+    - minimax-m25
+  - qwen-vl-72b:
+    - qwen-vl-max
+    - qwen-vl-plus
+    - minimax-m25
+  - claw-premium:
+    - qwen-max
+    - oc-minimax
+    - kilo-minimax
+  - claw-free-fast:
+    - qwen-max
+    - kilo-minimax
+    - oc-minimax
+  - claw-free-smart:
+    - qwen-plus
+    - kilo-minimax
+    - oc-minimax
+  - claw-cron-fast:
+    - qwen-max
+    - kilo-minimax
+    - oc-minimax
+  - claw-cron-smart:
+    - qwen-plus
+    - kilo-minimax
+    - oc-minimax
+  - claw-deepseek:
+    - kilo-deepseek-terminus
+    - qwen-max
+  - claw-deepseek-terminus:
+    - kilo-deepseek
+    - qwen-max
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  model_health_check: false
+  health_check_interval: 0
+  store_model_in_db: false
+  store_prompts_in_spend_logs: false
+  disable_spend_logs: true

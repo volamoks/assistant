@@ -52,6 +52,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     pandas \
     pydub \
     markitdown \
+    cocoindex \
     && npm install -g @google/gemini-cli acpx@0.1.15 clawvault \
     && bun install -g github:tobi/qmd \
     && bun pm -g trust --all \

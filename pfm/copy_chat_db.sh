@@ -11,9 +11,10 @@ DST="/tmp/chat_sms_copy.db"
 INTERVAL=300  # проверяем раз в 5 минут
 
 copy_if_changed() {
-    # Пропускаем если DST свежее SRC
+    # Пропускаем если DST свежее SRC — но всегда touch чтобы sms_watcher знал что cron жив
     if [ -f "$DST" ] && [ "$DST" -nt "$SRC" ]; then
-        return 0  # уже актуально
+        touch "$DST"
+        return 0
     fi
     if cp "$SRC" "$DST" 2>/dev/null; then
         echo "[$(date '+%H:%M:%S')] Copied chat.db → $DST"

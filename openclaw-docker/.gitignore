@@ -35,6 +35,14 @@ core/credentials/telegram-*.json
 __pycache__/
 *.py[cod]
 
+# Node
+node_modules/
+dist/
+build/
+
+# CocoIndex runtime data
+cocoindex-data/
+
 # IDE
 .idea/
 .vscode/
@@ -42,3 +50,4 @@ __pycache__/
 # Ignore specific personal test scripts (optional)
 test_env.sh
 
+tools/

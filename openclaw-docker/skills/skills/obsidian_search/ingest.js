@@ -3,30 +3,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://ollama:11434";
+const LITELLM_HOST = process.env.LITELLM_HOST || "http://litellm:4000";
+const LITELLM_API_KEY = process.env.LITELLM_API_KEY || "sk-litellm-openclaw-proxy";
 const CHROMA_HOST = process.env.CHROMA_HOST || "http://chromadb:8000";
 const SYS_VAULT_ENV = process.env.SYSTEM_VAULT_PATH || "/data/obsidian/vault";
 const USER_VAULT_ENV = process.env.USER_VAULT_PATH || "/data/abror_vault";
 const COLLECTION_NAME = "obsidian_vault";
 const EMBEDDING_MODEL = "nomic-embed-text";
 
-// 1. Ensure Nomic is pulled
+// 1. Verify LiteLLM embeddings are available
 async function ensureModel() {
-    console.log(`Checking if ${EMBEDDING_MODEL} is available in Ollama...`);
-    const res = await fetch(`${OLLAMA_HOST}/api/tags`);
-    const json = await res.json();
-    const hasModel = json.models?.some(m => m.name.includes(EMBEDDING_MODEL));
-
-    if (!hasModel) {
-        console.log(`Pulling ${EMBEDDING_MODEL}... (This might take a minute)`);
-        await fetch(`${OLLAMA_HOST}/api/pull`, {
-            method: 'POST',
-            body: JSON.stringify({ name: EMBEDDING_MODEL })
-        });
-        console.log(`Finished pulling ${EMBEDDING_MODEL}.`);
-    } else {
-        console.log(`${EMBEDDING_MODEL} is ready.`);
-    }
+    console.log(`Checking if ${EMBEDDING_MODEL} is available via LiteLLM...`);
+    const res = await fetch(`${LITELLM_HOST}/v1/embeddings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${LITELLM_API_KEY}` },
+        body: JSON.stringify({ model: EMBEDDING_MODEL, input: "test" })
+    });
+    if (!res.ok) throw new Error(`LiteLLM embeddings unavailable: ${res.statusText}`);
+    console.log(`${EMBEDDING_MODEL} via LiteLLM is ready.`);
 }
 
 // 2. Setup Chroma Collection
@@ -118,11 +112,11 @@ async function run() {
                 const safeName = relativePath.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
                 const id = `${safeName}-chunk-${i}`;
 
-                // Get Embedding
-                const embRes = await fetch(`${OLLAMA_HOST}/api/embeddings`, {
+                // Get Embedding via LiteLLM (OpenAI-compatible)
+                const embRes = await fetch(`${LITELLM_HOST}/v1/embeddings`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ model: EMBEDDING_MODEL, prompt: chunk })
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${LITELLM_API_KEY}` },
+                    body: JSON.stringify({ model: EMBEDDING_MODEL, input: chunk })
                 });
                 const embData = await embRes.json();
 
@@ -132,7 +126,7 @@ async function run() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         ids: [id],
-                        embeddings: [embData.embedding],
+                        embeddings: [embData.data[0].embedding],
                         documents: [chunk],
                         metadatas: [{ source: relativePath }]
                     })

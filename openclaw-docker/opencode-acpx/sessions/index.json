@@ -1,0 +1,18 @@
+{
+  "schema": "acpx.session-index.v1",
+  "files": [
+    "ses_2ffb7812bffetHWXV5nJfGvX6M.json"
+  ],
+  "entries": [
+    {
+      "file": "ses_2ffb7812bffetHWXV5nJfGvX6M.json",
+      "acpxRecordId": "ses_2ffb7812bffetHWXV5nJfGvX6M",
+      "acpSessionId": "ses_2ffb7812bffetHWXV5nJfGvX6M",
+      "agentCommand": "/home/node/.openclaw/tools/opencode-acp.sh",
+      "cwd": "/home/node/.openclaw/workspace",
+      "name": "agent:opencode:acp:20bf2627-4c24-4711-8a58-e4c3d9976c6c",
+      "closed": true,
+      "lastUsedAt": "2026-03-18T09:34:44.652Z"
+    }
+  ]
+}

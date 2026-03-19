@@ -1,25 +1,29 @@
 // obsidian_search RAG skill
 
-const OLLAMA_HOST = process.env.OLLAMA_HOST || "http://ollama:11434";
+const LITELLM_HOST = process.env.LITELLM_HOST || "http://litellm:4000";
+const LITELLM_API_KEY = process.env.LITELLM_API_KEY || "sk-litellm-openclaw-proxy";
 const CHROMA_HOST = process.env.CHROMA_HOST || "http://chromadb:8000";
 const COLLECTION_NAME = "obsidian_vault";
 const EMBEDDING_MODEL = "nomic-embed-text";
 
 async function getEmbedding(text) {
-    const response = await fetch(`${OLLAMA_HOST}/api/embeddings`, {
+    const response = await fetch(`${LITELLM_HOST}/v1/embeddings`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${LITELLM_API_KEY}`
+        },
         body: JSON.stringify({
             model: EMBEDDING_MODEL,
-            prompt: text
+            input: text
         })
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to get embedding from Ollama: ${response.statusText}`);
+        throw new Error(`Failed to get embedding from LiteLLM: ${response.statusText}`);
     }
     const data = await response.json();
-    return data.embedding;
+    return data.data[0].embedding;
 }
 
 export async function run(args) {

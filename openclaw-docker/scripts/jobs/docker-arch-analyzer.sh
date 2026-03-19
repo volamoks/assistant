@@ -69,30 +69,6 @@ cat > "$IMPLEMENTATION_FILE" << 'IMPL_EOF'
 
 ---
 
-## 📋 Detailed Steps
-
-### Consolidation: Vikunja → PostgreSQL
-
-**Why:** Single PostgreSQL instance instead of SQLite + PostgreSQL
-
-**Steps:**
-1. Connect to apps-postgres: `docker exec -it apps-postgres psql -U admin -d defaultdb`
-2. Create database: `CREATE DATABASE vikunja;`
-3. Update Vikunja env in docker-compose.apps.yml:
-   ```yaml
-   Vikunja:
-     environment:
-       - VIKUNJA_DATABASE_TYPE=postgres
-       - VIKUNJA_DATABASE_HOST=apps-postgres
-       - VIKUNJA_DATABASE_DATABASE=vikunja
-       - VIKUNJA_DATABASE_USER=admin
-       - VIKUNJA_DATABASE_PASSWORD=${POSTGRES_PASSWORD}
-   ```
-4. Run: `docker compose -f docker-compose.apps.yml up -d vikunja`
-5. Verify: Check Vikunja logs for migration success
-
----
-
 ### Consolidation: Langfuse → apps-postgres
 
 **Why:** Use single PostgreSQL for all services
@@ -242,7 +218,7 @@ echo "| Type | Container | Status |" >> "$REPORT_FILE"
 echo "|-----|-----------|--------|" >> "$REPORT_FILE"
 
 [ -n "$POSTGRES_RUNNING" ] && echo "| PostgreSQL | $(echo $POSTGRES_RUNNING | tr '\n' ', ') | Running |" >> "$REPORT_FILE"
-[ -n "$SQLITE_CONTAINERS" ] && echo "| SQLite | vikunja (internal) | Running |" >> "$REPORT_FILE"
+[ -n "$SQLITE_CONTAINERS" ] && echo "| SQLite | (unused — dropped) | Removed |" >> "$REPORT_FILE"
 [ -n "$CHROMA_RUNNING" ] && echo "| ChromaDB | chromadb | Running |" >> "$REPORT_FILE"
 [ -n "$REDIS_RUNNING" ] && echo "| Redis | redis-cache | Running |" >> "$REPORT_FILE"
 
@@ -252,16 +228,7 @@ cat >> "$REPORT_FILE" << 'EOF'
 
 EOF
 
-# Check for vikunja (SQLite) - could potentially use postgres
-if docker ps --filter "name=vikunja" --format '{{.Names}}' 2>/dev/null | grep -q "vikunja"; then
-  cat >> "$REPORT_FILE" << 'EOF'
-- **Vikunja + Ryot:** Both use database. Consider migrating Vikunja to use `apps-postgres` instead of SQLite.
-  - Current: Vikunja uses internal SQLite
-  - Benefit: Single PostgreSQL instance, easier backup, better performance
-  - Effort: Medium (requires Vikunja reconfiguration)
-  
-EOF
-fi
+# Vikunja was removed — migrated to Obsidian Tasks (2026-03-19)
 
 # === SECTION 4: Heavy Container Analysis ===
 echo "=== Analyzing Heavy Containers ==="
@@ -431,10 +398,7 @@ cat > "$SUMMARY_FILE" << EOF
 🎯 Ключевые находки:
 EOF
 
-# Add findings to summary
-if docker ps --filter "name=vikunja" --format '{{.Names}}' 2>/dev/null | grep -q "vikunja"; then
-  echo "- Vikunja использует SQLite — можно мигрировать на PostgreSQL" >> "$SUMMARY_FILE"
-fi
+# Vikunja was removed — tasks migrated to Obsidian Tasks
 
 if docker ps --filter "name=langfuse" --format '{{.Names}}' 2>/dev/null | grep -q "langfuse"; then
   echo "- Langfuse работает на отдельном PostgreSQL — можно объединить с apps-postgres" >> "$SUMMARY_FILE"

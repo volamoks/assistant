@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{FORM_TITLE}}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--tg-theme-bg-color, #1a1a2e);
+    color: var(--tg-theme-text-color, #e0e0e0);
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  h1 { font-size: 1.3em; margin-bottom: 12px; color: #fff; }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 10px 0;
+  }
+  .task-list { list-style: none; padding: 0; }
+  .task-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #2a2a3a;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-checkbox { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: #3390ec; }
+  .task-content { flex: 1; }
+  .task-title { font-size: 0.95em; color: #e0e0e0; }
+  .task-done .task-title { text-decoration: line-through; color: #666; }
+  .task-meta { font-size: 0.78em; color: #555; margin-top: 2px; }
+  .task-tag {
+    display: inline-block;
+    padding: 1px 6px; border-radius: 3px;
+    font-size: 0.72em; background: rgba(80,140,220,0.15); color: #6ea8fe;
+    margin-top: 3px;
+  }
+  .task-tag-urgent { background: rgba(220,80,100,0.15); color: #f08090; }
+  .empty { text-align: center; padding: 40px 20px; color: #555; }
+  .count { font-size: 0.85em; color: #555; margin-bottom: 8px; }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .btn {
+    flex: 1; padding: 10px;
+    border: none; border-radius: 8px;
+    font-size: 0.9em; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn:active { opacity: 0.75; }
+  .btn-primary {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #fff);
+  }
+  .btn-secondary { background: rgba(255,255,255,0.07); color: #999; }
+</style>
+</head>
+<body>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<h1>{{FORM_TITLE}}</h1>
+<div id="app"><div class="empty">Loading...</div></div>
+
+<script>
+  const tg = window.Telegram && Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  const params = new URLSearchParams(window.location.search);
+  const formId = params.get('id');
+
+  function render(data) {
+    const tasks = data.tasks || data.items || [];
+    const done = tasks.filter(t => t.done || t.completed);
+    const pending = tasks.filter(t => !t.done && !t.completed);
+    const app = document.getElementById('app');
+
+    if (!tasks.length) {
+      app.innerHTML = '<div class="empty">📋 No tasks</div>';
+      return;
+    }
+
+    let html = `<div class="count">${pending.length} pending, ${done.length} done</div>`;
+
+    if (pending.length) {
+      html += '<div class="card"><ul class="task-list">';
+      pending.forEach((t, i) => {
+        const tag = t.priority === 'high' || t.urgent ? '<span class="task-tag task-tag-urgent">Urgent</span>' :
+                    t.tag ? `<span class="task-tag">${t.tag}</span>` : '';
+        const meta = t.project ? ` · ${t.project}` : '';
+        html += `<li class="task-item">
+          <input type="checkbox" class="task-checkbox" id="t${i}" data-index="${i}" onchange="toggle(this)">
+          <div class="task-content">
+            <div class="task-title">${escapeHtml(t.title || t.text || t.name || '')}</div>
+            ${tag}<div class="task-meta">${t.due || ''}${meta}</div>
+          </div>
+        </li>`;
+      });
+      html += '</ul></div>';
+    }
+
+    if (done.length) {
+      html += '<div class="card"><div style="color:#555;font-size:0.85em;margin-bottom:8px;">Done</div><ul class="task-list">';
+      done.forEach(t => {
+        const title = escapeHtml(t.title || t.text || t.name || '');
+        html += `<li class="task-item task-done">
+          <input type="checkbox" checked class="task-checkbox" disabled>
+          <div class="task-content"><div class="task-title">${title}</div></div>
+        </li>`;
+      });
+      html += '</ul></div>';
+    }
+
+    html += '<div class="actions">';
+    html += '<button class="btn btn-secondary" onclick="closeApp()">Close</button>';
+    html += '</div>';
+
+    app.innerHTML = html;
+  }
+
+  function toggle(el) {
+    el.disabled = true;
+    el.closest('.task-item').classList.add('task-done');
+    // Could send update via Telegram.WebApp.sendData
+  }
+
+  function closeApp() {
+    if (tg) tg.close();
+    else window.close();
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  const dataEl = document.getElementById('form-data');
+  let data = {};
+  try { data = JSON.parse(dataEl.textContent || '{}'); } catch(e) {}
+  render(data);
+</script>
+
+<script id="form-data" type="application/json">{{FORM_DATA}}</script>
+</body>
+</html>

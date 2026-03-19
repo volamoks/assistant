@@ -5,7 +5,7 @@
       "id": "morning-digest",
       "agentId": "main",
       "name": "Morning Digest",
-      "enabled": true,
+      "enabled": false,
       "schedule": {
         "kind": "cron",
         "expr": "0 9 * * *",
@@ -20,21 +20,20 @@
         "model": "litellm/local-small"
       },
       "delivery": {
-        "mode": "announce",
+        "mode": "none",
         "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773806400000,
-        "lastRunAtMs": 1773720000033,
+        "lastRunAtMs": 1773892800031,
         "lastStatus": "ok",
-        "lastDurationMs": 11651,
+        "lastDurationMs": 11354,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
-        "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDeliveryStatus": "not-delivered",
+        "lastDelivered": false
       },
-      "updatedAtMs": 1773720011684,
+      "updatedAtMs": 1773892811385,
       "failureAlert": {
         "enabled": true,
         "after": 2,
@@ -46,7 +45,7 @@
       "id": "intraday-snapshot",
       "agentId": "main",
       "name": "Intraday Context Snapshot",
-      "enabled": true,
+      "enabled": false,
       "schedule": {
         "kind": "cron",
         "expr": "10 8 * * *",
@@ -61,16 +60,15 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773803400000,
-        "lastRunAtMs": 1773717000024,
+        "lastRunAtMs": 1773889909097,
         "lastStatus": "ok",
-        "lastDurationMs": 11395,
+        "lastDurationMs": 130260,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773717011419,
+      "updatedAtMs": 1773890039357,
       "delivery": {
         "mode": "none"
       }
@@ -98,16 +96,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773788400000,
+        "nextRunAtMs": 1773961200000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773702000027,
-        "lastDurationMs": 11321,
+        "lastRunAtMs": 1773874800030,
+        "lastDurationMs": 11233,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773702011348
+      "updatedAtMs": 1773874811263
     },
     {
       "id": "crash-analysis",
@@ -128,16 +126,16 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773766800000,
+        "nextRunAtMs": 1773916200000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773765000033,
+        "lastRunAtMs": 1773914400032,
         "lastStatus": "ok",
-        "lastDurationMs": 244180,
+        "lastDurationMs": 63330,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773765244213,
+      "updatedAtMs": 1773914463362,
       "delivery": {
         "mode": "none"
       },
@@ -152,7 +150,7 @@
       "id": "task-orchestration",
       "agentId": "main",
       "name": "Morning Task Briefing",
-      "enabled": true,
+      "enabled": false,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -167,16 +165,15 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773802800000,
-        "lastRunAtMs": 1773716411192,
+        "lastRunAtMs": 1773889261679,
         "lastStatus": "ok",
-        "lastDurationMs": 11414,
+        "lastDurationMs": 15076,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773716422606,
+      "updatedAtMs": 1773889276755,
       "delivery": {
         "mode": "none"
       }
@@ -188,7 +185,7 @@
       "enabled": true,
       "schedule": {
         "kind": "cron",
-        "expr": "30 8 * * *",
+        "expr": "0 8 * * *",
         "tz": "Asia/Tashkent"
       },
       "sessionTarget": "isolated",
@@ -201,21 +198,21 @@
         "model": "litellm/local-small"
       },
       "delivery": {
-        "mode": "announce",
+        "mode": "none",
         "channel": "telegram",
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773804600000,
+        "nextRunAtMs": 1773977400000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773718212674,
+        "lastRunAtMs": 1773891045674,
         "lastRunStatus": "ok",
-        "lastDurationMs": 13353,
-        "lastDelivered": true,
-        "lastDeliveryStatus": "delivered"
+        "lastDurationMs": 15278,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered"
       },
-      "updatedAtMs": 1773718226027,
+      "updatedAtMs": 1773891060952,
       "failureAlert": {
         "enabled": true,
         "after": 2,
@@ -242,16 +239,16 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "lastRunAtMs": 1773683100031,
+        "lastRunAtMs": 1773861944753,
         "lastStatus": "ok",
-        "lastDurationMs": 12840,
+        "lastDurationMs": 87714,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773769500000,
+        "nextRunAtMs": 1773942300000,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773683112871,
+      "updatedAtMs": 1773862032467,
       "delivery": {
         "mode": "none"
       }
@@ -274,14 +271,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773684011948,
+        "lastRunAtMs": 1773856864710,
         "lastStatus": "ok",
-        "lastDurationMs": 11672,
+        "lastDurationMs": 7869,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "not-requested",
-        "nextRunAtMs": 1773770400000
+        "nextRunAtMs": 1773943200000
       },
-      "updatedAtMs": 1773684023620
+      "updatedAtMs": 1773856872579
     },
     {
       "id": "obsidian-reindex",
@@ -303,15 +300,15 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773784800000,
-        "lastRunAtMs": 1773698413060,
+        "nextRunAtMs": 1773957600000,
+        "lastRunAtMs": 1773871257402,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 10667,
+        "lastDurationMs": 15853,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773698423727,
+      "updatedAtMs": 1773871273255,
       "delivery": {
         "mode": "none"
       }
@@ -337,14 +334,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773684300049,
+        "lastRunAtMs": 1773857100145,
         "lastRunStatus": "ok",
-        "lastDurationMs": 14233,
+        "lastDurationMs": 25861,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773770700000,
+        "nextRunAtMs": 1773943500000,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773684314282,
+      "updatedAtMs": 1773857126006,
       "delivery": {
         "mode": "none"
       }
@@ -370,14 +367,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773765900028,
+        "lastRunAtMs": 1773914463362,
         "lastRunStatus": "ok",
-        "lastDurationMs": 12954,
+        "lastDurationMs": 15249,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773766200000,
+        "nextRunAtMs": 1773914700000,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773765912982,
+      "updatedAtMs": 1773914478611,
       "failureAlert": false,
       "delivery": {
         "mode": "none"
@@ -405,14 +402,14 @@
       "state": {
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773752589997,
+        "lastRunAtMs": 1773903972052,
         "lastRunStatus": "ok",
-        "lastDurationMs": 12505,
+        "lastDurationMs": 12040,
         "lastDeliveryStatus": "not-delivered",
-        "nextRunAtMs": 1773774019024,
+        "nextRunAtMs": 1773925219024,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773752602502,
+      "updatedAtMs": 1773903984092,
       "delivery": {
         "mode": "none"
       }
@@ -421,7 +418,7 @@
       "id": "docker-arch-analyzer",
       "agentId": "main",
       "name": "Docker Architecture Analyzer",
-      "enabled": true,
+      "enabled": false,
       "schedule": {
         "kind": "cron",
         "expr": "25 8 * * *",
@@ -436,16 +433,15 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773804300000,
         "lastStatus": "ok",
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773717913182,
+        "lastRunAtMs": 1773890711749,
         "lastRunStatus": "ok",
-        "lastDurationMs": 11684,
+        "lastDurationMs": 73357,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773717924866,
+      "updatedAtMs": 1773890785106,
       "delivery": {
         "mode": "none"
       }
@@ -453,10 +449,10 @@
     {
       "id": "31eb68a9-4695-4749-996d-52f1e2e0a87b",
       "agentId": "analyst",
-      "name": "nightly-analysis",
+      "name": "Nightly Analysis — Obsidian Tasks",
       "enabled": true,
       "createdAtMs": 1772531832671,
-      "updatedAtMs": 1773688524949,
+      "updatedAtMs": 1773861325093,
       "schedule": {
         "kind": "cron",
         "expr": "15 19 * * *",
@@ -466,7 +462,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "NIGHTLY ANALYSIS — анализ сессий за последние 24ч. Создаёт задачи в Vikunja.\n\n## ШАГ 1: Получи сессии\nCall sessions_list: activeMinutes=1440, limit=20\n\n## ШАГ 2: Анализируй каждую сессию\nДля каждой (не более 20, бери последние):\n- Call sessions_history: sessionKey, limit=100, includeTools=true\n- Ищи:\n  🔴 ОШИБКИ: \"error\", \"failed\", \"timeout\", \"❌\", \"EACCES\", \"SIGTERM\", \"consecutiveErrors\"\n  🟡 МЕДЛЕННО: tool calls >30s, ответы >60s\n  🟡 ПОВТОРЫ: одна и та же ошибка несколько раз\n  💡 УЛУЧШЕНИЯ: жалобы юзера, \"почему так медленно\", \"fix this\"\n\n## ШАГ 3: Создай задачи в Vikunja\nДля каждой найденной проблемы создай задачу через bash скрипт:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-bug \"[Краткий заголовок ошибки]\" \"Описание: что, в какой сессии, сколько раз\\n\\nСессия: {sessionKey}\\nВремя: {timestamp}\" \"YYYY-MM-DD\"\n```\n\nДля улучшений (priority=2):\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-improvement \"[Заголовок улучшения]\" \"Описание проблемы\\n\\nРекомендация: [конкретный fix]\" \"YYYY-MM-DD\"\n```\n\n## ШАГ 4: Проверь повторяющиеся ошибки\nCall vikunja.sh list-by-status undone — прочитай задачи с [BUG] в названии.\nЕсли одна и та же ошибка встречается ≥2 раз (похожие заголовки):\n- Это КРИТИЧНО — обнови задачу с highest priority:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh update <task_id> \"[CRITICAL] Заголовок\" \"Описание + повторения N раз\"\n```\n- Отправь Telegram Abror:\n  «⚠️ Повторяющаяся ошибка (N раз за 7 дней):\n  [описание]\n  Задача в Vikunja: #<task_id>\n  Отвечай: \"разберись с [проблема]\"»\n\n## ШАГ 5: Экспорт для pipeline\nСохрани сводку в `/tmp/night_issues.json` — её читают следующие ночные задачи:\n```bash\npython3 -c \"\nimport json, sys\ndata = {\n  'date': __import__('datetime').date.today().isoformat(),\n  'bugs': ['список заголовков созданных bug tasks'],\n  'improvements': ['список заголовков improvement tasks'],\n  'session_count': 0,\n  'critical': ['повторяющиеся критичные проблемы если есть']\n}\nwith open('/tmp/night_issues.json', 'w') as f:\n  json.dump(data, f, ensure_ascii=False, indent=2)\nprint('Exported night_issues.json')\n\"\n```\n(Замени placeholders реальными данными из ШАГ 3)\n\n## ШАГ 6: ClawVault observe\nЗапусти наблюдение за активными сессиями:\n```bash\nexport CLAWVAULT_PATH=/data/obsidian/vault/Bot/AgentMemory\nclawvault observe --cron -v $CLAWVAULT_PATH 2>&1 | tail -5 || true\n```\n\n## ШАГ 7: Вывод\nПечатай только: «Analyzed N sessions, created X Vikunja tasks (Y bugs, Z improvements)»\nTelegram НЕ отправляй кроме случая из Шага 4.",
+        "message": "NIGHTLY ANALYSIS — анализ сессий за последние 24ч. Создаёт задачи в Obsidian Tasks (не в Vikunja).\n\n## ШАГ 1: Получи сессии\nCall sessions_list: activeMinutes=1440, limit=20\n\n## ШАГ 2: Анализируй каждую сессию\nДля каждой (не более 20, бери последние):\n- Call sessions_history: sessionKey, limit=100, includeTools=true\n- Ищи:\n  🔴 ОШИБКИ: 'error', 'failed', 'timeout', '❌', 'EACCES', 'SIGTERM', 'consecutiveErrors'\n  🟡 МЕДЛЕННО: tool calls >30s, ответы >60s\n  🟡 ПОВТОРЫ: одна и та же ошибка несколько раз\n  💡 УЛУЧШЕНИЯ: жалобы юзера, 'почему так медленно', 'fix this'\n\n## ШАГ 3: Создай задачи в Obsidian Tasks\nOBSIDIAN_TASKS=/data/bot/openclaw-docker/skills/obsidian_tasks/obsidian_tasks.py\nДля каждой найденной проблемы создай задачу:\n```bash\npython3 $OBSIDIAN_TASKS create-bug '[Краткий заголовок ошибки]'\n'Описание: что, в какой сессии, сколько раз. Сессия: {sessionKey}. Время: {timestamp}'\n'YYYY-MM-DD'\n'```\nДля улучшений:\n```bash\npython3 $OBSIDIAN_TASKS create-improvement '[Заголовок улучшения]'\n'Описание проблемы. Рекомендация: [конкретный fix]' 'YYYY-MM-DD'\n'```\n\n## ШАГ 4: Проверь повторяющиеся ошибки\nПрочитай Bot/Tasks/bot-tasks.md — ищи [BUG] в названии.\nЕсли одна и та же ошибка встречается ≥2 раз (похожие заголовки):\n- Отправь Telegram Abror:\n  «⚠️ Повторяющаяся ошибка (N раз за 7 дней):\n  [описание]\n  Задача: Bot/Tasks/bot-tasks.md\n  Отвечай: 'разберись с [проблема]'»\n\n## ШАГ 5: Экспорт для pipeline\nСохрани сводку в `/tmp/night_issues.json`:\n```bash\npython3 -c \"import json; data={'date': __import__('datetime').date.today().isoformat(), 'bugs': [], 'improvements': [], 'session_count': 0, 'critical': []}; with open('/tmp/night_issues.json','w') as f: json.dump(data,f,ensure_ascii=False,indent=2); print('Exported')\"\n```\n(Замени placeholders реальными данными из ШАГ 3)\n\n## ШАГ 6: ClawVault observe\n```bash\nexport CLAWVAULT_PATH=/data/obsidian/vault/Bot/AgentMemory\nclawvault observe --cron -v $CLAWVAULT_PATH 2>&1 | tail -5 || true\n```\n\n## ШАГ 7: Вывод\nПечатай только: 'Analyzed N sessions, created X Obsidian Tasks (Y bugs, Z improvements)'\nTelegram НЕ отправляй кроме случая из Шага 4.",
         "thinking": "low",
         "timeoutSeconds": 600,
         "model": "litellm/local-small"
@@ -476,11 +472,11 @@
         "channel": "last"
       },
       "state": {
-        "nextRunAtMs": 1773774900000,
-        "lastRunAtMs": 1773688510829,
+        "nextRunAtMs": 1773947700000,
+        "lastRunAtMs": 1773861310939,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 14120,
+        "lastDurationMs": 14154,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -543,8 +539,8 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773805200000,
-        "lastRunAtMs": 1773762011752,
+        "nextRunAtMs": 1773934800000,
+        "lastRunAtMs": 1773913212632,
         "lastRunStatus": "skipped",
         "lastStatus": "skipped",
         "lastDurationMs": 1,
@@ -552,16 +548,16 @@
         "consecutiveErrors": 0,
         "lastError": "main job requires payload.kind=\"systemEvent\""
       },
-      "updatedAtMs": 1773762011753
+      "updatedAtMs": 1773913212633
     },
     {
       "id": "a225b365-3f26-4ffb-af9f-e00079b712e7",
       "agentId": "investor",
       "sessionKey": "agent:investor:telegram:group:-1003706226741:topic:2",
       "name": "Crypto Daily Report",
-      "enabled": true,
+      "enabled": false,
       "createdAtMs": 1772607679973,
-      "updatedAtMs": 1773717328340,
+      "updatedAtMs": 1773894041279,
       "schedule": {
         "kind": "cron",
         "expr": "15 8 * * *",
@@ -577,14 +573,13 @@
         "model": "litellm/local-small"
       },
       "state": {
-        "nextRunAtMs": 1773803700000,
-        "lastRunAtMs": 1773717311575,
+        "lastRunAtMs": 1773890112772,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 16765,
-        "lastDeliveryStatus": "delivered",
+        "lastDurationMs": 11530,
+        "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
-        "lastDelivered": true
+        "lastDelivered": false
       },
       "delivery": {
         "mode": "announce",
@@ -601,7 +596,7 @@
     {
       "id": "weekly-discovery",
       "agentId": "researcher",
-      "name": "Weekly Discovery — поиск новых идей",
+      "name": "Weekly Discovery — Obsidian Tasks",
       "enabled": true,
       "schedule": {
         "kind": "cron",
@@ -612,7 +607,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "WEEKLY DISCOVERY — SILENT. Найди новые идеи через SearXNG, создай задачи в Vikunja. Telegram НЕ отправляй — это сделает Weekly Review в субботу в 12:00.\n\n## ЧТО УЖЕ ЕСТЬ (пропускай)\nSearXNG, ChromaDB, Ollama, LiteLLM, Crawl4AI, n8n, Vikunja, Ryot, Plaud, Bybit/crypto monitor, Gmail/Calendar, Obsidian RAG, Actual Budget, Telegram бот, vault gardening, inbox router, crash analyzer, watchdog, docker arch analyzer\n\n## ШАГ 1: ПОИСК через SearXNG (выполни все 8 запросов через exec bash)\n\nНЕ используй web_search tool — он платный. Используй ТОЛЬКО SearXNG curl.\n\nШаблон команды:\n```bash\ncurl -s 'http://searxng:8080/search?q=QUERY&format=json&categories=general&language=en' | python3 -c \"import json,sys; results=json.load(sys.stdin).get('results',[]); [print(r['title']+'\\n'+r['url']+'\\n'+r.get('content','')[:250]+'\\n---') for r in results[:4]]\"\n```\n\nЗапросы (подставляй в QUERY, пробелы = +):\n1. self-hosted+automation+tools+2026\n2. AI+agent+productivity+local+LLM+2026\n3. openclaw+clawhub+skills+new\n4. obsidian+plugin+automation+workflow+2026\n5. telegram+bot+self-hosted+2026\n6. crypto+portfolio+open+source+2026\n7. hacker+news+AI+productivity+tools+2026\n8. personal+finance+automation+open+source+2026\n\n## ШАГ 2: ФИЛЬТРАЦИЯ\nИз результатов берём только:\n- Self-hosted / open source / бесплатное\n- Касается: продуктивность PM, FinTech, крипто, Obsidian, AI агенты, home server\n- Реализуемо как: скил / cron / агент / интеграция\n- НЕ берём SaaS с подпиской, НЕ берём то что уже есть\n\n## ШАГ 3: СОЗДАНИЕ ЗАДАЧ VIKUNJA\nДля каждой найденной идеи (не более 5 лучших) создай задачу в Vikunja:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-discovery \"[Название идеи]\" \"Что: [одна строка]\\nОткуда: [url]\\nЗачем: [польза для Abror]\\nРеализация: [скил|cron|агент|интеграция]\\nСложность: [Low/Med/High]\" \"YYYY-MM-DD\"\n```\n\nПриоритеты по сложности:\n- Low → priority 1 (низкий)\n- Med → priority 2 (средний)\n- High → priority 1 (низкий, для ручного рассмотрения)\n\n## ШАГ 4: ЗАПИСЬ (опционально)\nСоздай или дозапиши в /data/obsidian/vault/Bot/discovery-proposals.md краткий список для истории:\n\n```\n## YYYY-MM-DD\n- [Название] → Vikunja task #<id>\n- [Название] → Vikunja task #<id>\n```\n\nВывод: только «Discovery готов: N задач создано в Vikunja». Больше ничего.",
+        "message": "WEEKLY DISCOVERY — SILENT. Найди новые идеи через SearXNG, создай задачи в Obsidian Tasks. Telegram НЕ отправляй — это сделает Weekly Review в субботу в 12:00.\n\n## ЧТО УЖЕ ЕСТЬ (пропускай)\nSearXNG, ChromaDB, Ollama, LiteLLM, Crawl4AI, n8n, Obsidian Tasks, Ryot, Plaud, Bybit/crypto monitor, Gmail/Calendar, Obsidian RAG, Actual Budget, Telegram бот, vault gardening, inbox router, crash analyzer, watchdog, docker arch analyzer\n\n## ШАГ 1: ПОИСК через SearXNG\nИспользуй ТОЛЬКО SearXNG curl (НЕ web_search tool — он платный).\nШаблон:\n```bash\ncurl -s 'http://searxng:8080/search?q=QUERY&format=json' | python3 -c 'import json,sys; results=json.load(sys.stdin).get(\"results\",[]); [print(r[\"title\"]+\"\\n\"+r[\"url\"]+\"\\n\"+r.get(\"content\",\"\")[:250]+\"\\n---\") for r in results[:4]]'\n```\nЗапросы:\n1. self-hosted+automation+tools+2026\n2. AI+agent+productivity+local+LLM+2026\n3. openclaw+clawhub+skills+new\n4. obsidian+plugin+automation+workflow+2026\n5. telegram+bot+self-hosted+2026\n6. crypto+portfolio+open+source+2026\n7. hacker+news+AI+productivity+tools+2026\n8. personal+finance+automation+open+source+2026\n\n## ШАГ 2: ФИЛЬТРАЦИЯ\n- Self-hosted / open source / бесплатное\n- Касается: продуктивность PM, FinTech, крипто, Obsidian, AI агенты, home server\n- Реализуемо как: скил / cron / агент / интеграция\n- НЕ SaaS с подпиской, НЕ то что уже есть\n\n## ШАГ 3: СОЗДАНИЕ ЗАДАЧ OBSIDIAN TASKS\nOBSIDIAN_TASKS=/data/bot/openclaw-docker/skills/obsidian_tasks/obsidian_tasks.py\nДля каждой идеи (не более 5 лучших):\n```bash\npython3 $OBSIDIAN_TASKS create-discovery 'Название идеи'\n'Что: [описание]. Откуда: [url]. Зачем: [польза для Abror]. Реализация: [скил|cron|агент|интеграция]. Сложность: [Low/Med/High]' 'YYYY-MM-DD'\n'```\n\n## ШАГ 4: ЗАПИСЬ\nСоздай или дозапиши в /data/obsidian/vault/Bot/discovery-proposals.md:\n```\n## YYYY-MM-DD\n- [Название] → создан в Bot/Tasks/bot-tasks.md\n```\n\nВывод: только 'Discovery готов: N задач создано в Obsidian Tasks'. Больше ничего.",
         "thinking": "low",
         "timeoutSeconds": 300,
         "model": "litellm/local-small"
@@ -638,7 +633,7 @@
       "name": "Crypto Radar",
       "enabled": true,
       "createdAtMs": 1772621202862,
-      "updatedAtMs": 1773765328217,
+      "updatedAtMs": 1773914502322,
       "schedule": {
         "kind": "cron",
         "expr": "*/30 * * * *",
@@ -648,22 +643,24 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "CRYPTO RADAR — проактивный скан. SILENT UNLESS ALERT.\n\n1. python3 /data/bot/openclaw-docker/skills/crypto_assistant/bybit_read.py --market --json\n   Проверь BTC, ETH, SOL: 1h и 24h изменение цены.\n\n2. ПРАВИЛА АЛЕРТОВ (отправлять только если):\n   - BTC/ETH/SOL упал ≥2% за 1ч → 🔴 ALERT: [монета] -X% за 1ч. Возможность докупить.\n   - BTC/ETH/SOL вырос ≥3% за 1ч → 🟢 ALERT: [монета] +X% за 1ч. Рассмотри фиксацию прибыли.\n   - BTC/ETH/SOL упал ≥5% за 24ч → 🔴 ALERT: [монета] -X% за 24ч. Сильная коррекция.\n   - BTC/ETH/SOL вырос ≥8% за 24ч → 🟢 ALERT: [монета] +X% за 24ч. Значительный рост.\n\n3. Если ни один порог не достигнут — НЕ ОТПРАВЛЯЙ НИЧЕГО. Полное молчание. Не используй инструмент telegram.\n\n4. При алерте — используй инструмент telegram для отправки короткого сообщения (2-3 строки max).",
+        "message": "SILENT. Run crypto signal detector:\nbash: python3 ~/.openclaw/skills/crypto_assistant/crypto_signal.py",
         "thinking": "low",
-        "timeoutSeconds": 300,
-        "model": "litellm/local-medium"
+        "timeoutSeconds": 60,
+        "model": "litellm/local-small"
       },
       "delivery": {
-        "mode": "none"
+        "mode": "none",
+        "channel": "telegram",
+        "to": "telegram:6053956251"
       },
       "state": {
-        "lastRunAtMs": 1773765259679,
+        "lastRunAtMs": 1773914478611,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 68538,
+        "lastDurationMs": 23711,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773766800000,
+        "nextRunAtMs": 1773916200000,
         "lastDelivered": false
       },
       "failureAlert": {
@@ -734,16 +731,16 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773779400000,
-        "lastRunAtMs": 1773693083015,
+        "nextRunAtMs": 1773952200000,
+        "lastRunAtMs": 1773865951690,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 20485,
+        "lastDurationMs": 19586,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
       },
-      "updatedAtMs": 1773693103500
+      "updatedAtMs": 1773865971276
     },
     {
       "id": "plaud-monitor",
@@ -767,11 +764,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773806400000,
-        "lastRunAtMs": 1773752557395,
+        "nextRunAtMs": 1773925200000,
+        "lastRunAtMs": 1773914502322,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 17123,
+        "lastDurationMs": 15886,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -782,7 +779,7 @@
         "channel": "telegram",
         "to": "telegram:6053956251"
       },
-      "updatedAtMs": 1773752574518
+      "updatedAtMs": 1773914518208
     },
     {
       "id": "c6925ca1-f6c8-4fb9-b54f-614153be18a6",
@@ -791,7 +788,7 @@
       "name": "Obsidian RAG Reindex (daytime)",
       "enabled": true,
       "createdAtMs": 1772828148831,
-      "updatedAtMs": 1773752587525,
+      "updatedAtMs": 1773903955670,
       "schedule": {
         "kind": "cron",
         "expr": "0 12,18 * * *",
@@ -807,11 +804,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773817200000,
-        "lastRunAtMs": 1773752574518,
+        "nextRunAtMs": 1773925200000,
+        "lastRunAtMs": 1773903835542,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 13007,
+        "lastDurationMs": 120128,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0
       }
@@ -823,7 +820,7 @@
       "description": "Night mode autoresearch with Feature Discovery",
       "enabled": true,
       "createdAtMs": 1773132247639,
-      "updatedAtMs": 1773694884656,
+      "updatedAtMs": 1773867739467,
       "schedule": {
         "expr": "0 21 * * *",
         "kind": "cron",
@@ -841,14 +838,14 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773781200000,
-        "lastRunAtMs": 1773694884640,
+        "nextRunAtMs": 1773954000000,
+        "lastRunAtMs": 1773867739466,
         "lastRunStatus": "skipped",
         "lastStatus": "skipped",
-        "lastDurationMs": 16,
+        "lastDurationMs": 1,
         "lastDeliveryStatus": "not-requested",
         "consecutiveErrors": 0,
-        "lastError": "disabled"
+        "lastError": "main job requires payload.kind=\"systemEvent\""
       }
     },
     {
@@ -870,16 +867,16 @@
         "timeoutSeconds": 300
       },
       "state": {
-        "nextRunAtMs": 1773786600000,
+        "nextRunAtMs": 1773959400000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1773700287328,
+        "lastRunAtMs": 1773873129427,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 14524,
+        "lastDurationMs": 18098,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
-      "updatedAtMs": 1773700301852,
+      "updatedAtMs": 1773873147525,
       "delivery": {
         "mode": "none"
       }
@@ -891,7 +888,7 @@
       "name": "Bot Error Logger",
       "enabled": true,
       "createdAtMs": 1773146982064,
-      "updatedAtMs": 1773765924979,
+      "updatedAtMs": 1773913525953,
       "schedule": {
         "kind": "cron",
         "expr": "15,45 * * * *",
@@ -909,11 +906,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773767700000,
-        "lastRunAtMs": 1773765912982,
+        "nextRunAtMs": 1773915300000,
+        "lastRunAtMs": 1773913512736,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 11997,
+        "lastDurationMs": 13217,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0,
         "lastDelivered": false
@@ -928,7 +925,7 @@
     {
       "id": "evolution-vikunja",
       "agentId": "analyst",
-      "name": "Nightly Evolution — Vikunja",
+      "name": "Nightly Evolution — Obsidian Tasks",
       "enabled": true,
       "schedule": {
         "kind": "cron",
@@ -939,7 +936,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "EVOLUTION VIKUNJA — SILENT. Создай задачи Vikunja из ночных рекомендаций.\n\n## ШАГ 1: Читай данные\n```bash\ncat /data/obsidian/vault/Bot/evolution-recommendations.md 2>/dev/null | tail -80\ncat /tmp/night_issues.json 2>/dev/null\n```\n\n## ШАГ 2: Создай задачи Vikunja (максимум 5, без дублей)\nДля каждой проблемы из 🔴/🟡/🟠 секций:\n```bash\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh list-by-status undone\n# Если похожая задача уже есть — пропусти\nbash /data/bot/openclaw-docker/skills/vikunja/vikunja.sh create-bug \"[заголовок]\" \"[описание]\" \"$(date +%Y-%m-%d)\"\n```\n\n## ШАГ 3: Вывод\nВыведи только: \"Vikunja: N tasks created\"\nНе отправляй Telegram.",
+        "message": "EVOLUTION TASKS — SILENT. Создай задачи Obsidian Tasks из ночных рекомендаций.\n\n## ШАГ 1: Читай данные\n```bash\ncat /data/obsidian/vault/Bot/evolution-recommendations.md 2>/dev/null | tail -80\ncat /tmp/night_issues.json 2>/dev/null\n```\n\n## ШАГ 2: Создай задачи Obsidian Tasks (максимум 5, без дублей)\nOBSIDIAN_TASKS=/data/bot/openclaw-docker/skills/obsidian_tasks/obsidian_tasks.py\nДля каждой проблемы из 🔴/🟡/🟠 секций:\n```bash\npython3 $OBSIDIAN_TASKS list-by-status undone\n# Если похожая задача уже есть — пропусти\npython3 $OBSIDIAN_TASKS create-bug '[заголовок]' '[описание]' '$(date +%Y-%m-%d)'\n'```\n\n## ШАГ 3: Вывод\nВыведи только: 'Obsidian Tasks: N tasks created'\nНе отправляй Telegram.",
         "thinking": "low",
         "timeoutSeconds": 300,
         "model": "litellm/local-small"
@@ -949,11 +946,11 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773788820000,
-        "lastRunAtMs": 1773702420026,
+        "nextRunAtMs": 1773961620000,
+        "lastRunAtMs": 1773875220025,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 11414,
+        "lastDurationMs": 12947,
         "lastDeliveryStatus": "not-delivered",
         "lastDelivered": false
       },
@@ -963,7 +960,7 @@
         "channel": "telegram",
         "to": "telegram:6053956251"
       },
-      "updatedAtMs": 1773702431440
+      "updatedAtMs": 1773875232972
     },
     {
       "id": "evolution-memory",
@@ -989,11 +986,11 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773789300000,
-        "lastRunAtMs": 1773702922243,
+        "nextRunAtMs": 1773962100000,
+        "lastRunAtMs": 1773875724744,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 10630,
+        "lastDurationMs": 11656,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered"
       },
@@ -1003,7 +1000,7 @@
         "channel": "telegram",
         "to": "telegram:6053956251"
       },
-      "updatedAtMs": 1773702932873
+      "updatedAtMs": 1773875736400
     },
     {
       "id": "lcm-db-vacuum",
@@ -1044,7 +1041,7 @@
       "name": "SILENT. bash: /data/bot/openclaw-docker/scripts/viking_inde…",
       "enabled": true,
       "createdAtMs": 1773604017297,
-      "updatedAtMs": 1773702110156,
+      "updatedAtMs": 1773874970258,
       "schedule": {
         "expr": "0 4 * * *",
         "tz": "Asia/Tashkent",
@@ -1062,11 +1059,11 @@
         "mode": "none"
       },
       "state": {
-        "nextRunAtMs": 1773788400000,
-        "lastRunAtMs": 1773702095348,
+        "nextRunAtMs": 1773961200000,
+        "lastRunAtMs": 1773874955109,
         "lastRunStatus": "ok",
         "lastStatus": "ok",
-        "lastDurationMs": 14808,
+        "lastDurationMs": 15149,
         "lastDelivered": false,
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0
@@ -1101,7 +1098,49 @@
         "to": "telegram:6053956251"
       },
       "state": {
-        "nextRunAtMs": 1773774154524
+        "nextRunAtMs": 1773925354524,
+        "lastRunAtMs": 1773903984092,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 11416,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1773903995508
+    },
+    {
+      "id": "3c05a03a-89c5-4322-a9a9-27ecb7fd3c30",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:6053956251",
+      "name": "Daily Crypto Report",
+      "enabled": true,
+      "createdAtMs": 1773804467412,
+      "updatedAtMs": 1773894056035,
+      "schedule": {
+        "kind": "cron",
+        "expr": "15 3 * * *",
+        "tz": "UTC"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "SILENT. Run the crypto report:\nbash: python3 ~/.openclaw/skills/crypto_assistant/bybit_read.py --json",
+        "model": "litellm/local-small",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1773976500000,
+        "lastRunAtMs": 1773890135854,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 14815,
+        "lastDeliveryStatus": "not-requested",
+        "consecutiveErrors": 0
       }
     }
   ]

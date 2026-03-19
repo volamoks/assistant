@@ -3,11 +3,11 @@
 # Гибридный анализатор: bash-проверка + LLM только при наличии crash-файлов
 # Запускается из OpenClaw cron (агент вызывает bash-инструментом)
 
-CRASH_DIR="/data/obsidian/vault/Bot/crash-configs"
-LESSONS_FILE="/data/obsidian/vault/Bot/lessons-learned.md"
-AGENT_ERRORS_FILE="/data/bot/openclaw-docker/workspace/.learnings/ERRORS.md"
+CRASH_DIR="${CRASH_DIR:-/data/obsidian/vault/Bot/crash-configs}"
+LESSONS_FILE="${LESSONS_FILE:-/data/obsidian/vault/Bot/lessons-learned.md}"
+AGENT_ERRORS_FILE="${AGENT_ERRORS_FILE:-/data/bot/openclaw-docker/workspace/.learnings/ERRORS.md}"
 OLLAMA_URL="${OLLAMA_URL:-http://host.docker.internal:11434/api/generate}"
-OLLAMA_MODEL="${OLLAMA_MODEL:-deepseek-r1:1.5b}"
+OLLAMA_MODEL="${OLLAMA_MODEL:-llama}"
 TELEGRAM_TOKEN="${TELEGRAM_BOT_TOKEN}"
 TELEGRAM_CHAT="${TELEGRAM_CHAT_ID:-6053956251}"  # Configurable via env var
 TODAY=$(date '+%Y-%m-%d')
@@ -17,7 +17,10 @@ if [ ! -d "$CRASH_DIR" ]; then
   exit 0
 fi
 
-mapfile -t FILES < <(find "$CRASH_DIR" -name "*.md" -type f 2>/dev/null)
+FILES=()
+while IFS= read -r line; do
+  FILES+=("$line")
+done < <(find "$CRASH_DIR" -name "*.md" -type f 2>/dev/null)
 
 if [ ${#FILES[@]} -eq 0 ]; then
   exit 0
@@ -26,9 +29,12 @@ fi
 # --- Шаг 2: Есть файлы — подключаем LLM ---
 echo "Found ${#FILES[@]} crash file(s). Invoking LLM analysis..." >&2
 
-# Убедимся, что папка для уроков агента существует
+# --- Папка для логов/уроков ---
 mkdir -p "$(dirname "$AGENT_ERRORS_FILE")"
 
+FAILED_COUNT=0
+PROCESSED_COUNT=0
+TOTAL_FILES=${#FILES[@]}
 for FILE in "${FILES[@]}"; do
   FILENAME=$(basename "$FILE")
   CONTENT=$(cat "$FILE" 2>/dev/null)
@@ -63,10 +69,9 @@ try:
     req = urllib.request.Request(
         '$OLLAMA_URL',
         data=json.dumps(payload).encode(),
-        headers={'Content-Type': 'application/json'},
-        timeout=30
+        headers={'Content-Type': 'application/json'}
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         data = json.load(resp)
         print(data.get('response', ''))
 except Exception as e:
@@ -78,6 +83,7 @@ except Exception as e:
 
   if [ -z "$CLEAN_RESPONSE" ]; then
     echo "LLM failed for $FILENAME, skipping" >&2
+    FAILED_COUNT=$((FAILED_COUNT + 1))
     continue
   fi
 
@@ -94,18 +100,28 @@ except Exception as e:
   # Удаляем обработанный crash-файл
   rm -f "$FILE"
   echo "Processed and deleted: $FILENAME" >&2
+  PROCESSED_COUNT=$((PROCESSED_COUNT + 1))
 
   # Telegram уведомление через Python
   MSG="🔴 *Crash analyzed: ${FILENAME%.md}*%0A%0A$(echo "$RESPONSE" | head -4 | sed 's/[*#]//g' | python3 -c 'import sys; print("%0A".join(l.strip() for l in sys.stdin if l.strip()))')"
 
-  python3 -c "
+  if ! python3 -c "
 import urllib.request
 url = 'https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage'
 data = 'chat_id=${TELEGRAM_CHAT}&text=${MSG}&parse_mode=Markdown'
 req = urllib.request.Request(url, data=data.encode(), headers={'Content-Type': 'application/x-www-form-urlencoded'})
 urllib.request.urlopen(req, timeout=10)
-" > /dev/null 2>&1
+" > /dev/null 2>&1; then
+    echo "Telegram notification failed for $FILENAME" >&2
+  fi
 
 done
 
-echo "Done. Processed ${#FILES[@]} crash file(s)."
+echo "Done. Processed $PROCESSED_COUNT/$TOTAL_FILES crash file(s)."
+
+if [ "$FAILED_COUNT" -gt 0 ]; then
+  echo "Errors encountered: $FAILED_COUNT files failed." >&2
+  exit 1
+fi
+
+exit 0

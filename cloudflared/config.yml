@@ -1,5 +1,7 @@
-tunnel: Jarvis
+tunnel: 2a6133f8-bca9-4b5c-9aab-0800a8502db9
 ingress:
+  - hostname: sure.volamoks.store
+    service: http://host.docker.internal:3002
   - hostname: sims.volamoks.store
     service: http://192.168.147.20:5174
   - hostname: tasks.volamoks.store

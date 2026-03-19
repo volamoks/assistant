@@ -23,7 +23,7 @@ CHAT_TMP = Path("/tmp/chat_sms_copy.db")
 # copy_chat_db.sh (run via cron or from Terminal) keeps CHAT_TMP fresh.
 # If the copy is missing or stale (>2 min old), we try to copy ourselves
 # (requires Full Disk Access for whichever process runs us).
-COPY_MAX_AGE_SECS = 120
+COPY_MAX_AGE_SECS = 180
 
 # State file to track processed SMS rowids (avoids reprocessing on restart)
 STATE_FILE = Path(__file__).parent / ".sms_state.json"
@@ -31,8 +31,9 @@ STATE_FILE = Path(__file__).parent / ".sms_state.json"
 POLL_INTERVAL = 300  # seconds (5 minutes — no need for realtime)
 
 SENDERS = {
-    "kapital": ["Kapitalbank", "KAPITALBANK", "KAPITAL"],
-    "uzum":    ["UzumBank", "UZUMBANK", "Uzum"],
+    "kapital": ["Kapital"],   # matches Kapital, Kapitalbank, KapitalBank, KAPITALBANK, kapitalbank
+    "uzum":    ["Uzum"],      # matches UzumBank, Uzum_Bank, UzumBank.uz, UzumID, etc.
+    "nbu":     ["NBU"],       # National Bank of Uzbekistan
 }
 ALL_SENDERS = [s for group in SENDERS.values() for s in group]
 
@@ -41,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from classifier      import classify_sms  # LLM классификация
 from parsers.kapital import parse_kapital
 from parsers.uzum    import parse_uzum
+from parsers.nbu     import parse as parse_nbu, is_nbu_sms
 from sink            import push_to_actual
 # ── State (processed rowids) ─────────────────────────────────────────────
 
@@ -123,11 +125,12 @@ def get_max_rowid() -> int:
 
 # ── Process ───────────────────────────────────────────────────────────────
 
-def _pick_parser(sender_id: str):
+def _pick_parser(sender_id: str, text: str = ""):
     s = sender_id.lower()
-    for name in SENDERS["uzum"]:
-        if name.lower() in s:
-            return parse_uzum
+    if "nbu" in s:
+        return parse_nbu
+    if "uzum" in s:
+        return parse_uzum
     return parse_kapital
 
 
@@ -173,7 +176,7 @@ def process_rows(rows, dry_run: bool, processed: set) -> int:
         
         # transaction — обрабатываем как обычно
         from sink import save_to_finance_db
-        parser = _pick_parser(sender)
+        parser = _pick_parser(sender, text)
         parsed = parser(text)
 
         processed.add(rowid)
@@ -184,9 +187,9 @@ def process_rows(rows, dry_run: bool, processed: set) -> int:
             continue
 
         account_name = f"{parsed['source']} *{parsed['card_last4']}" if parsed.get('card_last4') else parsed['source']
-        print(f"  {'[DRY] ' if dry_run else ''}✓ {parsed['date']} {parsed['time']} | "
-              f"*{parsed.get('card_last4') or '????'} | {parsed['category']} | "
-              f"{parsed['amount']:,.0f} {parsed['currency']} | {parsed['merchant']}")
+        print(f"  {'[DRY] ' if dry_run else ''}✓ {parsed['date']} {parsed.get('time','')} | "
+              f"*{parsed.get('card_last4') or '????'} | "
+              f"{parsed['amount']:,.0f} {parsed['currency']} | {parsed.get('merchant','')}")
         
         # Сохраняем в finance.db
         save_to_finance_db(classification, parsed, text)

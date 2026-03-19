@@ -357,7 +357,7 @@ export function buildGatewayCronService(params: {
     log: getChildLogger({ module: "cron", storePath }),
     onEvent: (evt) => {
       params.broadcast("cron", evt, { dropIfSlow: true });
-      if (evt.action === "finished") {
+      if (evt.action === "finished" && evt.jobId) {
         const webhookToken = trimToOptionalString(params.cfg.cron?.webhookToken);
         const legacyWebhook = trimToOptionalString(params.cfg.cron?.webhook);
         const job = cron.getJob(evt.jobId);
@@ -468,11 +468,12 @@ export function buildGatewayCronService(params: {
           }
         }
 
-        const logPath = resolveCronRunLogPath({
-          storePath,
-          jobId: evt.jobId,
-        });
-        void appendCronRunLog(
+        if (evt.jobId) {
+          const logPath = resolveCronRunLogPath({
+            storePath,
+            jobId: evt.jobId,
+          });
+          void appendCronRunLog(
           logPath,
           {
             ts: Date.now(),

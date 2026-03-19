@@ -1,60 +1,53 @@
 #!/bin/bash
-# Morning Briefing Cron - Get Vikunja tasks and send to Telegram
-# This replaces the agentTurn-based morning-briefing cron with pure bash
-# Uses vikunja.sh to get tasks and formats them for Telegram
+# Morning Briefing Cron — uses Obsidian Tasks (replaces Vikunja)
+# Collects tasks + system status and sends to Telegram
 
-VIKUNJA_SCRIPT="/data/bot/openclaw-docker/skills/vikunja/vikunja.sh"
 NOTIFY_SCRIPT="/data/bot/openclaw-docker/skills/telegram/notify.py"
 TELEGRAM_CHAT="6053956251"
+OBSIDIAN_TASKS="/data/bot/openclaw-docker/skills/obsidian_tasks/obsidian_tasks.py"
 
 TODAY=$(date '+%d %b')
 
-# Get overdue tasks
-OVERDUE=$(bash "$VIKUNJA_SCRIPT" list-overdue 2>/dev/null)
-OVERDUE_COUNT=$(echo "$OVERDUE" | grep -c "id" || echo "0")
+# Get task counts
+TASK_COUNTS=$(python3 "$OBSIDIAN_TASKS" count-by-folder 2>/dev/null || echo "error")
 
-# Get all undone tasks
-UNDONE=$(bash "$VIKUNJA_SCRIPT" list-by-status undone 2>/dev/null)
+# Parse counts
+BOT_COUNT=$(echo "$TASK_COUNTS" | grep -oP 'bot: \K\d+' || echo "0")
+WORK_COUNT=$(echo "$TASK_COUNTS" | grep -oP 'work: \K\d+' || echo "0")
+PERSONAL_COUNT=$(echo "$TASK_COUNTS" | grep -oP 'personal: \K\d+' || echo "0")
+TOTAL_COUNT=$(echo "$TASK_COUNTS" | grep -oP 'total: \K\d+' || echo "0")
 
-# Count by type
-BUG_COUNT=$(echo "$UNDONE" | grep -c "\[BUG\]" || echo "0")
-IMPROVE_COUNT=$(echo "$UNDONE" | grep -c "\[IMPROVE\]" || echo "0")
-IDEA_COUNT=$(echo "$UNDONE" | grep -c "\[IDEA\]" || echo "0")
+# Get overdue
+OVERDUE=$(python3 "$OBSIDIAN_TASKS" list-overdue 2>/dev/null)
+OVERDUE_COUNT=$(echo "$OVERDUE" | grep -c "\- \[" || echo "0")
+
+# Docker container count
+CONTAINER_COUNT=$(docker ps --format '{{.Names}}' 2>/dev/null | wc -l || echo "?")
+
+# System alerts (containers not running)
+UNHEALTHY=$(docker ps --format '{{.Names}} ({{.Status}})' 2>/dev/null | grep -v "Up" | grep -v "healthy" | grep -v "starting" | wc -l || echo "0")
 
 # Format the message
 MESSAGE="🌙 Утренний брифинг — $TODAY
 
+📋 Задач: $TOTAL_COUNT (🤖 $BOT_COUNT | 💼 $WORK_COUNT | 🏠 $PERSONAL_COUNT)
 "
 
 if [ "$OVERDUE_COUNT" -gt 0 ]; then
     MESSAGE+="⚠️ Просрочено: $OVERDUE_COUNT задач"
     MESSAGE+=$'\n'
-    MESSAGE+=$(echo "$OVERDUE" | grep "title" | head -3 | sed 's/.*"title": "\(.*\)".*/\1/' | sed 's/^/  • /')
-    MESSAGE+=$'\n\n'
 fi
 
-if [ "$BUG_COUNT" -gt 0 ]; then
-    MESSAGE+="🔴 Баги: $BUG_COUNT задач"
-    MESSAGE+=$'\n'
-    MESSAGE+=$(echo "$UNDONE" | grep "\[BUG\]" | head -3 | sed 's/.*"title": "\(.*\)".*/\1/' | sed 's/^/  • /')
-    MESSAGE+=$'\n\n'
+MESSAGE+="🐳 Контейнеров: $CONTAINER_COUNT"
+
+if [ "$UNHEALTHY" -gt 0 ]; then
+    MESSAGE+=" | ⚠️ $UNHEALTHY проблемы"
 fi
 
-if [ "$IMPROVE_COUNT" -gt 0 ]; then
-    MESSAGE+="🔧 Улучшения: $IMPROVE_COUNT задач"
-    MESSAGE+=$'\n'
-    MESSAGE+=$(echo "$UNDONE" | grep "\[IMPROVE\]" | head -3 | sed 's/.*"title": "\(.*\)".*/\1/' | sed 's/^/  • /')
-    MESSAGE+=$'\n\n'
-fi
-
-if [ "$IDEA_COUNT" -gt 0 ]; then
-    MESSAGE+="💡 Идеи: $IDEA_COUNT задач"
-    MESSAGE+=$'\n'
-    MESSAGE+=$(echo "$UNDONE" | grep "\[IDEA\]" | head -3 | sed 's/.*"title": "\(.*\)".*/\1/' | sed 's/^/  • /')
-    MESSAGE+=$'\n\n'
-fi
-
-MESSAGE+="📄 Полная сводка: vikunja.sh weekly-report"
+MESSAGE+=$'\n\n'
+MESSAGE+="📂 Vault: /data/obsidian/vault/Bot/Tasks/"
+MESSAGE+=$'\n'
+MESSAGE+="📄 Полная сводка: vault-viewer /tasks"
 
 # Send to Telegram
 python3 "$NOTIFY_SCRIPT" "$MESSAGE" --chat-id "$TELEGRAM_CHAT" 2>/dev/null || true

@@ -1,37 +1,66 @@
+"""
+Obsidian Tasks integration for Plaud.
+Replaces Vikunja API calls with Obsidian Tasks plugin format.
+Pushes parsed tasks from Plaud recordings to Bot/Tasks/bot-tasks.md.
+"""
+
+import os
+import sys
 import re
-import subprocess
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+# Add skills path so we can import obsidian_tasks
+SCRIPT_DIR = Path(__file__).parent
+SKILLS_DIR = SCRIPT_DIR.parent.parent.parent
 
-def push_tasks_to_vikunja(analysis_text, filename, dry_run=False):
-    """Parses '- [ ] task name: description' strings from the text and pushes them to Vikunja."""
+# Import the obsidian tasks module
+sys.path.insert(0, str(SKILLS_DIR / "obsidian_tasks"))
+try:
+    from obsidian_tasks import create_task
+except ImportError:
+    # Fallback: import directly
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "obsidian_tasks",
+            SKILLS_DIR / "obsidian_tasks" / "obsidian_tasks.py"
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        create_task = mod.create_task
+    except Exception as e:
+        def create_task_fallback(title, tags, due=None, priority=None, folder=None, description=None):
+            print(f"WARNING: obsidian_tasks unavailable: {e}")
+            print(f"  Would create: {title}")
+            return None
+        create_task = create_task_fallback
+
+
+def push_tasks_to_obsidian(analysis_text: str, filename: str, dry_run: bool = False) -> int:
+    """
+    Parses '- [ ] task name: description' strings from text and pushes them to Obsidian Tasks.
     
-    # Match both format with description (separated by colon or dash) and without
-    # Group 1: Title, Group 2: Description (optional)
-    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*([^:\-]+)(?:[:\-]\s*(.+))?$", analysis_text, re.MULTILINE)
+    Returns:
+        Number of tasks created
+    """
+    # Match: - [ ] Task Title: description
+    tasks = re.findall(r"^\s*-\s*\[\s*\]\s*([^:\-]+)(?::\s*(.+))?$", analysis_text, re.MULTILINE)
     
     if not tasks:
-        # Fallback if LLM used a different format
+        # Fallback: just find all unchecked task lines
         tasks = re.findall(r"^\s*-\s*\[\s*\]\s*(.+)$", analysis_text, re.MULTILINE)
-        if not tasks:
-            return 0
-        
-        # Normalize to tuple (title, empty description)
-        normalized_tasks = [(t, "") for t in tasks if not isinstance(t, tuple)]
-    else:
-        normalized_tasks = tasks
+        if tasks:
+            tasks = [(t, "") for t in tasks]
     
-    vikunja_script = PROJECT_ROOT / "skills" / "vikunja" / "vikunja.sh"
     added_count = 0
     
-    for task_entry in normalized_tasks:
+    for task_entry in tasks:
         if isinstance(task_entry, tuple):
             task_title, task_desc = task_entry
         else:
             task_title, task_desc = task_entry, ""
-            
-        # Clean task name of extra formatting if any (like bolding)
+        
+        # Clean formatting
         clean_name = task_title.replace("**", "").strip()
         title = f"[Plaud] {clean_name}"
         
@@ -41,23 +70,40 @@ def push_tasks_to_vikunja(analysis_text, filename, dry_run=False):
             description = f"{clean_desc}\n\n{description}"
         
         if dry_run:
-            print(f"  -> (DRY RUN) Would create Vikunja task: {title}\n      Desc: {description.splitlines()[0][:50]}...")
+            print(f"  -> (DRY RUN) Would create Obsidian Task: {title}")
             added_count += 1
             continue
-            
+        
         try:
-            # Using the Vikunja wrapper script to create tasks
-            result = subprocess.run(
-                ["bash", str(vikunja_script), "create-improvement", title, description],
-                capture_output=True,
-                text=True
+            result = create_task(
+                title=title,
+                tags=["task/bot", "plaud"],
+                folder="bot-tasks",
+                priority="medium",
+                description=description
             )
-            
-            if result.returncode == 0:
-                added_count += 1
-            else:
-                print(f"  -> Vikunja push failed for: {title}\n     Error: {result.stderr}")
+            added_count += 1
+            print(f"  -> Created Obsidian Task: {title}")
+            if result:
+                print(f"      File: {result}")
         except Exception as e:
-            print(f"  -> Error pushing task '{clean_name}' to Vikunja: {e}")
-            
+            print(f"  -> Error pushing task '{clean_name}' to Obsidian Tasks: {e}")
+    
     return added_count
+
+
+# Backwards-compatible alias
+push_tasks_to_vikunja = push_tasks_to_obsidian
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Push Plaud tasks to Obsidian Tasks")
+    parser.add_argument("filename", help="Source recording filename")
+    parser.add_argument("--dry-run", action="store_true", help="Don't actually create tasks")
+    args = parser.parse_args()
+    
+    # Read from stdin
+    text = sys.stdin.read()
+    count = push_tasks_to_obsidian(text, args.filename, dry_run=args.dry_run)
+    print(f"Created {count} tasks")

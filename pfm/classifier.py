@@ -24,10 +24,27 @@ except ImportError:
     print("❌ pip install requests")
     sys.exit(1)
 
-# MiniMax Portal (OAuth) — прямой вызов через Anthropic API
-MINIMAX_PORTAL_URL = "https://api.minimax.io/anthropic/v1/messages"
-MODEL = "MiniMax-M2.5"
-API_KEY = os.environ.get("MINIMAX_API_KEY")
+# Uses LiteLLM proxy — fallbacks work automatically, no hardcoded key
+LITELLM_URL = "http://localhost:18788/v1/chat/completions"
+MODEL = "claw-free-fast"
+
+def _read_env(key: str) -> str:
+    val = os.environ.get(key, "")
+    if val:
+        return val
+    for p in [
+        Path(__file__).parent.parent / "openclaw-docker" / ".env",
+        Path(__file__).parent.parent / ".env",
+    ]:
+        try:
+            for line in p.read_text().splitlines():
+                if line.strip().startswith(f"{key}="):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+        except Exception:
+            pass
+    return ""
+
+API_KEY = _read_env("LITELLM_MASTER_KEY")
 
 SYSTEM_PROMPT = """Ты классификатор финансовых SMS. Верни ТОЛЬКО JSON без markdown:
 {"class": "transaction|transfer|promotional|informational", "confidence": 0.0-1.0, "reason": "почему", "amount": number|null, "currency": "UZS|USD|etc"}
@@ -62,11 +79,10 @@ def classify_sms(text: str, use_cache: bool = True) -> dict:
     # Запрос к MiniMax Portal (Anthropic API format)
     try:
         resp = requests.post(
-            MINIMAX_PORTAL_URL,
+            LITELLM_URL,
             headers={
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json",
-                "anthropic-version": "2023-06-01"
             },
             json={
                 "model": MODEL,
@@ -74,11 +90,11 @@ def classify_sms(text: str, use_cache: bool = True) -> dict:
                 "messages": [
                     {"role": "user", "content": f"{SYSTEM_PROMPT}\n\nSMS: {text}"}
                 ],
-                "temperature": 0.1
+                "temperature": 0.1,
             },
-            timeout=30
+            timeout=30,
         )
-        result = resp.json()["content"][0]["text"].strip()
+        result = resp.json()["choices"][0]["message"]["content"].strip()
         
         # Парсим JSON из результата (убираем markdown если есть)
         result = result.replace("```json", "").replace("```", "").strip()

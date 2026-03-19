@@ -5,16 +5,34 @@
 # If the container crashes or gets stuck in a restart loop due to bad config,
 # it automatically restores the git repository state and restarts the container.
 
+# Fix for cron: set full path and docker socket
+export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:$PATH"
+export DOCKER_HOST="unix:///Users/abror_mac_mini/.orbstack/run/docker.sock"
+
 CONTAINER_NAME="openclaw-latest"
 PROJECT_DIR="/Users/abror_mac_mini/Projects/bot"
 OBSIDIAN_DIR="/Users/abror_mac_mini/Library/Mobile Documents/iCloud~md~obsidian/Documents/My Docs/vault/Bot/crash-configs"
 LOG_FILE="/tmp/openclaw-watchdog.log"
+DOCKER_BIN="/usr/local/bin/docker"
+MAINTENANCE_FLAG="/tmp/openclaw-maintenance.lock"
+
+# Skip watchdog during planned maintenance
+if [ -f "$MAINTENANCE_FLAG" ]; then
+    echo "$(date): Maintenance mode active, skipping watchdog." >> "$LOG_FILE"
+    exit 0
+fi
+
+# Check if docker exists at expected path, fallback to system docker
+if [ ! -x "$DOCKER_BIN" ]; then
+    DOCKER_BIN="docker"
+fi
+
 TELEGRAM_BOT_TOKEN=$(grep TELEGRAM_BOT_TOKEN "$PROJECT_DIR/openclaw-docker/.env" | cut -d '=' -f2)
 TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-6053956251}" # Default from .env if set
 
 # Check container status
-STATUS=$(docker container inspect -f '{{.State.Status}}' "$CONTAINER_NAME" 2>/dev/null)
-RESTARTING=$(docker container inspect -f '{{.State.Restarting}}' "$CONTAINER_NAME" 2>/dev/null)
+STATUS=$($DOCKER_BIN container inspect -f '{{.State.Status}}' "$CONTAINER_NAME" 2>/dev/null)
+RESTARTING=$($DOCKER_BIN container inspect -f '{{.State.Restarting}}' "$CONTAINER_NAME" 2>/dev/null)
 
 if [ "$STATUS" == "" ]; then
     echo "$(date): Container $CONTAINER_NAME not found." >> "$LOG_FILE"
@@ -72,7 +90,7 @@ EOF
     fi
 
     echo "$(date): Restarting Docker container..." >> "$LOG_FILE"
-    docker restart "$CONTAINER_NAME" >> "$LOG_FILE" 2>&1
+    $DOCKER_BIN restart "$CONTAINER_NAME" >> "$LOG_FILE" 2>&1
 
     # Send Telegram alert AFTER restoring
     if [ ! -z "$TELEGRAM_BOT_TOKEN" ]; then
