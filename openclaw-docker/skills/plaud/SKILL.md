@@ -13,6 +13,8 @@ triggers:
   - analyze recording
   - анализ записи
   - обработай записи plaud
+  - обработай записи Plaud
+  - транскрибируй Plaud
   - plaud monitor
 ---
 
@@ -21,8 +23,8 @@ triggers:
 Full pipeline for syncing, transcribing and analyzing voice recordings from Plaud Note.
 
 **Data destination:** Obsidian vault at `/data/obsidian/`  
-**Tasks:** Obsidian Tasks (`Bot/Tasks/bot-tasks.md`) via `plaud_vikunja.py`  
-**No remote task API — everything stays local.**
+**Tasks:** Obsidian Tasks plugin format, written directly into each transcript note as checklist items  
+**Everything stays local — no external task APIs.**
 
 ---
 
@@ -35,7 +37,7 @@ Plaud API
        ├─ download_audio() ───────────────────────┐
        │                                         ↓
        │  Groq Whisper (whisper-large-v3)   ← PRIMARY TRANSCRIPTION
-       │   • Groq API → plain text          (always runs)
+       │   • Groq API → plain text          (always runs, regardless of is_trans)
        │   • Handles: ru, uz, en (auto-detect)
        │   • Chunks long audio (>25MB / >20min)
        │
@@ -52,14 +54,9 @@ Groq Whisper text
        │  • Chunks long transcripts automatically
        │  • Returns: summary + action items
        │
-       ├─ push_tasks_to_vikunja()      ← Obsidian Tasks
-       │   • Parses '- [ ] Task Title: description'
-       │   • Creates entries in Bot/Tasks/bot-tasks.md
-       │   • Tags: #task/bot #plaud
-       │
        └─ format_obsidian_note()       ← Obsidian Note
             • Saved to /data/obsidian/Work/Transcripts/{Calls,Meetings,Ideas}/
-            • Sections: Summary & Tasks, Native Transcript (bonus),
+            • Sections: Summary, Tasks (#tasks), Native Transcript (bonus),
               Plaud AI Summary (bonus), Full Whisper Transcript (collapsible)
 ```
 
@@ -75,6 +72,8 @@ Groq Whisper text
 - "Расшифруй последнюю запись с Plaud"
 - "Какие задачи обсудили на встрече? (запись plaud <ID>)"
 - "Analyze recording `<ID>`"
+- "обработай записи Plaud"
+- "транскрибируй Plaud"
 
 **Manual pipeline:**
 ```bash
@@ -125,7 +124,7 @@ bash /data/bot/openclaw-docker/skills/plaud/plaud.sh download <FILE_ID> /tmp/rec
    - **Transcribes via Groq Whisper** (primary — always, regardless of `is_trans`)
    - If `is_trans=True`: also fetches native Plaud transcript (bonus)
    - Analyzes with LLM (Groq Llama 3.3 70B) → summary + tasks
-   - Pushes tasks to Obsidian Tasks (`Bot/Tasks/bot-tasks.md`)
+   - Writes tasks as Obsidian checklist items (`- [ ]`) directly in the transcript note
    - Saves formatted note to `Work/Transcripts/{Calls,Meetings,Ideas}/`
 4. Updates state file
 
@@ -170,7 +169,6 @@ Tip: Open Plaud app and sync the recording first.
 | Output | Location |
 |--------|----------|
 | Obsidian notes | `/data/obsidian/Work/Transcripts/{Calls,Meetings,Ideas}/Plaud_YYYY-MM-DD_HHMM_<id>.md` |
-| Tasks | `/data/obsidian/vault/Bot/Tasks/bot-tasks.md` (tag `#task/bot #plaud`) |
 | State | `/data/bot/openclaw-docker/data/plaud_state.json` |
 | Logs | `/tmp/plaud_monitor.log` |
 
@@ -183,8 +181,13 @@ Tip: Open Plaud app and sync the recording first.
 - ID: <file_id>
 - Source: Plaud Note
 
-## Summary & Tasks
-<LLM summary + extracted action items>
+## Summary
+<LLM summary>
+
+## Tasks
+
+- [ ] Task description #tasks
+- [ ] Another task #tasks
 
 ## Native Plaud Transcript (bonus, N segments)  ← only if is_trans=True
 <transcript text>
@@ -194,10 +197,12 @@ Tip: Open Plaud app and sync the recording first.
 
 ## Full Whisper Transcript
 <details>
-<summary>Click to expand</summary>
+<summary>Click to expand transcript</summary>
 <transcribed text>
 </details>
 ```
+
+Tasks use Obsidian Tasks plugin format: `- [ ] Task description #tasks`
 
 ---
 
