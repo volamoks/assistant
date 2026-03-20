@@ -127,6 +127,22 @@ openclaw-docker/core/delivery-queue/failed/
 
 # Python virtual environments
 *venv*/
+tts-venv/
+
+# Python bytecode (never commit)
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+
+# OpenCode runtime cache & data (auto-generated)
+openclaw-docker/core/opencode-cache/
+openclaw-docker/core/opencode-data/
+
+# Plaud audio downloads (large MP3s, stored locally only)
+plaud-downloader/downloads/
+
+# Corrupted / backup DB files
+*.db.corrupted*
 
 # PFM runtime logs
 pfm/logs/
