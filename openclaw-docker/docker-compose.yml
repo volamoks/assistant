@@ -206,7 +206,7 @@ services:
       - USER_VAULT_PATH=/data/obsidian/vault
       - BOT_PROJECT_PATH=/data/bot
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
-      - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
+      # - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}  # legacy: Actual Budget removed, replaced by Sure PFM
       - VIKUNJA_TOKEN=${VIKUNJA_TOKEN}
       - PLAUD_TOKEN=${PLAUD_TOKEN}
       - PLAUD_API_DOMAIN=${PLAUD_API_DOMAIN}
@@ -352,22 +352,23 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  actual-budget:
-    image: actualbudget/actual-server:latest
-    container_name: actual-budget
-    restart: unless-stopped
-    ports:
-      - "5006:5006"
-    volumes:
-      - ./actual-data:/data
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-          cpus: '0.5'
-    networks:
-      - default
-      - jarvis_net
+  # actual-budget:
+    # DEPRECATED: replaced by Sure PFM. Uncomment only if Actual Budget is needed again.
+    # image: actualbudget/actual-server:latest
+    # container_name: actual-budget
+    # restart: unless-stopped
+    # ports:
+    #   - "5006:5006"
+    # volumes:
+    #   - ./actual-data:/data
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 256m
+    #       cpus: '0.5'
+    # networks:
+    #   - default
+    #   - jarvis_net
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:5006 || exit 1" ]
       interval: 30s
