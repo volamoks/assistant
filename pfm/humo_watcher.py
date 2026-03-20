@@ -1,5 +1,5 @@
 """
-humo_watcher.py — Watches @HUMOcardbot via Telethon → Actual Budget
+humo_watcher.py — Watches @HUMOcardbot via Telethon → Sure PFM (finance.db)
 
 Usage:
     python3 humo_watcher.py               # live mode (new messages)

@@ -1,5 +1,5 @@
 """
-sms_watcher.py — Watches macOS chat.db for Kapitalbank & Uzum SMS → Actual Budget
+sms_watcher.py — Watches macOS chat.db for Kapitalbank & Uzum SMS → Sure PFM (finance.db)
 
 Requires Full Disk Access for Terminal (System Settings → Privacy → Full Disk Access).
 
