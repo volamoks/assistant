@@ -203,7 +203,7 @@ services:
       - LITELLM_API_KEY=sk-litellm-openclaw-proxy
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
       - SYSTEM_VAULT_PATH=/data/obsidian/vault
-      - USER_VAULT_PATH=/data/abror_vault
+      - USER_VAULT_PATH=/data/obsidian/vault
       - BOT_PROJECT_PATH=/data/bot
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
@@ -570,8 +570,8 @@ services:
 
   a2ui-webapp:
     build:
-      context: ./core/workspace-main/a2ui
-      dockerfile: ../a2ui-webapp.Dockerfile
+      context: .
+      dockerfile: a2ui-webapp.Dockerfile
     container_name: a2ui-webapp
     restart: unless-stopped
     ports:
