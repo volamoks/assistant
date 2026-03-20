@@ -232,7 +232,7 @@ services:
       - CHROMA_HOST=http://chromadb:8000
       - COCOINDEX_DATABASE_URL=postgresql://cocoindex:cocoindex@cocoindex-db:5432/cocoindex
       - VIKING_HOST=http://viking-bridge:8100
-      - VIKING_API_KEY=viking-local-key-12345
+      - VIKING_API_KEY=acaa187ed229a753075be0265fc4e87cc1009b3b23827e3e60d90ff1e89f9bb2
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       # Note: Setting GEMINI_API_KEY means gemini CLI uses API key instead of OAuth
       # This is needed for LCM (Lossless Context Management) to create summaries
@@ -369,17 +369,17 @@ services:
     # networks:
     #   - default
     #   - jarvis_net
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5006 || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "curl -f http://localhost:5006 || exit 1" ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   # ── Sure PFM (personal finance, replaces Actual Budget) ─────────────────────
   sure:

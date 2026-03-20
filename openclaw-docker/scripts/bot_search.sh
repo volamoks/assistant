@@ -24,6 +24,9 @@ set -euo pipefail
 QUERY="${1:-}"
 CHROMA_HOST="${CHROMA_HOST:-http://chromadb:8000}"
 EMBED_SH="${EMBED_SH:-/data/bot/openclaw-docker/scripts/embed.sh}"
+COCOINDEX_DB="${COCOINDEX_DATABASE_URL:-postgresql://cocoindex:cocoindex@cocoindex-db:5432/cocoindex}"
+LITELLM_HOST="${LITELLM_HOST:-http://litellm:4000}"
+LITELLM_KEY="${LITELLM_API_KEY:-sk-litellm-openclaw-proxy}"
 LIMIT=3
 ONLY=""
 
@@ -38,7 +41,7 @@ done
 
 if [ -z "$QUERY" ]; then
   cat <<'EOF'
-Usage: bot_search.sh "query" [--limit N] [--only skills|prompts|scripts|context|obsidian]
+Usage: bot_search.sh "query" [--limit N] [--only skills|prompts|scripts|context|obsidian|code]
 
 Searches across:
   skills    — SKILL.md files (what can the bot do)
@@ -46,12 +49,13 @@ Searches across:
   scripts   — automation scripts in scripts/
   context   — workspace docs: AGENTS.md, IDENTITY.md
   obsidian  — Obsidian vault notes (user context, preferences, history)
+  code      — CocoIndex: semantic search across .ts/.py/.sh source files (pgvector)
 
 Examples:
   bot_search.sh "finance monthly report"
   bot_search.sh "telegram notification" --only skills
   bot_search.sh "user crypto preferences" --only obsidian
-  bot_search.sh "reindex embeddings" --only scripts
+  bot_search.sh "enricher pfm pipeline" --only code
 EOF
   exit 1
 fi
@@ -172,6 +176,51 @@ for score, name, path, desc, role, ftype, snippet in scored[:max_show]:
 echo "🔍 bot_search: \"${QUERY}\""
 echo "────────────────────────────────────────────────────────"
 
+# ─── CocoIndex code search (pgvector, precise for .ts/.py/.sh) ───────────────
+query_cocoindex() {
+  local N="$1"
+  python3 - <<PYEOF 2>/dev/null
+import psycopg2, json, urllib.request, sys
+
+db_url  = "$COCOINDEX_DB"
+lm_url  = "$LITELLM_HOST"
+lm_key  = "$LITELLM_KEY"
+query   = """$QUERY"""
+limit   = $N
+
+try:
+    payload = json.dumps({"model": "nomic-embed-text", "input": query}).encode()
+    req = urllib.request.Request(
+        f"{lm_url}/embeddings", data=payload,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {lm_key}"},
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        vec = json.load(resp)["data"][0]["embedding"]
+
+    conn = psycopg2.connect(db_url)
+    cur  = conn.cursor()
+    cur.execute("""
+        SELECT filename, location, text,
+               1 - (embedding <=> %s::vector) AS score
+        FROM botcodeflow__bot_code_chunks
+        ORDER BY embedding <=> %s::vector
+        LIMIT %s
+    """, (str(vec), str(vec), limit))
+    rows = cur.fetchall()
+    conn.close()
+
+    for fn, loc, text, score in rows:
+        short_fn = fn.replace("/data/bot/openclaw-docker/", "")
+        print(f"[code] {short_fn}  score={round(float(score)*100)}%")
+        print(f"  @ {loc}")
+        snippet = text.strip().replace("\n", " ")[:160]
+        print(f"  > {snippet}")
+        print()
+except Exception as e:
+    print(f"  (CocoIndex unavailable: {e})", file=sys.stderr)
+PYEOF
+}
+
 case "$ONLY" in
   skills)
     query_collection "skills" "skill" "$LIMIT" ""
@@ -188,6 +237,9 @@ case "$ONLY" in
   obsidian)
     query_collection "obsidian_vault" "obsidian" "$LIMIT" ""
     ;;
+  code)
+    query_cocoindex "$LIMIT"
+    ;;
   "")
     EACH=$(( (LIMIT + 1) / 2 ))
     [ "$EACH" -lt 2 ] && EACH=2
@@ -198,7 +250,7 @@ case "$ONLY" in
     query_collection "obsidian_vault" "obsidian"  "$EACH" ""
     ;;
   *)
-    echo "Unknown --only value: $ONLY. Use: skills|prompts|scripts|context|obsidian"
+    echo "Unknown --only value: $ONLY. Use: skills|prompts|scripts|context|obsidian|code"
     exit 1
     ;;
 esac
