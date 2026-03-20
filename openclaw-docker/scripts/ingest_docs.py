@@ -21,6 +21,12 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
+# ─── FIX: Broken numpy in /opt/pip-packages (macOS .so on Linux) ────────────
+# Install numpy==1.26.4 to /tmp/pip_numpy if not present
+_NUMPY_FIX_PATH = "/tmp/pip_numpy"
+if os.path.exists(_NUMPY_FIX_PATH) and _NUMPY_FIX_PATH not in sys.path:
+    sys.path.insert(0, _NUMPY_FIX_PATH)
+
 # ─── Config ──────────────────────────────────────────────────────────────────
 SYS_VAULT_ENV  = os.environ.get("SYSTEM_VAULT_PATH", "/data/obsidian/vault")
 USER_VAULT_ENV = os.environ.get("USER_VAULT_PATH", "/data/abror_vault")
@@ -69,11 +75,12 @@ def ensure_markitdown():
         return False
 
 def convert_to_text(file_path: Path) -> str | None:
-    """Convert doc to markdown text using markitdown (.docx) or catdoc (.doc)."""
+    """Convert doc/docx/pdf/other to text using markitdown."""
     ext = file_path.suffix.lower()
     
-    # .doc (old Word format) → catdoc
+    # .doc (old Word format) → try catdoc first, fall back to markitdown
     if ext == ".doc":
+        # Try catdoc if available
         try:
             import subprocess
             result = subprocess.run(
@@ -82,13 +89,24 @@ def convert_to_text(file_path: Path) -> str | None:
             )
             if result.returncode == 0 and len(result.stdout.strip()) > 50:
                 return result.stdout.strip()
-            log(f"  ⚠️  catdoc empty/failed for {file_path.name}")
-            return None
+        except FileNotFoundError:
+            pass  # catdoc not installed
         except Exception as e:
-            log(f"  ❌ catdoc failed for {file_path.name}: {e}")
-            return None
+            log(f"  ⚠️  catdoc failed for {file_path.name}: {e}")
+        
+        # Fall back to markitdown (works for some .doc files via olefile)
+        try:
+            from markitdown import MarkItDown
+            md = MarkItDown(enable_plugins=False)
+            result = md.convert(str(file_path))
+            text = result.text_content
+            if text and len(text.strip()) > 50:
+                return text.strip()
+        except Exception as e:
+            log(f"  ❌ markitdown failed for {file_path.name}: {e}")
+        return None
     
-    # .docx and others → markitdown
+    # .docx, .pdf, .xlsx, .pptx, .rtf, .odt → markitdown
     try:
         from markitdown import MarkItDown
         md = MarkItDown(enable_plugins=False)
@@ -204,7 +222,19 @@ def main():
     log(f"Vaults: {SYS_VAULT_ENV}, {USER_VAULT_ENV}")
     log(f"ChromaDB: {CHROMA_HOST} | Ollama: {OLLAMA_HOST}")
 
-    vault_paths = [Path(SYS_VAULT_ENV)]
+    vault_paths = []
+    
+    # Handle both /data/obsidian/vault and /data/obsidian (root with sibling dirs)
+    sys_vault = Path(SYS_VAULT_ENV)
+    if sys_vault.name == "vault" and sys_vault.parent.exists():
+        # /data/obsidian/vault -> also scan sibling dirs like Inbox, Assets, etc.
+        vault_paths.append(sys_vault)  # Claw subfolder
+        for sibling in sys_vault.parent.iterdir():
+            if sibling.is_dir() and not sibling.name.startswith(".") and sibling.name != "vault":
+                vault_paths.append(sibling)
+    else:
+        vault_paths.append(sys_vault)
+    
     if Path(USER_VAULT_ENV).exists() and USER_VAULT_ENV != SYS_VAULT_ENV:
         vault_paths.append(Path(USER_VAULT_ENV))
 

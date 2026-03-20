@@ -120,7 +120,7 @@ Config restored to last commit." --chat-id "$CHAT_ID" 2>/dev/null || true
     docker restart openclaw-latest 2>&1 | tee -a $LOG
 }
 
-# Main
+# ── Main ──────────────────────────────────────────────────────────────────────
 log "=== Watchdog check ==="
 
 if check_gateway; then
